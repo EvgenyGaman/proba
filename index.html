@@ -112,8 +112,22 @@ details summary{cursor:pointer;color:var(--muted);font-weight:500}
 .cam-top .pill.rec::before{content:"";width:8px;height:8px;border-radius:50%;background:#fff;animation:blink 1s steps(2) infinite}
 @keyframes blink{50%{opacity:.2}}
 .cam-x{all:unset;cursor:pointer;font:600 15px/1 var(--f-body);padding:8px 10px;color:#fff}
-.cam-view{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding-inline:10px;overflow:hidden}
+.cam-view{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding-inline:10px;overflow:hidden}
 .cam-view canvas{height:100%;width:auto;max-width:100%;object-fit:contain;border-radius:12px;background:#111}
+.cam-q{position:absolute;left:18px;right:18px;top:10px;background:rgba(8,20,16,.78);border-radius:16px;padding:12px 16px;display:flex;flex-direction:column;gap:4px}
+.cam-q span{font:500 12px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:#3CC79E}
+.cam-q b{font:600 19px/1.25 var(--f-body);color:#fff}
+.procbox{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.procbox h3{margin:0;font:600 16px/1.2 var(--f-display)}
+.procbox p{margin:0;font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:baseline}
+.procbox p i{font-style:normal;font:500 12px/1 var(--f-mono);color:var(--accent);min-width:16px}
+.procbox p.bad i{color:var(--warn)}
+.prog{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s linear}
+.toggle{display:grid;grid-template-columns:24px 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;cursor:pointer}
+.toggle input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--accent)}
+.toggle strong{display:block}
+.toggle span.sub{color:var(--muted);font-size:14px}
 .cam-src{position:fixed;left:0;top:0;width:2px;height:2px;opacity:.01;pointer-events:none}
 .cam-tip{text-align:center;font-size:14px;color:rgba(255,255,255,.8);padding:8px 18px 0;min-height:28px}
 .cam-ctl{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:12px 18px 16px;gap:10px}
@@ -142,7 +156,7 @@ details summary{cursor:pointer;color:var(--muted);font-weight:500}
 
 <div class="cam" id="cam" hidden>
   <div class="cam-top"><span class="pill" id="camPill"></span><button type="button" class="cam-x" id="camClose"></button></div>
-  <div class="cam-view"><canvas id="camCanvas" width="720" height="1280"></canvas></div>
+  <div class="cam-view"><canvas id="camCanvas" width="720" height="1280"></canvas><div class="cam-q" id="camQ" hidden><span id="camQk"></span><b id="camQt"></b></div></div>
   <div class="cam-tip" id="camTip"></div>
   <div class="cam-ctl">
     <button type="button" class="side" id="camFlip"></button>
@@ -216,6 +230,10 @@ pt:{
  sumHead:"O resumo que vai junto", thanks:"Obrigada! Assim que recebermos, combinamos o Pix de R$ 20 pelo WhatsApp.",
  demo:"Versão de demonstração: câmera e envio só funcionam na versão publicada no site.",
  foot:"Teste de avaliações em vídeo · Florianópolis",
+ subsToggle:"Legendas automáticas", subsNote:"O celular transcreve a fala sozinho, nada é enviado. Na primeira vez baixa cerca de 80 MB: melhor no Wi‑Fi.",
+ procTitle:"Preparando o vídeo final", pSubsLoad:"Legendas: baixando o reconhecedor de voz · {p}%", pSubsRun:"Legendas: transcrevendo a fala…", pSubsOk:"Legendas prontas", pSubsNone:"Legendas: não encontramos fala", pSubsFail:"Legendas: não deu neste celular",
+ pFaceLoad:"Rostos: preparando…", pFaceMask:"Seu rosto vai com máscara, outros rostos desfocados", pFaceBlur:"Rostos de outras pessoas desfocados", pFaceFail:"Rostos: não deu para esconder neste celular. A gente esconde antes de publicar.",
+ pRender:"Montando o vídeo · {p}% · mantenha a tela aberta", pDone:"Vídeo final pronto", sendNow:"Enviar o original sem esperar", procFail:"Não deu para preparar o vídeo final. Envie o original, a gente ajusta.",
  gen:{title:"Gerador de links",lead:"Um link por cliente. O código liga o vídeo que chegar no WhatsApp à pessoa a quem pedimos.",base:"Endereço do site",wa:"WhatsApp do assistente (só números, com 55)",fmt:"Modo inicial",fmtA:"A · com perguntas",fmtB:"B · do seu jeito",fmtMix:"Alternar 2:1 (A, A, B)",svc:"Serviço",any:"Cliente escolhe",pro:"Profissional (opcional)",count:"Quantos links",prefix:"Prefixo do código",make:"Gerar",copyAll:"Copiar todos"}
 },
 ru:{
@@ -260,6 +278,10 @@ ru:{
  sumHead:"Сводка, которая уйдёт вместе с видео", thanks:"Спасибо! Как получим — договоримся о Pix R$ 20 в WhatsApp.",
  demo:"Демо-версия: камера и отправка работают только в версии на сайте.",
  foot:"Тест видео-отзывов · Флорианополис",
+ subsToggle:"Автосубтитры", subsNote:"Телефон сам расшифрует речь, ничего никуда не отправляется. В первый раз скачается около 80 МБ — лучше по Wi‑Fi.",
+ procTitle:"Готовим итоговое видео", pSubsLoad:"Субтитры: загрузка распознавания речи · {p}%", pSubsRun:"Субтитры: расшифровываем речь…", pSubsOk:"Субтитры готовы", pSubsNone:"Субтитры: речи не нашли", pSubsFail:"Субтитры: на этом телефоне не получилось",
+ pFaceLoad:"Лица: подготовка…", pFaceMask:"Ваше лицо под маской, чужие лица размыты", pFaceBlur:"Чужие лица размыты", pFaceFail:"Лица: на этом телефоне скрыть не вышло. Скроем перед публикацией.",
+ pRender:"Собираем видео · {p}% · не закрывайте экран", pDone:"Итоговое видео готово", sendNow:"Отправить исходное, не дожидаясь", procFail:"Не получилось подготовить итоговое видео. Отправьте исходное — доработаем.",
  gen:{title:"Генератор ссылок",lead:"Одна ссылка на клиентку. Код связывает видео, пришедшее в WhatsApp, с тем, кого мы просили.",base:"Адрес сайта",wa:"WhatsApp помощника (только цифры, с 55)",fmt:"Режим по умолчанию",fmtA:"A · с подсказками",fmtB:"B · экспромт",fmtMix:"Чередовать 2:1 (A, A, B)",svc:"Услуга",any:"Выбирает клиентка",pro:"Мастер (необязательно)",count:"Сколько ссылок",prefix:"Префикс кода",make:"Создать",copyAll:"Скопировать все"}
 }};
 var L = CFG.lang;
@@ -274,7 +296,7 @@ var S = {
   step:0, service:CFG.service, pro:CFG.pro, date:iso,
   mode: CFG.format==="b" ? "livre" : "guiado", modeTouched:false,
   out:null, outUrl:"", outDur:0, segs:[], shotAt:null,
-  native:false, parts:[null,null,null],
+  native:false, parts:[null,null,null], subs:true, flog:[],
   proofs:[], photo:null, q1:"", q2:"", q3:"", perm:"", consent:false,
   sent:false, err:"", shareMsg:"", camErr:""
 };
@@ -370,7 +392,7 @@ function render(){
     app.innerHTML=h;
     app.querySelectorAll('input[name=perm]').forEach(function(r){ r.onchange=function(){ S.perm=r.value; }; });
     document.getElementById("consent").onchange=function(e){ S.consent=e.target.checked; };
-    setBar([{label:t("back"),cls:"ghost",on:function(){go(4);}},{label:t("next"),on:function(){ if(!S.perm||!S.consent){S.err=t("errPerm");render();return;} go(6); }}]); return;
+    setBar([{label:t("back"),cls:"ghost",on:function(){go(4);}},{label:t("next"),on:function(){ if(!S.perm||!S.consent){S.err=t("errPerm");render();return;} prepareFinal(); go(6); }}]); return;
   }
   if(st===6){ renderSend(); return; }
 }
@@ -383,6 +405,7 @@ function renderVideoStep(){
     h+='<div class="stage"><video src="'+S.outUrl+'" playsinline controls></video></div>'+
        '<p class="status">● '+esc(t("recDone"))+' · '+mmss(S.outDur)+'</p>';
     if(S.mode==="guiado") h+=segList();
+    h+='<label class="toggle" for="subs"><input type="checkbox" id="subs"'+(S.subs?' checked':'')+'><span><strong>'+esc(t("subsToggle"))+'</strong><span class="sub">'+esc(t("subsNote"))+'</span></span></label>';
     h+='<button type="button" class="btn ghost" id="again">'+esc(t("again"))+'</button>';
   } else if(S.native){
     h+='<p class="note">'+esc(t("camFail"))+'</p>'+nativeCards();
@@ -398,9 +421,10 @@ function renderVideoStep(){
   app.innerHTML=h;
   app.querySelectorAll('input[name=mode]').forEach(function(r){ r.onchange=function(){ S.mode=r.value; S.modeTouched=true; }; });
   var ag=document.getElementById("again"); if(ag) ag.onclick=function(){ resetVideo(); render(); };
+  var sb=document.getElementById("subs"); if(sb) sb.onchange=function(){ S.subs=sb.checked; };
   bindNative();
   if(S.out||S.native){
-    setBar([{label:t("back"),cls:"ghost",on:function(){go(1);}},{label:t("next"),on:function(){ if(!hasVideo()){S.err=t("errVideo");render();return;} go(3); }}]);
+    setBar([{label:t("back"),cls:"ghost",on:function(){go(1);}},{label:t("next"),on:function(){ if(!hasVideo()){S.err=t("errVideo");render();return;} if(S.out&&S.subs){ ensureAC(); startTranscription(); } go(3); }}]);
   } else {
     setBar([{label:t("back"),cls:"ghost",on:function(){go(1);}},{label:t("openCam"),on:openCamera}]);
   }
@@ -413,7 +437,7 @@ function segList(){
     return '<li><b>'+(i+1)+'</b><span>'+esc(q.label)+'</span>'+tag+'</li>';
   }).join("")+'</ul>';
 }
-function resetVideo(){ if(S.outUrl) URL.revokeObjectURL(S.outUrl); S.out=null; S.outUrl=""; S.outDur=0; S.segs=[]; S.sent=false; }
+function resetVideo(){ if(S.outUrl) URL.revokeObjectURL(S.outUrl); S.out=null; S.outUrl=""; S.outDur=0; S.segs=[]; S.sent=false; resetProc(); }
 
 /* native-camera fallback: one clip per question, sent as separate files */
 function nativeCards(){
@@ -442,7 +466,7 @@ function openCamera(){
   S.camErr="";
   if(!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder)){ S.native=true; render(); return; }
   var defs=qdefs();
-  CAM={open:true,q:0,state:"idle",facing:defs[0].cam,audio:null,vtrack:null,rec:null,chunks:[],raf:0,elapsed:0,tick:null,segStart:0,segs:[],direct:false,noPause:false,started:false,busy:false,startedAt:null};
+  CAM={open:true,q:0,state:"idle",facing:defs[0].cam,audio:null,vtrack:null,rec:null,chunks:[],raf:0,elapsed:0,tick:null,segStart:0,segs:[],direct:false,noPause:false,started:false,busy:false,startedAt:null,flog:[{t:0,f:defs[0].cam}]};
   gum({audio:{echoCancellation:true,noiseSuppression:true},video:videoC(CAM.facing)}).then(function(s){
     CAM.audio=s.getAudioTracks()[0]; CAM.vtrack=s.getVideoTracks()[0];
     src.srcObject=new MediaStream([CAM.vtrack]);
@@ -465,8 +489,8 @@ function draw(){
     try{ cx.drawImage(src,(W-dw)/2,(H-dh)/2,dw,dh); }catch(e){}
   }
   var defs=qdefs(), d=defs[Math.min(CAM.q,defs.length-1)];
-  if(S.mode==="guiado") plate(fmt(t("qOf"),{n:CAM.q+1,m:defs.length}).toUpperCase(), d.q);
   watermark();
+  if(S.mode==="guiado" && CAM.state==="rec" && CAM.elapsed-CAM.segStart<2.5) chapterTag(d.label);
 }
 function wrapLines(text,maxW){
   var words=String(text).split(/\s+/), line="", out=[];
@@ -486,9 +510,16 @@ function plate(kicker,text){
 function watermark(){
   var p=S.date.split("-");
   cx.save(); cx.textBaseline="alphabetic"; cx.shadowColor="rgba(0,0,0,.5)"; cx.shadowBlur=8;
-  cx.fillStyle="#FFFFFF"; cx.font='700 34px "Familjen Grotesk", Arial, sans-serif'; cx.fillText("proba",40,H-74);
-  cx.fillStyle="rgba(255,255,255,.8)"; cx.font='500 22px "IBM Plex Mono", monospace'; cx.fillText((L==="ru"?"визит ":"visita ")+p[2]+"."+p[1]+"."+p[0],40,H-42);
+  cx.fillStyle="#FFFFFF"; cx.font='700 34px "Familjen Grotesk", Arial, sans-serif'; cx.fillText("proba",40,76);
+  cx.fillStyle="rgba(255,255,255,.8)"; cx.font='500 22px "IBM Plex Mono", monospace'; cx.fillText((L==="ru"?"визит ":"visita ")+p[2]+"."+p[1]+"."+p[0],40,106);
   cx.restore();
+}
+function chapterTag(label){
+  cx.save(); cx.font='600 28px "Figtree", Arial, sans-serif';
+  var w=cx.measureText(label).width+40;
+  cx.fillStyle="rgba(8,20,16,.74)"; rr(36,130,w,52,26); cx.fill();
+  cx.fillStyle="#3CC79E"; cx.beginPath(); cx.arc(56,156,6,0,Math.PI*2); cx.fill();
+  cx.fillStyle="#FFFFFF"; cx.textBaseline="middle"; cx.fillText(label,72,157); cx.restore();
 }
 function camUI(){
   var defs=qdefs(), d=defs[Math.min(CAM.q,defs.length-1)], guided=S.mode==="guiado", recording=CAM.state==="rec";
@@ -497,6 +528,9 @@ function camUI(){
   elPill.className="pill"+(recording?" rec":"");
   elPill.textContent = recording ? mmss(CAM.elapsed)+" · "+fmt(t("left"),{s:Math.max(0,left)}) : (CAM.started?t("paused")+" · "+mmss(CAM.elapsed):t("ready"));
   elTip.textContent = d.tip;
+  var qbox=document.getElementById("camQ");
+  if(guided){ qbox.hidden=false; document.getElementById("camQk").textContent=fmt(t("qOf"),{n:CAM.q+1,m:defs.length}); document.getElementById("camQt").textContent=d.q; }
+  else qbox.hidden=true;
   elShutter.className="shutter"+(recording?" on":"");
   elLabel.textContent = recording ? (guided?t("stopAnswer"):t("stopFree")) : (guided?t("recAnswer"):t("recFree"));
   elFlip.textContent=t("flip"); elFlip.disabled = recording || CAM.busy || (CAM.direct&&CAM.started);
@@ -568,7 +602,7 @@ function flip(to){
   CAM.busy=true; camUI();
   try{ CAM.vtrack.stop(); }catch(e){}
   gum({audio:false,video:videoC(to)}).then(function(s){
-    CAM.vtrack=s.getVideoTracks()[0]; CAM.facing=to; src.srcObject=new MediaStream([CAM.vtrack]); return src.play().catch(function(){});
+    CAM.vtrack=s.getVideoTracks()[0]; CAM.facing=to; CAM.flog.push({t:CAM.elapsed,f:to}); src.srcObject=new MediaStream([CAM.vtrack]); return src.play().catch(function(){});
   }).catch(function(){
     return gum({audio:false,video:videoC(CAM.facing)}).then(function(s){ CAM.vtrack=s.getVideoTracks()[0]; src.srcObject=new MediaStream([CAM.vtrack]); return src.play().catch(function(){}); });
   }).then(function(){ CAM.busy=false; camUI(); });
@@ -584,7 +618,7 @@ function finish(){
     var ext=type.indexOf("mp4")>-1?"mp4":"webm", name="proba_"+(CFG.code||S.date)+"."+ext;
     resetVideo();
     try{ S.out=new File([blob],name,{type:type}); }catch(e){ S.out=blob; S.out.name=name; }
-    S.outUrl=URL.createObjectURL(S.out); S.outDur=CAM.elapsed; S.segs=CAM.segs.slice(); S.shotAt=CAM.startedAt; S.noPause=CAM.noPause;
+    S.outUrl=URL.createObjectURL(S.out); S.outDur=CAM.elapsed; S.segs=CAM.segs.slice(); S.shotAt=CAM.startedAt; S.noPause=CAM.noPause; S.flog=CAM.flog.slice(); resetProc();
     closeCamera(); render();
   };
   try{ if(r.state==="paused") r.resume(); }catch(e){}
@@ -626,14 +660,52 @@ function summary(){
     "P1: "+(P.q1o[S.q1]||"—")+" | P2: "+(P.q2o[S.q2]||"—")+" | P3: "+(P.q3o[S.q3]||"—"),
     "Permissão: "+(S.perm?P.perm[S.perm][0]:"—")+" · autorização: "+(S.consent?"sim":"não")
   );
+  if(S.out){
+    var fin=procActive()&&PROC.final;
+    lines.push("Legendas: "+(!S.subs?"desligadas":(PROC.txState==="done"?((PROC.cues&&PROC.cues.length)?"sim":"sem fala"):PROC.txState==="fail"?"falhou":"em andamento")));
+    if(procActive()) lines.push("Rostos: "+(FACE.state==="ok"?(S.perm==="semrosto"?"máscara na autora + outros desfocados":"outros desfocados"):FACE.state==="fail"?"não processado":"em andamento")+(fin?"":" · enviado o original"));
+  }
   return lines.join("\n");
 }
 
 /* ---------- send ---------- */
+function procActive(){ return !!(S.out && S.perm && S.perm!=="privado"); }
+function finalFile(){ return (procActive() && PROC.final) ? PROC.final : S.out; }
+function procWaiting(){ return procActive() && !PROC.final && !PROC.useOriginal && PROC.state!=="fail" && PROC.state!=="skip"; }
+function procHtml(){
+  if(!procActive()) return "";
+  var rows=[];
+  if(S.subs){
+    var st=PROC.txState;
+    if(st==="loading"||st==="") rows.push(['…',fmt(t("pSubsLoad"),{p:Math.round(PROC.txPct*100)}),0]);
+    else if(st==="run") rows.push(['…',t("pSubsRun"),0]);
+    else if(st==="done") rows.push(['✓',(PROC.cues&&PROC.cues.length)?t("pSubsOk"):t("pSubsNone"),0]);
+    else rows.push(['!',t("pSubsFail"),1]);
+  }
+  var mask=S.perm==="semrosto";
+  if(FACE.state==="ok") rows.push(['✓',mask?t("pFaceMask"):t("pFaceBlur"),0]);
+  else if(FACE.state==="fail") rows.push(['!',t("pFaceFail"),1]);
+  else rows.push(['…',t("pFaceLoad"),0]);
+  var h='<div class="procbox" id="procbox"><h3>'+esc(PROC.final?t("pDone"):t("procTitle"))+'</h3>'+
+    rows.map(function(r){ return '<p'+(r[2]?' class="bad"':'')+'><i>'+r[0]+'</i><span>'+esc(r[1])+'</span></p>'; }).join("");
+  if(PROC.state==="render") h+='<p><i>…</i><span>'+esc(fmt(t("pRender"),{p:Math.round(PROC.pct*100)}))+'</span></p><div class="prog"><i style="width:'+Math.round(PROC.pct*100)+'%"></i></div>';
+  if(PROC.state==="fail") h+='<p class="bad"><i>!</i><span>'+esc(t("procFail"))+'</span></p>';
+  return h+'</div>';
+}
+var procTimer=0;
+function procUI(){
+  if(S.step!==6||CFG.gen||!procActive()) return;
+  var box=document.getElementById("procbox");
+  if(box && !PROC.justDone){ var tmp=document.createElement("div"); tmp.innerHTML=procHtml(); if(tmp.firstChild) box.replaceWith(tmp.firstChild); return; }
+  PROC.justDone=false; render();
+}
 function renderSend(){
-  var files = S.out ? [S.out] : S.parts.filter(function(p){return p;}).map(function(p){return p.file;});
+  var wait=procWaiting();
+  var f=finalFile();
+  var files = S.out ? [f] : S.parts.filter(function(p){return p;}).map(function(p){return p.file;});
   var h='<div class="stack">'+head(6,t("sendTitle"),t("sendLead"));
-  if(S.out) h+='<div class="stage"><video src="'+S.outUrl+'" playsinline controls></video></div>';
+  if(S.out) h+='<div class="stage"><video src="'+((procActive()&&PROC.finalUrl)?PROC.finalUrl:S.outUrl)+'" playsinline controls></video></div>';
+  h+=procHtml();
   if(S.sent) h+='<p class="thanks">'+esc(t("thanks"))+'</p>';
   if(S.shareMsg) h+='<p class="note">'+esc(S.shareMsg)+'</p>';
   h+='<div class="stack" id="actions"></div>';
@@ -642,18 +714,233 @@ function renderSend(){
   h+='</div>';
   app.innerHTML=h;
   var acts=document.getElementById("actions");
-  function addBtn(label,cls,fn){ var b=document.createElement("button"); b.type="button"; b.className="btn block "+cls; b.textContent=label; b.onclick=fn; acts.appendChild(b); return b; }
-  addBtn("1. "+(S.out?t("share"):t("shareParts")),"primary",function(){ shareFiles(files.concat(S.photo?[S.photo]:[])); });
+  function addBtn(label,cls,fn,dis){ var b=document.createElement("button"); b.type="button"; b.className="btn block "+cls; b.textContent=label; b.onclick=fn; if(dis) b.disabled=true; acts.appendChild(b); return b; }
+  addBtn("1. "+(S.out?t("share"):t("shareParts")),"primary",function(){ shareFiles(files.concat(S.photo?[S.photo]:[])); },wait);
+  if(wait) addBtn(t("sendNow"),"ghost",function(){ PROC.useOriginal=true; render(); });
   var wa=document.createElement("a"); wa.className="btn block ghost"; wa.target="_blank"; wa.rel="noopener";
   wa.href="https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(summary()); wa.textContent="2. "+t("summary");
   wa.onclick=function(){ S.sent=true; setTimeout(render,400); };
   acts.appendChild(wa);
-  if(S.out) addBtn(t("save"),"ghost",function(){ saveFile(S.out); });
+  if(S.out) addBtn(t("save"),"ghost",function(){ saveFile(finalFile()); },wait);
   var cp=addBtn(t("copy"),"ghost",function(){
     try{ navigator.clipboard.writeText(summary()).then(function(){ cp.textContent=t("copied")+" ✓"; },selectSum); }catch(e){ selectSum(); }
   });
   setBar([{label:t("back"),cls:"ghost",on:function(){go(5);}}]);
 }
+
+/* ---------- final video processing on the phone: subtitles (Whisper) + faces (MediaPipe) ---------- */
+var TF_URLS=["https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.2","https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.2/dist/transformers.min.js"];
+var MP_VER="0.10.14";
+var MP_URLS=["https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@"+MP_VER+"/vision_bundle.mjs","https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@"+MP_VER];
+var MP_WASM="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@"+MP_VER+"/wasm";
+var MP_MODEL="https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task";
+var ASR_MODEL="onnx-community/whisper-base";
+var PROC={}; var FACE={state:"",lm:null,loading:null};
+function resetProc(){ if(PROC.finalUrl) URL.revokeObjectURL(PROC.finalUrl); PROC={tx:null,txState:"",txPct:0,cues:null,audioBuf:null,ac:PROC.ac||null,final:null,finalUrl:"",key:"",state:"",pct:0,useOriginal:false}; }
+resetProc();
+function importFirst(urls){ var i=0; function next(){ if(i>=urls.length) return Promise.reject(new Error("import")); var u=urls[i++]; return import(u).catch(next); } return next(); }
+function ensureAC(){ try{ if(!PROC.ac){ var AC=window.AudioContext||window.webkitAudioContext; PROC.ac=new AC(); } PROC.ac.resume(); }catch(e){} return PROC.ac; }
+function decodeAudio(){
+  if(PROC.audioP) return PROC.audioP;
+  PROC.audioP=S.out.arrayBuffer().then(function(ab){
+    var ac=ensureAC();
+    return new Promise(function(res,rej){ var p=ac.decodeAudioData(ab,res,rej); if(p&&p.then) p.then(res,rej); });
+  }).then(function(b){ PROC.audioBuf=b; return b; });
+  return PROC.audioP;
+}
+function to16k(buf){
+  var OAC=window.OfflineAudioContext||window.webkitOfflineAudioContext, n=Math.max(1,Math.ceil(buf.duration*16000)), oc=new OAC(1,n,16000), s=oc.createBufferSource();
+  s.buffer=buf; s.connect(oc.destination); s.start(0);
+  var r=oc.startRendering(); if(r&&r.then) return r.then(function(o){ return o.getChannelData(0); });
+  return new Promise(function(res){ oc.oncomplete=function(e){ res(e.renderedBuffer.getChannelData(0)); }; });
+}
+function splitCues(chunks,dur){
+  var out=[], MAX=52;
+  chunks.forEach(function(c,ci){
+    var text=String(c.text||"").trim(); if(!text) return;
+    var s=c.timestamp&&c.timestamp[0]!=null?c.timestamp[0]:0;
+    var e=c.timestamp&&c.timestamp[1]!=null?c.timestamp[1]:(chunks[ci+1]&&chunks[ci+1].timestamp?chunks[ci+1].timestamp[0]:Math.min(dur||s+4,s+6));
+    if(e<=s) e=s+1.5;
+    var words=text.split(/\s+/), parts=[], cur="";
+    words.forEach(function(w){ var tt=cur?cur+" "+w:w; if(tt.length>MAX&&cur){ parts.push(cur); cur=w; } else { cur=tt; if(/[,.;!?]$/.test(w)&&cur.length>=24){ parts.push(cur); cur=""; } } });
+    if(cur) parts.push(cur);
+    var total=parts.reduce(function(a,p){return a+p.length;},0)||1, t0=s;
+    parts.forEach(function(p){ var d=(e-s)*p.length/total; out.push({s:t0,e:t0+d,text:p}); t0+=d; });
+  });
+  return out;
+}
+function startTranscription(){
+  if(PROC.tx) return PROC.tx;
+  PROC.txState="loading"; PROC.txPct=0; var files={};
+  function prog(p){
+    if(p&&p.status==="progress"&&p.total){ files[p.file]=[p.loaded,p.total]; var a=0,b=0; for(var k in files){ a+=files[k][0]; b+=files[k][1]; } PROC.txPct=b?a/b:0; throttleUI(); }
+  }
+  PROC.tx=decodeAudio().then(to16k).then(function(pcm){
+    return importFirst(TF_URLS).then(function(mod){
+      var T=mod.pipeline?mod:(mod.default||mod); try{ T.env.allowLocalModels=false; }catch(e){}
+      function mk(device,dtype){ return T.pipeline("automatic-speech-recognition",ASR_MODEL,{device:device,dtype:dtype,progress_callback:prog}); }
+      var p = navigator.gpu ? mk("webgpu",{encoder_model:"fp32",decoder_model_merged:"q4"}).catch(function(){ return mk("wasm","q8"); }) : mk("wasm","q8");
+      return p.then(function(asr){
+        PROC.txState="run"; procUI();
+        return asr(pcm,{language:L==="ru"?"russian":"portuguese",task:"transcribe",return_timestamps:true,chunk_length_s:30,stride_length_s:5});
+      });
+    });
+  }).then(function(out){
+    PROC.cues=splitCues((out&&out.chunks)||[],S.outDur); PROC.txState="done"; procUI(); return PROC.cues;
+  }).catch(function(e){ PROC.txState="fail"; PROC.txErr=String(e&&e.message||e); procUI(); return null; });
+  return PROC.tx;
+}
+function loadFace(){
+  if(FACE.loading) return FACE.loading;
+  FACE.state="loading";
+  FACE.loading=importFirst(MP_URLS).then(function(mod){
+    var V=mod.FaceLandmarker?mod:(mod.default||mod);
+    return V.FilesetResolver.forVisionTasks(MP_WASM).then(function(fs){
+      function mk(dl){ return V.FaceLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:MP_MODEL,delegate:dl},runningMode:"VIDEO",numFaces:5,minFaceDetectionConfidence:0.35,minFacePresenceConfidence:0.35,minTrackingConfidence:0.35}); }
+      return mk("GPU").catch(function(){ return mk("CPU"); });
+    });
+  }).then(function(lm){ FACE.lm=lm; FACE.state="ok"; procUI(); return lm; })
+    .catch(function(e){ FACE.state="fail"; FACE.err=String(e&&e.message||e); procUI(); return null; });
+  return FACE.loading;
+}
+function throttleUI(){ if(procTimer) return; procTimer=setTimeout(function(){ procTimer=0; procUI(); },300); }
+
+function prepareFinal(){
+  if(!procActive()) return;
+  var key=S.perm+"|"+S.subs+"|"+S.outUrl;
+  if(PROC.key===key && (PROC.final||PROC.state==="wait"||PROC.state==="render")) return;
+  if(PROC.finalUrl){ URL.revokeObjectURL(PROC.finalUrl); PROC.finalUrl=""; PROC.final=null; }
+  PROC.key=key; PROC.state="wait"; PROC.pct=0; PROC.useOriginal=false;
+  /* gesture-bound unlocks: audio context and a muted player element */
+  ensureAC();
+  var v=document.createElement("video"); v.muted=true; v.playsInline=true; v.setAttribute("playsinline",""); v.preload="auto"; v.className="cam-src"; v.src=S.outUrl; document.body.appendChild(v);
+  var pp=v.play(); if(pp&&pp.then) pp.then(function(){ v.pause(); v.currentTime=0; }).catch(function(){});
+  if(PROC.player) try{ PROC.player.remove(); }catch(e){}
+  PROC.player=v;
+  var subsP = S.subs ? startTranscription() : Promise.resolve(null);
+  var faceP = loadFace();
+  var myKey=key;
+  Promise.all([subsP,faceP,decodeAudio().catch(function(){ return null; })]).then(function(r){
+    if(PROC.key!==myKey) return;
+    var cues=r[0], lm=r[1], buf=r[2];
+    if(!buf || (!lm && !(cues&&cues.length))){ PROC.state= buf? "skip":"fail"; PROC.justDone=true; procUI(); return; }
+    PROC.state="render"; procUI();
+    return renderPass(v,buf,lm,cues,S.perm==="semrosto",S.flog||[]).then(function(file){
+      if(PROC.key!==myKey) return;
+      PROC.final=file; PROC.finalUrl=URL.createObjectURL(file); PROC.state="done"; PROC.justDone=true; procUI();
+    });
+  }).catch(function(e){ PROC.state="fail"; PROC.err=String(e&&e.message||e); PROC.justDone=true; procUI(); });
+}
+
+var FACE_OVAL=[10,338,297,332,284,251,389,356,454,323,361,288,397,365,379,378,400,377,152,148,176,149,150,136,172,58,132,93,234,127,162,21,54,103,67,109];
+var LIPS_OUT=[61,146,91,181,84,17,314,405,321,375,291,409,270,269,267,0,37,39,40,185];
+var LIPS_IN=[78,95,88,178,87,14,317,402,318,324,308,415,310,311,312,13,82,81,80,191];
+var EYE_A=[33,7,163,144,145,153,154,155,133,173,157,158,159,160,161,246], EYE_B=[362,382,381,380,374,373,390,249,263,466,388,387,386,385,384,398];
+var BROW_A=[70,63,105,66,107], BROW_B=[336,296,334,293,300];
+
+function renderPass(v,buf,lm,cues,mask,flog){
+  return new Promise(function(resolve,reject){
+    var c=document.createElement("canvas"); c.width=W; c.height=H; c.className="cam-src"; document.body.appendChild(c);
+    var x=c.getContext("2d"), sm=document.createElement("canvas"), sx=sm.getContext("2d");
+    var ac=ensureAC(), dest=ac.createMediaStreamDestination(), node=ac.createBufferSource(); node.buffer=buf; node.connect(dest);
+    var stream, rec, chunks=[], mime=pickMime();
+    try{
+      stream=new MediaStream([c.captureStream(30).getVideoTracks()[0], dest.stream.getAudioTracks()[0]]);
+      var opts={videoBitsPerSecond:2500000,audioBitsPerSecond:128000}; if(mime) opts.mimeType=mime;
+      try{ rec=new MediaRecorder(stream,opts); }catch(e){ rec=new MediaRecorder(stream); }
+    }catch(e){ reject(e); return; }
+    rec.ondataavailable=function(e){ if(e.data&&e.data.size) chunks.push(e.data); };
+    var dur=(isFinite(v.duration)&&v.duration)||S.outDur||buf.duration, last=null, lastFrame=-99, frame=0, raf=0, done=false, lastTs=0;
+    function facingAt(tt){ var f=(flog[0]&&flog[0].f)||"user"; for(var i=0;i<flog.length;i++){ if(flog[i].t<=tt+0.05) f=flog[i].f; } return f; }
+    function cueAt(tt){ if(!cues) return null; for(var i=0;i<cues.length;i++){ if(tt>=cues[i].s&&tt<cues[i].e) return cues[i].text; } return null; }
+    function loop(){
+      if(done) return;
+      var tt=v.currentTime;
+      x.drawImage(v,0,0,W,H);
+      if(lm){
+        var res=null, ts=Math.max(lastTs+1,performance.now()); lastTs=ts;
+        try{ res=lm.detectForVideo(v,ts); }catch(e){}
+        if(res&&res.faceLandmarks&&res.faceLandmarks.length){ last=res.faceLandmarks; lastFrame=frame; }
+        else if(frame-lastFrame>10) last=null;
+        if(last) applyFaces(x,sx,sm,last,facingAt(tt),mask);
+      }
+      var cue=cueAt(tt); if(cue) drawCue(x,cue);
+      frame++; PROC.pct=Math.min(1,tt/dur); if(frame%10===0) throttleUI();
+      raf=requestAnimationFrame(loop);
+    }
+    function end(){
+      if(done) return; done=true; cancelAnimationFrame(raf);
+      try{ node.stop(); }catch(e){}
+      rec.onstop=function(){
+        var type=(rec.mimeType||mime||"video/webm").split(";")[0], blob=new Blob(chunks,{type:type});
+        var name="proba_"+(CFG.code||S.date)+"_final."+(type.indexOf("mp4")>-1?"mp4":"webm"), file;
+        try{ file=new File([blob],name,{type:type}); }catch(e){ file=blob; file.name=name; }
+        try{ c.remove(); }catch(e){}
+        blob.size?resolve(file):reject(new Error("empty"));
+      };
+      try{ rec.stop(); }catch(e){ reject(e); }
+    }
+    v.onended=end; setTimeout(function(){ if(!done) end(); },(dur+5)*1000);
+    try{ v.currentTime=0; }catch(e){}
+    rec.start(1000);
+    var p=v.play();
+    (p&&p.then?p:Promise.resolve()).then(function(){ try{ node.start(0); }catch(e){} loop(); }).catch(function(e){ end(); reject(e); });
+  });
+}
+function bbox(f){ var a=1e9,b=1e9,cc=-1e9,d=-1e9; for(var i=0;i<f.length;i++){ var px=f[i].x*W, py=f[i].y*H; if(px<a)a=px; if(py<b)b=py; if(px>cc)cc=px; if(py>d)d=py; } return {x:a,y:b,w:cc-a,h:d-b}; }
+function applyFaces(x,sx,sm,faces,facing,mask){
+  var boxes=faces.map(bbox), author=-1;
+  if(facing==="user"){ var best=0; boxes.forEach(function(bx,i){ var ar=bx.w*bx.h; if(ar>best){ best=ar; author=i; } }); }
+  faces.forEach(function(f,i){
+    if(i===author){ if(mask) drawMask(x,f); return; }
+    pixelate(x,sx,sm,boxes[i]);
+  });
+}
+function pixelate(x,sx,sm,bx){
+  var padX=bx.w*0.25, padY=bx.h*0.35, X=Math.max(0,bx.x-padX), Y=Math.max(0,bx.y-padY*1.2), Wd=Math.min(W-X,bx.w+padX*2), Hd=Math.min(H-Y,bx.h+padY*2);
+  if(Wd<4||Hd<4) return;
+  var sw=Math.max(4,Math.round(Wd/22)), sh=Math.max(4,Math.round(Hd/22)); sm.width=sw; sm.height=sh;
+  sx.imageSmoothingEnabled=true; sx.drawImage(x.canvas,X,Y,Wd,Hd,0,0,sw,sh);
+  x.save(); x.imageSmoothingEnabled=false; x.drawImage(sm,0,0,sw,sh,X,Y,Wd,Hd); x.restore();
+}
+function pts(f,idx,scale,cx0,cy0){ return idx.map(function(i){ var px=f[i].x*W, py=f[i].y*H; if(scale){ px=cx0+(px-cx0)*scale; py=cy0+(py-cy0)*scale; } return [px,py]; }); }
+function poly(x,P){ x.beginPath(); P.forEach(function(p,i){ if(i) x.lineTo(p[0],p[1]); else x.moveTo(p[0],p[1]); }); x.closePath(); }
+function centroid(P){ var a=0,b=0; P.forEach(function(p){ a+=p[0]; b+=p[1]; }); return [a/P.length,b/P.length]; }
+function drawMask(x,f){
+  var ov=pts(f,FACE_OVAL), c0=centroid(ov), bx=bbox(f), fw=bx.w;
+  var O=pts(f,FACE_OVAL,1.12,c0[0],c0[1]);
+  x.save();
+  var g=x.createLinearGradient(0,bx.y,0,bx.y+bx.h); g.addColorStop(0,"#45D3A8"); g.addColorStop(1,"#0F7A5D");
+  poly(x,O); x.fillStyle=g; x.fill(); x.lineWidth=Math.max(2,fw*0.02); x.strokeStyle="rgba(5,35,26,.55)"; x.stroke();
+  x.lineCap="round"; x.lineJoin="round";
+  [BROW_A,BROW_B].forEach(function(idx){ var P=pts(f,idx); x.beginPath(); P.forEach(function(p,i){ if(i) x.lineTo(p[0],p[1]); else x.moveTo(p[0],p[1]); }); x.lineWidth=Math.max(3,fw*0.045); x.strokeStyle="#05231A"; x.stroke(); });
+  [[EYE_A,468],[EYE_B,473]].forEach(function(e){
+    var P=pts(f,e[0]), ec=centroid(P), E=pts(f,e[0],1.35,ec[0],ec[1]);
+    poly(x,E); x.fillStyle="#FFFFFF"; x.fill();
+    var ip = f[e[1]] ? [f[e[1]].x*W,f[e[1]].y*H] : ec;
+    var ew=Math.abs(P[8][0]-P[0][0]), eh=Math.abs(P[4][1]-P[12][1]);
+    if(eh>ew*0.12){ x.save(); poly(x,E); x.clip(); x.beginPath(); x.arc(ip[0],ip[1],Math.max(2,ew*0.24),0,Math.PI*2); x.fillStyle="#05231A"; x.fill(); x.restore(); }
+  });
+  var LO=pts(f,LIPS_OUT), LI=pts(f,LIPS_IN);
+  poly(x,LO); x.fillStyle="#F3A491"; x.fill();
+  poly(x,LI); x.fillStyle="#3A0F14"; x.fill();
+  x.restore();
+}
+function drawCue(x,text){
+  x.save(); x.font='600 42px "Figtree", Arial, sans-serif';
+  var words=String(text).split(/\s+/), lines=[], cur="";
+  words.forEach(function(w){ var tt=cur?cur+" "+w:w; if(x.measureText(tt).width>W-140&&cur){ lines.push(cur); cur=w; } else cur=tt; });
+  if(cur) lines.push(cur); lines=lines.slice(0,3);
+  var lh=54, ph=lines.length*lh+28, y=H-150-ph, maxw=0;
+  lines.forEach(function(l){ maxw=Math.max(maxw,x.measureText(l).width); });
+  var pw=maxw+48, px=(W-pw)/2;
+  x.fillStyle="rgba(5,15,12,.72)"; rr2(x,px,y,pw,ph,22); x.fill();
+  x.fillStyle="#FFFFFF"; x.textAlign="center"; x.textBaseline="top";
+  lines.forEach(function(l,i){ x.fillText(l,W/2,y+14+i*lh); });
+  x.restore();
+}
+function rr2(x,X,Y,w,h,r){ x.beginPath(); x.moveTo(X+r,Y); x.arcTo(X+w,Y,X+w,Y+h,r); x.arcTo(X+w,Y+h,X,Y+h,r); x.arcTo(X,Y+h,X,Y,r); x.arcTo(X,Y,X+w,Y,r); x.closePath(); }
+
 function selectSum(){ var d=document.querySelector("details"); if(d) d.open=true; var el=document.getElementById("sumtxt"); if(!el) return; var r=document.createRange(); r.selectNodeContents(el); var s=getSelection(); s.removeAllRanges(); s.addRange(r); }
 function shareFiles(files){
   S.shareMsg="";
