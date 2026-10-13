@@ -313,6 +313,8 @@ details[open] summary svg{transform:rotate(90deg)}
 .cam-ctl .side .ci .msw{width:30px;height:30px;border-radius:999px;border:2px solid #fff;box-sizing:border-box}
 .cam-ctl .side[aria-expanded="true"] .ci{background:#fff;color:#17181C}
 .masks:not([hidden]){animation:rise .25s var(--ease)}
+.focus-ring{position:fixed;z-index:3;width:70px;height:70px;margin:-35px 0 0 -35px;border:2px solid #F2C94C;border-radius:14px;pointer-events:none;animation:focusring .9s var(--ease) forwards}
+@keyframes focusring{0%{transform:scale(1.4);opacity:0}25%{transform:scale(1);opacity:1}80%{opacity:1}100%{opacity:0}}
 .cam-x{all:unset;cursor:pointer;font:600 15px/1 var(--f);padding:9px 14px;border-radius:999px;background:rgba(255,255,255,.16);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .cam-view{position:absolute;inset:0}
 .cam-view canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#111}
@@ -433,7 +435,7 @@ pt:{
  camNote:"O navegador vai pedir acesso à câmera e ao microfone. Nada sai do seu celular enquanto você grava.",
  openCam:"Abrir câmera", camFail:"Não deu para abrir a câmera aqui. Grave com a câmera do celular, uma resposta por vez.",
  questions:[
-  {label:"O resultado",q:"Mostre de perto como ficou.",tip:"Câmera de trás, luz natural. Não precisa falar.",cam:"environment"},
+  {label:"O resultado",q:"Mostre de perto como ficou.",tip:"Câmera de trás, a um palmo de distância. Luz natural ajuda. Não precisa falar.",cam:"environment"},
   {label:"O que achou",q:"O que você gostou? E o que poderia ser melhor?",tip:"Seja sincera: o ponto fraco também ajuda quem vai escolher.",cam:"user"},
   {label:"O atendimento",q:"Foi pontual? Limpeza, preço combinado, voltaria?",tip:"Fale do que mais importou para você.",cam:"user"}],
  freeQ:{label:"Sua avaliação",q:"Fale sobre a sua visita, do jeito que quiser.",tip:"Resultado, atendimento, preço: o que importou para você.",cam:"user"},
@@ -494,7 +496,7 @@ ru:{
  camNote:"Браузер попросит доступ к камере и микрофону. Пока вы снимаете, ничего не уходит с телефона.",
  openCam:"Открыть камеру", camFail:"Здесь камера не открылась. Снимите обычной камерой телефона, по одному ответу.",
  questions:[
-  {label:"Результат",q:"Покажите крупно, что получилось.",tip:"Задняя камера, дневной свет. Говорить не обязательно.",cam:"environment"},
+  {label:"Результат",q:"Покажите крупно, что получилось.",tip:"Задняя камера, примерно на расстоянии ладони. Дневной свет поможет. Говорить не обязательно.",cam:"environment"},
   {label:"Что понравилось",q:"Что понравилось? А что могло быть лучше?",tip:"Будьте честны: минус тоже помогает тому, кто выбирает.",cam:"user"},
   {label:"Обслуживание",q:"Приняли вовремя? Чистота, цена как договаривались, вернётесь?",tip:"Скажите, что было важно лично вам.",cam:"user"}],
  freeQ:{label:"Ваш отзыв",q:"Расскажите о визите, как хотите.",tip:"Результат, обслуживание, цена — что было важно вам.",cam:"user"},
@@ -791,7 +793,7 @@ function openCamera(){
   CAM={open:true,q:0,state:"idle",facing:defs[0].cam,audio:null,vtrack:null,rec:null,chunks:[],raf:0,elapsed:0,tick:null,segStart:0,segs:[],direct:false,noPause:false,started:false,busy:false,startedAt:null,flog:[{t:0,f:defs[0].cam}]};
   loadFace(); buildMaskChips(); document.getElementById("camMasks").hidden=true;
   gum({audio:{echoCancellation:true,noiseSuppression:true},video:videoC(CAM.facing)}).then(function(s){
-    CAM.audio=s.getAudioTracks()[0]; CAM.vtrack=s.getVideoTracks()[0];
+    CAM.audio=s.getAudioTracks()[0]; CAM.vtrack=s.getVideoTracks()[0]; setupFocus(CAM.vtrack);
     src.srcObject=new MediaStream([CAM.vtrack]);
     return src.play().catch(function(){});
   }).then(function(){
@@ -801,8 +803,28 @@ function openCamera(){
     CAM.open=false; camEl.hidden=true; try{ if(document.fullscreenElement) document.exitFullscreen(); }catch(e){} S.native=true; render();
   });
 }
+/* Android Chrome exposes focus controls: keep autofocus continuous and allow tap-to-focus. iOS keeps focus to itself. */
+function setupFocus(track){
+  CAM.focusPoi=false;
+  try{
+    var cap=track.getCapabilities?track.getCapabilities():{};
+    if(cap.focusMode&&cap.focusMode.indexOf("continuous")>-1) track.applyConstraints({advanced:[{focusMode:"continuous"}]}).catch(function(){});
+    CAM.focusPoi=!!(cap.pointsOfInterest||(cap.focusMode&&cap.focusMode.indexOf("single-shot")>-1));
+  }catch(e){}
+}
+cv.addEventListener("pointerdown",function(ev){
+  if(!CAM.open||!CAM.focusPoi||!CAM.vtrack) return;
+  var r=cv.getBoundingClientRect(), x=(ev.clientX-r.left)/r.width, y=(ev.clientY-r.top)/r.height;
+  try{
+    CAM.vtrack.applyConstraints({advanced:[{pointsOfInterest:[{x:x,y:y}],focusMode:"single-shot"}]}).catch(function(){});
+    setTimeout(function(){ try{ CAM.vtrack.applyConstraints({advanced:[{focusMode:"continuous"}]}).catch(function(){}); }catch(e){} },2500);
+  }catch(e){}
+  var ring=document.createElement("span"); ring.className="focus-ring"; ring.style.left=ev.clientX+"px"; ring.style.top=ev.clientY+"px"; camEl.appendChild(ring); setTimeout(function(){ ring.remove(); },900);
+});
 function loop(){
-  draw();
+  /* camera delivers ~30 fps; ProMotion screens call rAF up to 120 times a second, so draw at camera pace only */
+  var now=performance.now();
+  if(now-(CAM.lastDraw||0)>=31){ CAM.lastDraw=now; draw(); }
   CAM.raf=requestAnimationFrame(loop);
 }
 function draw(){
@@ -811,10 +833,15 @@ function draw(){
     var vw=src.videoWidth, vh=src.videoHeight, s=Math.max(W/vw,H/vh), dw=vw*s, dh=vh*s;
     try{ cx.drawImage(src,(W-dw)/2,(H-dh)/2,dw,dh); }catch(e){}
     if(FACE.state==="ok"){
-      var ts=Math.max((CAM.lastTs||0)+1,performance.now()); CAM.lastTs=ts; var res=null;
-      try{ res=FACE.lm.detectForVideo(src,ts); }catch(e){}
-      var fl=res&&res.faceLandmarks;
-      if(fl&&fl.length){ CAM.faces=fl; CAM.miss=0; } else { CAM.miss=(CAM.miss||0)+1; if(CAM.miss>10) CAM.faces=null; }
+      /* full-rate face tracking only when a mask must follow the face; otherwise ~10/s is enough to keep other faces blurred */
+      CAM.fc=(CAM.fc||0)+1;
+      var needFull = S.mask!=="none" && CAM.facing==="user";
+      if(needFull || CAM.fc%3===0 || !CAM.faces){
+        var ts=Math.max((CAM.lastTs||0)+1,performance.now()); CAM.lastTs=ts; var res=null;
+        try{ res=FACE.lm.detectForVideo(src,ts); }catch(e){}
+        var fl=res&&res.faceLandmarks;
+        if(fl&&fl.length){ CAM.faces=fl; CAM.miss=0; } else { CAM.miss=(CAM.miss||0)+(needFull?1:3); if(CAM.miss>10) CAM.faces=null; }
+      }
       var ox=(W-dw)/2, oy=(H-dh)/2, map=function(p){ return [ox+p.x*vw*s, oy+p.y*vh*s, p.z*vw*s]; };
       var r=processFaces(cx,CAM.faces,map,CAM.facing,S.mask,W,H);
       var nf=S.mask!=="none" && CAM.facing==="user" && !r.masked;
@@ -957,7 +984,7 @@ function flip(to){
   CAM.busy=true; camUI();
   try{ CAM.vtrack.stop(); }catch(e){}
   gum({audio:false,video:videoC(to)}).then(function(s){
-    CAM.vtrack=s.getVideoTracks()[0]; CAM.facing=to; CAM.flog.push({t:CAM.elapsed,f:to}); src.srcObject=new MediaStream([CAM.vtrack]); return src.play().catch(function(){});
+    CAM.vtrack=s.getVideoTracks()[0]; setupFocus(CAM.vtrack); CAM.facing=to; CAM.flog.push({t:CAM.elapsed,f:to}); src.srcObject=new MediaStream([CAM.vtrack]); return src.play().catch(function(){});
   }).catch(function(){
     return gum({audio:false,video:videoC(CAM.facing)}).then(function(s){ CAM.vtrack=s.getVideoTracks()[0]; src.srcObject=new MediaStream([CAM.vtrack]); return src.play().catch(function(){}); });
   }).then(function(){ CAM.busy=false; camUI(); });
