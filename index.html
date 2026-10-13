@@ -779,7 +779,7 @@ function startTranscription(){
     return importFirst(TF_URLS).then(function(mod){
       var T=mod.pipeline?mod:(mod.default||mod); try{ T.env.allowLocalModels=false; }catch(e){}
       function mk(device,dtype){ return T.pipeline("automatic-speech-recognition",ASR_MODEL,{device:device,dtype:dtype,progress_callback:prog}); }
-      var p = navigator.gpu ? mk("webgpu",{encoder_model:"fp32",decoder_model_merged:"q4"}).catch(function(){ return mk("wasm","q8"); }) : mk("wasm","q8");
+      var p = mk("wasm","q8"); /* ~77 MB, same model on every phone */
       return p.then(function(asr){
         PROC.txState="run"; procUI();
         return asr(pcm,{language:L==="ru"?"russian":"portuguese",task:"transcribe",return_timestamps:true,chunk_length_s:30,stride_length_s:5});
