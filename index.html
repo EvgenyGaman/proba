@@ -960,7 +960,7 @@ var LIPS_IN=[78,95,88,178,87,14,317,402,318,324,308,415,310,311,312,13,82,81,80,
 var EYE_A=[33,7,163,144,145,153,154,155,133,173,157,158,159,160,161,246], EYE_B=[362,382,381,380,374,373,390,249,263,466,388,387,386,385,384,398];
 var LID_A=[173,157,158,159,160,161,246], LID_B=[398,384,385,386,387,388,466];
 var BROW_A=[46,53,52,65,55], BROW_A2=[70,63,105,66,107], BROW_B=[276,283,282,295,285], BROW_B2=[300,293,334,296,336];
-var NV=468, NX=3;
+var NV=468, NX=3, NS=36, SK=NV+NX; /* SK: first index of the skirt ring that extends the mask past the face edge */
 
 function importFirst(urls){ var i=0; function next(){ if(i>=urls.length) return Promise.reject(new Error("import")); var u=urls[i++]; return import(u).catch(next); } return next(); }
 function loadMesh(){
@@ -968,14 +968,19 @@ function loadMesh(){
     var VT=[],F=[],uvRaw=new Array(NV);
     txt.split("\n").forEach(function(l){ var p=l.trim().split(/\s+/); if(p[0]==="vt") VT.push([+p[1],+p[2]]); else if(p[0]==="f") F.push(p.slice(1).map(function(x){ return x.split("/").map(Number); })); });
     F.forEach(function(f){ f.forEach(function(q){ uvRaw[q[0]-1]=VT[q[1]-1]; }); });
-    var uv=new Float32Array((NV+NX)*2);
+    var uv=new Float32Array((NV+NX+NS)*2);
     for(var i=0;i<NV;i++){ var t2=uvRaw[i]||[0.5,0.5]; uv[2*i]=t2[0]; uv[2*i+1]=1-t2[1]; }
     function cuv(idx,k){ var a=0,b=0; idx.forEach(function(i){ a+=uv[2*i]; b+=uv[2*i+1]; }); uv[2*k]=a/idx.length; uv[2*k+1]=b/idx.length; }
     cuv(EYE_A,NV); cuv(EYE_B,NV+1); cuv(LIPS_IN,NV+2);
+    var oc=[0,0]; FACE_OVAL.forEach(function(i){ oc[0]+=uv[2*i]; oc[1]+=uv[2*i+1]; }); oc[0]/=NS; oc[1]/=NS;
+    var vmin=1,vmax=0; FACE_OVAL.forEach(function(i){ vmin=Math.min(vmin,uv[2*i+1]); vmax=Math.max(vmax,uv[2*i+1]); });
+    var kk=FACE_OVAL.map(function(i){ var up=Math.max(0,(oc[1]-uv[2*i+1])/(oc[1]-vmin)); return 1.10+0.22*up*up; });
+    FACE_OVAL.forEach(function(i,k){ uv[2*(SK+k)]=oc[0]+(uv[2*i]-oc[0])*kk[k]; uv[2*(SK+k)+1]=oc[1]+(uv[2*i+1]-oc[1])*kk[k]; });
     var base=[]; F.forEach(function(f){ base.push(f[0][0]-1,f[1][0]-1,f[2][0]-1); });
     var idx=base.slice();
+    for(var k=0;k<NS;k++){ var a=FACE_OVAL[k], b=FACE_OVAL[(k+1)%NS], sa=SK+k, sb=SK+(k+1)%NS; idx.push(a,b,sb, a,sb,sa); }
     [[EYE_A,NV],[EYE_B,NV+1],[LIPS_IN,NV+2]].forEach(function(p){ var loop=p[0]; for(var i=0;i<loop.length;i++){ idx.push(p[1],loop[i],loop[(i+1)%loop.length]); } });
-    return {uv:uv, idx:new Uint16Array(idx), base:new Uint16Array(base)};
+    return {uv:uv, idx:new Uint16Array(idx), base:new Uint16Array(base), k:kk};
   });
 }
 function loadFace(){
@@ -1013,7 +1018,7 @@ function makeTexture(key){
   if(TEXS[key]) return TEXS[key];
   var c=document.createElement("canvas"); c.width=TS; c.height=TS; var g=c.getContext("2d"); g.lineJoin="round"; g.lineCap="round";
   var nose=uvp(1), fore=uvp(10), chin=uvp(152), eA=centroid(uvPoly(EYE_A)), eB=centroid(uvPoly(EYE_B)), mouth=centroid(uvPoly(LIPS_OUT));
-  var faceH=Math.abs(chin[1]-fore[1]), oval=uvPoly(FACE_OVAL);
+  var faceH=Math.abs(chin[1]-fore[1]), oval=uvPoly(FACE_OVAL), skirt=[]; for(var si=0;si<NS;si++) skirt.push(uvp(SK+si));
   function eyes(fill,stroke,lw,lashes,scale){
     [[EYE_A,LID_A],[EYE_B,LID_B]].forEach(function(e){
       var P=uvPoly(e[0],scale||1.35); poly(g,P); g.fillStyle=fill; g.fill(); if(stroke){ g.lineWidth=lw; g.strokeStyle=stroke; g.stroke(); }
@@ -1023,7 +1028,7 @@ function makeTexture(key){
   }
   function brows(color,w){ [BROW_A2,BROW_B2].forEach(function(b){ pline(g,uvPoly(b)); g.strokeStyle=color; g.lineWidth=w; g.stroke(); }); }
   function lips(fill,line,scale){ var O=uvPoly(LIPS_OUT,scale||1); poly(g,O); g.fillStyle=fill; g.fill(); if(line){ pline(g,uvPoly(LIPS_IN.slice(0,11),scale||1)); g.strokeStyle=line; g.lineWidth=4; g.stroke(); } }
-  function rim(color,w,blur){ g.save(); if(blur){ g.shadowColor=color; g.shadowBlur=blur; } poly(g,oval); g.strokeStyle=color; g.lineWidth=w; g.stroke(); g.restore(); }
+  function rim(color,w,blur){ g.save(); if(blur){ g.shadowColor=color; g.shadowBlur=blur; } poly(g,skirt); g.strokeStyle=color; g.lineWidth=w; g.stroke(); g.restore(); }
   function wire(color,w,alpha,blur){ var m=FACE.mesh; g.save(); g.globalAlpha=alpha; g.strokeStyle=color; g.lineWidth=w; if(blur){ g.shadowColor=color; g.shadowBlur=blur; } g.beginPath(); for(var i=0;i<m.base.length;i+=3){ var a=uvp(m.base[i]),b=uvp(m.base[i+1]),d=uvp(m.base[i+2]); g.moveTo(a[0],a[1]); g.lineTo(b[0],b[1]); g.lineTo(d[0],d[1]); g.closePath(); } g.stroke(); g.restore(); }
   function radial(cxp,cyp,r,c0,c1){ var gr=g.createRadialGradient(cxp,cyp,0,cxp,cyp,r); gr.addColorStop(0,c0); gr.addColorStop(1,c1); return gr; }
   function swirl(o,dir,color,w){ g.save(); g.strokeStyle=color; g.lineWidth=w; var r=faceH*0.09; for(var k=0;k<3;k++){ var rr3=r*(1-k*0.28); g.beginPath(); for(var a=0;a<=Math.PI*1.6;a+=0.08){ var rad=rr3*(1-a/(Math.PI*2.2)); var px=o[0]+dir*Math.cos(a+k)*rad, py=o[1]-Math.sin(a+k)*rad; if(a===0) g.moveTo(px,py); else g.lineTo(px,py); } g.stroke(); } g.restore(); }
@@ -1062,12 +1067,13 @@ function makeTexture(key){
     rim("#19E3FF",6,14);
   } else if(key==="aquarela"){
     g.fillStyle="#F8F4EE"; g.fillRect(0,0,TS,TS);
-    var r2=seeded(11), cols=["rgba(94,196,170,.32)","rgba(246,170,140,.32)","rgba(176,150,226,.30)","rgba(250,214,120,.28)"];
-    for(var b=0;b<26;b++){ var px=oval[Math.floor(r2()*oval.length)], cxp=px[0]+(nose[0]-px[0])*r2()*0.8, cyp=px[1]+(nose[1]-px[1])*r2()*0.8, col=cols[b%cols.length]; g.fillStyle=radial(cxp,cyp,faceH*(0.08+r2()*0.14),col,col.replace(/[\d.]+\)$/,"0)")); g.fillRect(0,0,TS,TS); }
+    var r2=seeded(11), cols=["rgba(64,186,156,.55)","rgba(244,150,116,.55)","rgba(156,124,222,.50)","rgba(246,198,90,.50)"];
+    for(var b=0;b<34;b++){ var px=oval[Math.floor(r2()*oval.length)], cxp=px[0]+(nose[0]-px[0])*r2()*0.8, cyp=px[1]+(nose[1]-px[1])*r2()*0.8, col=cols[b%cols.length]; g.fillStyle=radial(cxp,cyp,faceH*(0.08+r2()*0.14),col,col.replace(/[\d.]+\)$/,"0)")); g.fillRect(0,0,TS,TS); }
     [[eA,-1],[eB,1]].forEach(function(e){ g.save(); g.fillStyle="rgba(70,150,110,.75)"; for(var l=0;l<3;l++){ g.beginPath(); g.ellipse(e[0][0]+e[1]*faceH*(0.13+l*0.03), e[0][1]-faceH*(0.02+l*0.045), faceH*0.035, faceH*0.013, e[1]*(0.5+l*0.4), 0, Math.PI*2); g.fill(); } g.restore(); });
     eyes("#FFFFFF","#2E5D57",5,"#2E5D57",1.3);
     brows("rgba(61,107,99,.85)",8);
-    lips("#E58F7A","#9C4A3A",0.95);
+    lips("#E07A63","#8E3E2E",0.95);
+    rim("rgba(46,93,87,.55)",6);
   }
   TEXS[key]=c; return c;
 }
@@ -1084,7 +1090,7 @@ function glInit(){
   gl.attachShader(pr,sh(gl.VERTEX_SHADER,"attribute vec3 aP;attribute vec2 aU;attribute float aS;attribute float aH;varying vec2 vU;varying float vS;varying float vH;void main(){gl_Position=vec4(aP,1.0);vU=aU;vS=aS;vH=aH;}"));
   gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,"precision mediump float;uniform sampler2D uT;varying vec2 vU;varying float vS;varying float vH;void main(){vec4 t=texture2D(uT,vU);gl_FragColor=vec4(t.rgb*vS+vec3(vH),1.0);}"));
   gl.linkProgram(pr); gl.useProgram(pr);
-  var n=NV+NX, m=FACE.mesh;
+  var n=NV+NX+NS, m=FACE.mesh;
   function buf(data,usage){ var b=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,b); gl.bufferData(gl.ARRAY_BUFFER,data,usage); return b; }
   var R={c:c,gl:gl,pr:pr,n:n,pos:new Float32Array(n*3),shade:new Float32Array(n),spec:new Float32Array(n),nrm:new Float32Array(n*3),px:new Float32Array(n*3),tex:{}};
   R.bP=buf(R.pos,gl.DYNAMIC_DRAW); R.bU=buf(m.uv,gl.STATIC_DRAW); R.bS=buf(R.shade,gl.DYNAMIC_DRAW); R.bH=buf(R.spec,gl.DYNAMIC_DRAW);
@@ -1109,6 +1115,8 @@ function glDraw(f,map,key,w,h){
   if(R.c.width!==w||R.c.height!==h){ R.c.width=w; R.c.height=h; }
   for(i=0;i<NV;i++){ var q=map(f[i]); px[3*i]=q[0]; px[3*i+1]=q[1]; px[3*i+2]=q[2]; }
   [[EYE_A,NV],[EYE_B,NV+1],[LIPS_IN,NV+2]].forEach(function(p){ var a=0,b=0,cz=0; p[0].forEach(function(k){ a+=px[3*k]; b+=px[3*k+1]; cz+=px[3*k+2]; }); var L2=p[0].length; px[3*p[1]]=a/L2; px[3*p[1]+1]=b/L2; px[3*p[1]+2]=cz/L2; });
+  var ocx=0,ocy=0; FACE_OVAL.forEach(function(k){ ocx+=px[3*k]; ocy+=px[3*k+1]; }); ocx/=NS; ocy/=NS;
+  FACE_OVAL.forEach(function(k,q){ var s2=SK+q, kq=m.k[q]; px[3*s2]=ocx+(px[3*k]-ocx)*kq; px[3*s2+1]=ocy+(px[3*k+1]-ocy)*kq; px[3*s2+2]=px[3*k+2]+2; });
   nrm.fill(0);
   var bs=m.base;
   for(j=0;j<bs.length;j+=3){
@@ -1119,6 +1127,7 @@ function glDraw(f,map,key,w,h){
     nrm[a1]+=nx;nrm[a1+1]+=ny;nrm[a1+2]+=nz; nrm[b1]+=nx;nrm[b1+1]+=ny;nrm[b1+2]+=nz; nrm[c1]+=nx;nrm[c1+1]+=ny;nrm[c1+2]+=nz;
   }
   [[EYE_A,NV],[EYE_B,NV+1],[LIPS_IN,NV+2]].forEach(function(p){ var a=0,b=0,cz=0; p[0].forEach(function(k){ a+=nrm[3*k]; b+=nrm[3*k+1]; cz+=nrm[3*k+2]; }); nrm[3*p[1]]=a; nrm[3*p[1]+1]=b; nrm[3*p[1]+2]=cz; });
+  FACE_OVAL.forEach(function(k,q){ var s2=SK+q; nrm[3*s2]=nrm[3*k]; nrm[3*s2+1]=nrm[3*k+1]; nrm[3*s2+2]=nrm[3*k+2]; });
   for(i=0;i<R.n;i++){
     var x0=nrm[3*i],y0=nrm[3*i+1],z0=nrm[3*i+2], d=Math.hypot(x0,y0,z0)||1; x0/=d;y0/=d;z0/=d;
     var dif=Math.max(0,x0*LIGHT[0]+y0*LIGHT[1]+z0*LIGHT[2]);
