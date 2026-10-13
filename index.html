@@ -106,6 +106,10 @@ ul.how{margin:0;padding:0}
 .field{display:flex;flex-direction:column;gap:8px}
 input[type=text],input[type=date],input[type=url],input[type=tel],input[type=number],textarea,select{width:100%;font:400 16px/1.4 var(--f);color:var(--ink);background:var(--paper);border:1.5px solid var(--line2);border-radius:var(--r-sm);padding:13px 14px;min-height:52px;transition:border-color .2s var(--ease),box-shadow .2s var(--ease)}
 textarea{min-height:64px;resize:vertical}
+.field{min-width:0}
+input[type=date]{-webkit-appearance:none;appearance:none;display:block;min-width:0;max-width:100%;text-align:left;line-height:1.4}
+input[type=date]::-webkit-date-and-time-value{text-align:left;margin:0}
+input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
 input::placeholder,textarea::placeholder{color:var(--ink3)}
 input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 4px var(--focus)}
 button:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
