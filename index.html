@@ -1067,7 +1067,7 @@ function renderSend(){
 }
 
 /* ---------- subtitles: audio-only file -> small server -> Whisper large-v3 (Groq) ---------- */
-var STT_URL = qs.stt || "";   /* set to the Cloudflare Worker address once it exists */
+var STT_URL = qs.stt || "https://proba-legendas.evgenygaman.workers.dev/";   /* Cloudflare Worker -> Groq Whisper */
 var PROC={};
 function resetProc(){ PROC.audioP=null; if(PROC.finalUrl) URL.revokeObjectURL(PROC.finalUrl); if(PROC.abort) try{ PROC.abort.abort(); }catch(e){} PROC={tx:null,txState:"",cues:null,ac:PROC.ac||null,final:null,finalUrl:"",key:"",state:"",pct:0,useOriginal:false,edited:false,editing:false}; }
 resetProc();
