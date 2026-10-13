@@ -1188,15 +1188,28 @@ function renderPass(v,c,buf,cues){
       try{ rec=new MediaRecorder(stream,opts); }catch(e){ rec=new MediaRecorder(stream); }
     }catch(e){ reject(e); return; }
     rec.ondataavailable=function(e){ if(e.data&&e.data.size) chunks.push(e.data); };
-    var dur=S.outDur||buf.duration, raf=0, done=false, started=false;
+    /* The audio clock is the master: Safari can stall a <video> at the seams left by pausing between answers,
+       so whenever the picture falls behind the sound we seek it back in line instead of recording a frozen frame. */
+    var dur=buf.duration||S.outDur, raf=0, done=false, started=false, startAt=0, off0=0, lastSeek=0;
+    function audioPos(){ return started ? off0+(ac.currentTime-startAt) : v.currentTime; }
     function cueAt(tt){ for(var i=0;i<cues.length;i++){ if(tt>=cues[i].s&&tt<cues[i].e) return cues[i].text; } return null; }
-    function paint(){ x.drawImage(v,0,0,W,H); var cue=cueAt(v.currentTime); if(cue) drawCue(x,cue); }
-    function loop(){ if(done) return; paint(); PROC.pct=Math.min(1,v.currentTime/dur); throttleUI(); if(v.ended||v.currentTime>=dur-0.04){ end(); return; } raf=requestAnimationFrame(loop); }
+    function paint(tt){ x.drawImage(v,0,0,W,H); var cue=cueAt(tt); if(cue) drawCue(x,cue); }
+    function loop(){
+      if(done) return;
+      var tt=audioPos(), now=performance.now();
+      if(!v.seeking && Math.abs(v.currentTime-tt)>0.3 && now-lastSeek>250 && tt<dur-0.1){ lastSeek=now; try{ v.currentTime=Math.min(tt+0.05,dur-0.05); }catch(e){} }
+      if(v.paused && !v.ended && tt<dur-0.1){ var pp2=v.play(); if(pp2&&pp2.catch) pp2.catch(function(){}); }
+      paint(tt); PROC.pct=Math.min(1,tt/dur); throttleUI();
+      if(tt>=dur-0.04){ end(); return; }
+      raf=requestAnimationFrame(loop);
+    }
     function begin(){
-      if(started) return; started=true;
-      paint();                                   /* first real frame is on the canvas before recording starts */
+      if(started) return;
+      off0=Math.max(0,v.currentTime);
+      paint(off0);                               /* first real frame is on the canvas before recording starts */
       rec.start(1000);
-      try{ node.start(0, Math.max(0,v.currentTime)); }catch(e){}
+      try{ node.start(0, off0); }catch(e){}
+      startAt=ac.currentTime; started=true;
       loop();
     }
     function end(){
@@ -1210,7 +1223,7 @@ function renderPass(v,c,buf,cues){
       };
       try{ rec.stop(); }catch(e){ reject(e); }
     }
-    v.onended=end; setTimeout(function(){ if(!done) end(); },(dur+8)*1000);
+    v.onended=function(){ if(audioPos()>=dur-0.3) end(); }; setTimeout(function(){ if(!done) end(); },(dur+8)*1000);
     try{ v.currentTime=0; }catch(e){}
     var p=v.play();
     (p&&p.then?p:Promise.resolve()).then(function(){
