@@ -301,6 +301,14 @@ details[open] summary svg{transform:rotate(90deg)}
 .cam-top .pill.rec{background:#D9283F}
 .cam-top .pill.rec::before{content:"";width:8px;height:8px;border-radius:50%;background:#fff;animation:blink 1s steps(2) infinite}
 @keyframes blink{50%{opacity:.2}}
+.cam-tr{display:flex;align-items:center;gap:8px}
+.cam-ib{all:unset;cursor:pointer;width:38px;height:38px;border-radius:999px;display:grid;place-items:center;background:rgba(255,255,255,.16);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:transform .15s var(--ease)}
+.cam-ib svg{width:20px;height:20px}
+.cam-ib:active{transform:scale(.9)}
+.cam-ib[disabled]{opacity:.35;pointer-events:none}
+.cam-ctl .side .ci .msw{width:30px;height:30px;border-radius:999px;border:2px solid #fff;box-sizing:border-box}
+.cam-ctl .side[aria-expanded="true"] .ci{background:#fff;color:#17181C}
+.masks:not([hidden]){animation:rise .25s var(--ease)}
 .cam-x{all:unset;cursor:pointer;font:600 15px/1 var(--f);padding:9px 14px;border-radius:999px;background:rgba(255,255,255,.16);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .cam-view{position:absolute;inset:0}
 .cam-view canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#111}
@@ -360,13 +368,13 @@ details[open] summary svg{transform:rotate(90deg)}
 <div class="bar" id="bar" hidden><div class="in" id="barIn"></div></div>
 
 <div class="cam" id="cam" hidden>
-  <div class="cam-top"><span class="pill" id="camPill"></span><button type="button" class="cam-x" id="camClose"></button></div>
+  <div class="cam-top"><span class="pill" id="camPill"></span><div class="cam-tr"><button type="button" class="cam-ib" id="camFlip" aria-label="Virar câmera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8.5h3l1.8-2.5h6.4L17 8.5h3V19H4z"/><path d="M9.5 13.5a2.5 2.5 0 0 1 4.3-1.7M14.5 13.5a2.5 2.5 0 0 1-4.3 1.7"/></svg></button><button type="button" class="cam-x" id="camClose"></button></div></div>
   <div class="cam-view"><canvas id="camCanvas" width="720" height="1280"></canvas><div class="cam-q" id="camQ" hidden><span><i id="camDots"></i><em id="camQk"></em></span><strong id="camQt"></strong></div></div>
   <div class="cam-bottom">
-    <div class="masks" id="camMasks" role="group" aria-label="Máscaras"></div>
+    <div class="masks" id="camMasks" role="group" aria-label="Máscaras" hidden></div>
     <div class="cam-tip" id="camTip"></div>
     <div class="cam-ctl">
-      <button type="button" class="side" id="camFlip"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8.5h3l1.8-2.5h6.4L17 8.5h3V19H4z"/><path d="M9.5 13.5a2.5 2.5 0 0 1 4.3-1.7M14.5 13.5a2.5 2.5 0 0 1-4.3 1.7"/></svg></span><span class="lbl"></span></button>
+      <button type="button" class="side" id="camMaskBtn" aria-expanded="false"><span class="ci" id="camMaskIc"></span><span class="lbl"></span></button>
       <button type="button" class="shutter" id="camShutter" aria-label="Gravar"><svg class="ring" viewBox="0 0 84 84" aria-hidden="true"><circle class="bgc" cx="42" cy="42" r="39"/><circle class="fg" id="camRing" cx="42" cy="42" r="39" stroke-dasharray="245" stroke-dashoffset="245"/></svg><i></i></button>
       <button type="button" class="side" id="camNext"><span class="ci" id="camNextIc"></span><span class="lbl"></span></button>
       <div class="shutter-label" id="camLabel"></div>
@@ -374,6 +382,7 @@ details[open] summary svg{transform:rotate(90deg)}
   </div>
 </div>
 <video id="camSrc" class="cam-src" playsinline muted autoplay></video>
+<canvas id="recCanvas" class="cam-src" width="720" height="1280"></canvas>
 <input type="file" id="natcam" accept="video/*" capture="environment" hidden>
 <input type="file" id="pic" accept="image/*" hidden>
 
@@ -450,7 +459,7 @@ pt:{
  foot:"Teste de avaliações em vídeo · Florianópolis",
  subsToggle:"Legendas automáticas", subsNote:"Só o áudio é enviado para transcrição automática. Não guardamos o áudio depois.",
  sGen:"Gerando legendas…", sReady:"Legendas prontas", sNone:"Não encontramos fala no vídeo", sFail:"Não deu para gerar legendas agora", cuesEdit:"Corrigir texto", cuesDone:"Pronto",
- maskNone:"Sem", maskLoading:"Preparando máscaras…", faceOut:"Mantenha o rosto na tela para a máscara funcionar", maskLocked:"A máscara fica até o fim da gravação",
+ maskNone:"Sem", maskBtn:"Máscara", maskLoading:"Preparando máscaras…", faceOut:"Mantenha o rosto na tela para a máscara funcionar", maskLocked:"A máscara fica até o fim da gravação",
  permMask:["Pode publicar, com a máscara","Seu rosto já está escondido pela máscara. Rostos de outras pessoas ficam desfocados."],
  labTitle:"Provador de máscaras", labLead:"Escolha uma foto com rosto: todas as máscaras aparecem nela. A foto não sai do aparelho.", labPick:"Escolher foto", labLoading:"Carregando…", labReady:"Pronto. Escolha uma foto.", labFail:"Não deu para carregar o reconhecimento de rosto.", labNoFace:"Nenhum rosto encontrado nessa foto.", labFound:"Rostos encontrados: {n}", labImgFail:"Não deu para abrir a imagem.",
  procTitle:"Preparando o vídeo final", pSubsLoad:"Legendas: baixando o reconhecedor de voz · {p}%", pSubsRun:"Legendas: transcrevendo a fala…", pSubsOk:"Legendas prontas", pSubsNone:"Legendas: não encontramos fala", pSubsFail:"Legendas: não deu neste celular",
@@ -511,7 +520,7 @@ ru:{
  foot:"Тест видео-отзывов · Флорианополис",
  subsToggle:"Автосубтитры", subsNote:"На расшифровку отправляется только звук. После этого мы его не храним.",
  sGen:"Делаем субтитры…", sReady:"Субтитры готовы", sNone:"Речи в видео не нашли", sFail:"Сейчас субтитры сделать не получилось", cuesEdit:"Поправить текст", cuesDone:"Готово",
- maskNone:"Без", maskLoading:"Готовим маски…", faceOut:"Держите лицо в кадре, чтобы маска работала", maskLocked:"Маска остаётся до конца записи",
+ maskNone:"Без", maskBtn:"Маска", maskLoading:"Готовим маски…", faceOut:"Держите лицо в кадре, чтобы маска работала", maskLocked:"Маска остаётся до конца записи",
  permMask:["Можно публиковать, с маской","Ваше лицо уже скрыто маской. Чужие лица размыты."],
  labTitle:"Примерочная масок", labLead:"Выберите фото с лицом — на нём появятся все маски. Фото не покидает устройство.", labPick:"Выбрать фото", labLoading:"Загрузка…", labReady:"Готово. Выберите фото.", labFail:"Не удалось загрузить распознавание лица.", labNoFace:"На фото не найдено лицо.", labFound:"Найдено лиц: {n}", labImgFail:"Не удалось открыть изображение.",
  procTitle:"Готовим итоговое видео", pSubsLoad:"Субтитры: загрузка распознавания речи · {p}%", pSubsRun:"Субтитры: расшифровываем речь…", pSubsOk:"Субтитры готовы", pSubsNone:"Субтитры: речи не нашли", pSubsFail:"Субтитры: на этом телефоне не получилось",
@@ -762,6 +771,7 @@ pic.onchange=function(){ var f=pic.files&&pic.files[0]; if(!f) return; S.photo=f
 /* ---------- camera: live preview, questions burned into the frame, mic audio straight into the recorder ---------- */
 var CAM={open:false};
 var camEl=document.getElementById("cam"), cv=document.getElementById("camCanvas"), cx=cv.getContext("2d"), src=document.getElementById("camSrc");
+var rc=document.getElementById("recCanvas"), rcx=rc.getContext("2d"); /* what gets recorded = preview + brand marks; the preview itself stays clean */
 var W=720,H=1280;
 var elPill=document.getElementById("camPill"), elTip=document.getElementById("camTip"), elLabel=document.getElementById("camLabel"),
     elShutter=document.getElementById("camShutter"), elFlip=document.getElementById("camFlip"), elNext=document.getElementById("camNext"), elClose=document.getElementById("camClose");
@@ -775,7 +785,7 @@ function openCamera(){
   try{ var fsr=camEl.requestFullscreen||camEl.webkitRequestFullscreen; if(fsr){ camEl.hidden=false; var fp=fsr.call(camEl,{navigationUI:"hide"}); if(fp&&fp.catch) fp.catch(function(){}); } }catch(e){}
   var defs=qdefs();
   CAM={open:true,q:0,state:"idle",facing:defs[0].cam,audio:null,vtrack:null,rec:null,chunks:[],raf:0,elapsed:0,tick:null,segStart:0,segs:[],direct:false,noPause:false,started:false,busy:false,startedAt:null,flog:[{t:0,f:defs[0].cam}]};
-  loadFace(); buildMaskChips();
+  loadFace(); buildMaskChips(); document.getElementById("camMasks").hidden=true;
   gum({audio:{echoCancellation:true,noiseSuppression:true},video:videoC(CAM.facing)}).then(function(s){
     CAM.audio=s.getAudioTracks()[0]; CAM.vtrack=s.getVideoTracks()[0];
     src.srcObject=new MediaStream([CAM.vtrack]);
@@ -808,6 +818,7 @@ function draw(){
     }
   }
   var defs=qdefs(), d=defs[Math.min(CAM.q,defs.length-1)];
+  rcx.drawImage(cv,0,0);
   watermark();
   if(S.mode==="guiado" && CAM.state==="rec" && CAM.elapsed-CAM.segStart<2.5) chapterTag(d.label);
 }
@@ -819,17 +830,17 @@ function wrapLines(text,maxW){
 function rr(x,y,w,h,r){ cx.beginPath(); cx.moveTo(x+r,y); cx.arcTo(x+w,y,x+w,y+h,r); cx.arcTo(x+w,y+h,x,y+h,r); cx.arcTo(x,y+h,x,y,r); cx.arcTo(x,y,x+w,y,r); cx.closePath(); }
 function watermark(){
   var p=S.date.split("-");
-  cx.save(); cx.textBaseline="alphabetic"; cx.shadowColor="rgba(0,0,0,.5)"; cx.shadowBlur=8;
-  cx.fillStyle="#FFFFFF"; cx.font='700 36px "Golos Text", Arial, sans-serif'; cx.fillText("proba",84,86);
-  cx.fillStyle="rgba(255,255,255,.85)"; cx.font='500 22px "Golos Text", Arial, sans-serif'; cx.fillText((L==="ru"?"визит ":"visita ")+p[2]+"."+p[1]+"."+p[0],84,116);
-  cx.restore();
+  rcx.save(); rcx.textBaseline="alphabetic"; rcx.shadowColor="rgba(0,0,0,.5)"; rcx.shadowBlur=8;
+  rcx.fillStyle="#FFFFFF"; rcx.font='700 36px "Golos Text", Arial, sans-serif'; rcx.fillText("proba",84,86);
+  rcx.fillStyle="rgba(255,255,255,.85)"; rcx.font='500 22px "Golos Text", Arial, sans-serif'; rcx.fillText((L==="ru"?"визит ":"visita ")+p[2]+"."+p[1]+"."+p[0],84,116);
+  rcx.restore();
 }
 function chapterTag(label){
-  cx.save(); cx.font='600 28px "Golos Text", Arial, sans-serif';
-  var w=cx.measureText(label).width+48;
-  cx.fillStyle="rgba(23,24,28,.72)"; rr(80,140,w,54,27); cx.fill();
-  cx.fillStyle="rgba(255,255,255,.75)"; cx.beginPath(); cx.arc(102,167,5,0,Math.PI*2); cx.fill();
-  cx.fillStyle="#FFFFFF"; cx.textBaseline="middle"; cx.fillText(label,118,168); cx.restore();
+  rcx.save(); rcx.font='600 28px "Golos Text", Arial, sans-serif';
+  var w=rcx.measureText(label).width+48;
+  rcx.fillStyle="rgba(23,24,28,.72)"; rr2(rcx,80,140,w,54,27); rcx.fill();
+  rcx.fillStyle="rgba(255,255,255,.75)"; rcx.beginPath(); rcx.arc(102,167,5,0,Math.PI*2); rcx.fill();
+  rcx.fillStyle="#FFFFFF"; rcx.textBaseline="middle"; rcx.fillText(label,118,168); rcx.restore();
 }
 function camUI(){
   var defs=qdefs(), d=defs[Math.min(CAM.q,defs.length-1)], guided=S.mode==="guiado", recording=CAM.state==="rec";
@@ -844,7 +855,7 @@ function camUI(){
   else qbox.hidden=true;
   elShutter.className="shutter"+(recording?" on":"");
   elLabel.textContent = recording ? (guided?t("stopAnswer"):t("stopFree")) : (guided?t("recAnswer"):t("recFree"));
-  elFlip.querySelector(".lbl").textContent=t("flip"); elFlip.disabled = recording || CAM.busy || (CAM.direct&&CAM.started);
+  elFlip.setAttribute("aria-label",t("flip")); elFlip.disabled = recording || CAM.busy || (CAM.direct&&CAM.started);
   var answered=CAM.segs.some(function(s){return !s.skip;});
   if(guided){
     var last=CAM.q>=defs.length-1;
@@ -855,17 +866,23 @@ function camUI(){
   var maxT=guided?ANSWER_MAX:FREE_MAX, frac=recording?Math.min(1,(CAM.elapsed-CAM.segStart)/maxT):0; document.getElementById("camRing").style.strokeDashoffset=String(245*(1-frac));
   elShutter.disabled = CAM.busy || maskWait;
   [].forEach.call(document.querySelectorAll("#camMasks .mchip"),function(b){ b.setAttribute("aria-pressed", b.dataset.k===S.mask); b.disabled = CAM.started; });
+  var mb=document.getElementById("camMaskBtn"), mbox=document.getElementById("camMasks"), canMask=FACE.state!=="fail"&&!IN_FRAME;
+  mb.style.visibility=canMask?"visible":"hidden"; mb.disabled=!canMask||CAM.started||recording;
+  if(CAM.started && !mbox.hidden){ mbox.hidden=true; }
+  mb.setAttribute("aria-expanded",String(!mbox.hidden));
+  mb.querySelector(".lbl").textContent = S.mask!=="none" ? MASKS[S.mask][L] : t("maskBtn");
+  document.getElementById("camMaskIc").innerHTML = S.mask!=="none" ? '<span class="msw" style="background:'+MASKS[S.mask].sw+'"></span>' : ic("mask");
+  elTip.hidden = !mbox.hidden;
 }
 function buildMaskChips(){
   var box=document.getElementById("camMasks"); box.innerHTML="";
   if(FACE.state==="fail"||IN_FRAME){ box.hidden=true; return; }
-  box.hidden=false;
   MASK_ORDER.forEach(function(k){
     var b=document.createElement("button"); b.type="button"; b.className="mchip"; b.dataset.k=k;
     var sw=document.createElement("span"); sw.className="sw"; if(k==="none") sw.innerHTML=ic("none"); else sw.style.background=MASKS[k].sw;
     var lb=document.createElement("b"); lb.textContent=k==="none"?t("maskNone"):MASKS[k][L];
     b.appendChild(sw); b.appendChild(lb);
-    b.onclick=function(){ if(CAM.started) return; S.mask=k; if(k!=="none"&&FACE.state==="ok"){ glInit(); makeTexture(k); } camUI(); };
+    b.onclick=function(){ if(CAM.started) return; S.mask=k; if(k!=="none"&&FACE.state==="ok"){ glInit(); makeTexture(k); } setTimeout(function(){ box.hidden=true; camUI(); },220); camUI(); };
     box.appendChild(b);
   });
 }
@@ -887,7 +904,7 @@ function ensureRecorder(){
   if(CAM.rec) return true;
   var stream=null;
   try{
-    if(cv.captureStream){ var vs=cv.captureStream(30); stream=new MediaStream([vs.getVideoTracks()[0],CAM.audio]); }
+    if(rc.captureStream){ var vs=rc.captureStream(30); stream=new MediaStream([vs.getVideoTracks()[0],CAM.audio]); }
   }catch(e){ stream=null; }
   if(!stream){ CAM.direct=true; stream=new MediaStream([CAM.vtrack,CAM.audio]); }
   var mime=pickMime(), opts={videoBitsPerSecond:2500000,audioBitsPerSecond:128000}; if(mime) opts.mimeType=mime;
@@ -970,6 +987,7 @@ function closeCamera(){
 elShutter.onclick=function(){ if(CAM.busy) return; if(CAM.state==="rec") stopAnswer(); else startAnswer(); };
 elNext.onclick=function(){ if(CAM.busy||CAM.state==="rec") return; skip(); };
 elFlip.onclick=function(){ if(CAM.busy||CAM.state==="rec") return; flip(); };
+document.getElementById("camMaskBtn").onclick=function(){ if(CAM.started) return; var box=document.getElementById("camMasks"); box.hidden=!box.hidden; camUI(); };
 elClose.onclick=function(){
   if(CAM.started){ finish(); return; }
   closeCamera(); render();
