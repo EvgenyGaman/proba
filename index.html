@@ -105,16 +105,16 @@ details summary{cursor:pointer;color:var(--muted);font-weight:500}
 .foot{margin-top:28px;font-size:12px;color:var(--muted)}
 
 /* camera layer: always dark, it is a viewfinder */
-.cam{position:fixed;inset:0;z-index:50;background:#000;color:#fff;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-.cam-top{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;gap:10px}
+.cam{position:fixed;inset:0;z-index:50;background:#000;color:#fff;overflow:hidden}
+.cam-top{position:absolute;left:0;right:0;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top,0px)) 14px 18px;background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,0))}
 .cam-top .pill{font:500 13px/1 var(--f-mono);background:rgba(255,255,255,.14);border-radius:999px;padding:8px 12px;display:inline-flex;gap:8px;align-items:center}
 .cam-top .pill.rec{background:#C21F35}
 .cam-top .pill.rec::before{content:"";width:8px;height:8px;border-radius:50%;background:#fff;animation:blink 1s steps(2) infinite}
 @keyframes blink{50%{opacity:.2}}
 .cam-x{all:unset;cursor:pointer;font:600 15px/1 var(--f-body);padding:8px 10px;color:#fff}
-.cam-view{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding-inline:10px;overflow:hidden}
-.cam-view canvas{height:100%;width:auto;max-width:100%;object-fit:contain;border-radius:12px;background:#111}
-.cam-q{position:absolute;left:18px;right:18px;top:10px;background:rgba(8,20,16,.78);border-radius:16px;padding:12px 16px;display:flex;flex-direction:column;gap:4px}
+.cam-view{position:absolute;inset:0}
+.cam-view canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#111}
+.cam-q{position:absolute;z-index:2;left:16px;right:16px;top:calc(62px + env(safe-area-inset-top,0px));background:rgba(8,20,16,.78);border-radius:16px;padding:12px 16px;display:flex;flex-direction:column;gap:4px}
 .cam-q span{font:500 12px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:#3CC79E}
 .cam-q b{font:600 19px/1.25 var(--f-body);color:#fff}
 .procbox{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:8px}
@@ -129,8 +129,9 @@ details summary{cursor:pointer;color:var(--muted);font-weight:500}
 .toggle strong{display:block}
 .toggle span.sub{color:var(--muted);font-size:14px}
 .cam-src{position:fixed;left:0;top:0;width:2px;height:2px;opacity:.01;pointer-events:none}
-.cam-tip{text-align:center;font-size:14px;color:rgba(255,255,255,.8);padding:8px 18px 0;min-height:28px}
-.cam-ctl{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:12px 18px 16px;gap:10px}
+.cam-bottom{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:40px 0 calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.6) 45%)}
+.cam-tip{text-align:center;font-size:14px;color:rgba(255,255,255,.9);padding:0 18px;min-height:22px;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+.cam-ctl{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:12px 18px 0;gap:10px}
 .cam-ctl .side{all:unset;cursor:pointer;font:600 14px/1.2 var(--f-body);color:#fff;padding:10px;text-align:center;justify-self:center}
 .cam-ctl .side[disabled]{opacity:.35;pointer-events:none}
 .shutter{all:unset;cursor:pointer;width:76px;height:76px;border-radius:50%;border:4px solid #fff;display:grid;place-items:center}
@@ -157,12 +158,14 @@ details summary{cursor:pointer;color:var(--muted);font-weight:500}
 <div class="cam" id="cam" hidden>
   <div class="cam-top"><span class="pill" id="camPill"></span><button type="button" class="cam-x" id="camClose"></button></div>
   <div class="cam-view"><canvas id="camCanvas" width="720" height="1280"></canvas><div class="cam-q" id="camQ" hidden><span id="camQk"></span><b id="camQt"></b></div></div>
+  <div class="cam-bottom">
   <div class="cam-tip" id="camTip"></div>
   <div class="cam-ctl">
     <button type="button" class="side" id="camFlip"></button>
     <button type="button" class="shutter" id="camShutter" aria-label="Gravar"><i></i></button>
     <button type="button" class="side" id="camNext"></button>
     <div class="shutter-label" id="camLabel"></div>
+  </div>
   </div>
 </div>
 <video id="camSrc" class="cam-src" playsinline muted autoplay></video>
@@ -465,6 +468,7 @@ function videoC(facing){ return {facingMode:{ideal:facing},width:{ideal:1280},he
 function openCamera(){
   S.camErr="";
   if(!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder)){ S.native=true; render(); return; }
+  try{ var fsr=camEl.requestFullscreen||camEl.webkitRequestFullscreen; if(fsr){ camEl.hidden=false; var fp=fsr.call(camEl,{navigationUI:"hide"}); if(fp&&fp.catch) fp.catch(function(){}); } }catch(e){}
   var defs=qdefs();
   CAM={open:true,q:0,state:"idle",facing:defs[0].cam,audio:null,vtrack:null,rec:null,chunks:[],raf:0,elapsed:0,tick:null,segStart:0,segs:[],direct:false,noPause:false,started:false,busy:false,startedAt:null,flog:[{t:0,f:defs[0].cam}]};
   gum({audio:{echoCancellation:true,noiseSuppression:true},video:videoC(CAM.facing)}).then(function(s){
@@ -475,7 +479,7 @@ function openCamera(){
     camEl.hidden=false; document.body.style.overflow="hidden";
     loop(); camUI();
   }).catch(function(){
-    CAM.open=false; S.native=true; render();
+    CAM.open=false; camEl.hidden=true; try{ if(document.fullscreenElement) document.exitFullscreen(); }catch(e){} S.native=true; render();
   });
 }
 function loop(){
@@ -628,6 +632,7 @@ function closeCamera(){
   stopTick(); cancelAnimationFrame(CAM.raf);
   try{ CAM.vtrack&&CAM.vtrack.stop(); }catch(e){} try{ CAM.audio&&CAM.audio.stop(); }catch(e){}
   src.srcObject=null; camEl.hidden=true; document.body.style.overflow=""; CAM.open=false;
+  try{ var fe=document.fullscreenElement||document.webkitFullscreenElement; if(fe){ (document.exitFullscreen||document.webkitExitFullscreen).call(document); } }catch(e){}
 }
 elShutter.onclick=function(){ if(CAM.busy) return; if(CAM.state==="rec") stopAnswer(); else startAnswer(); };
 elNext.onclick=function(){ if(CAM.busy||CAM.state==="rec") return; skip(); };
@@ -782,7 +787,8 @@ function startTranscription(){
       var p = mk("wasm","q8"); /* ~77 MB, same model on every phone */
       return p.then(function(asr){
         PROC.txState="run"; procUI();
-        return asr(pcm,{language:L==="ru"?"russian":"portuguese",task:"transcribe",return_timestamps:true,chunk_length_s:30,stride_length_s:5});
+        var o={task:"transcribe",return_timestamps:true,chunk_length_s:30,stride_length_s:5}; if(L==="ru") o.language="russian"; /* PT interface: language auto-detected (covers Russian speakers using PT) */
+        return asr(pcm,o);
       });
     });
   }).then(function(out){
