@@ -263,6 +263,17 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offs
 @keyframes fadeup{from{opacity:0;transform:translateY(4px)}}
 .btn.armed{background:var(--bad-soft);color:var(--bad)}
 @media (max-width:360px){.stk-tray{grid-template-columns:repeat(6,1fr)}}
+.pv-cue{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--u,.5px) * 150);z-index:3;pointer-events:none;background:rgba(23,24,28,.74);color:#fff;font:600 calc(var(--u,.5px) * 42)/1.29 var(--f);padding:calc(var(--u,.5px) * 14) calc(var(--u,.5px) * 24);border-radius:calc(var(--u,.5px) * 22);width:max-content;max-width:calc(100% - var(--u,.5px) * 92);text-align:center;box-sizing:border-box}
+.pv-cue[hidden]{display:none}
+.upbox{display:flex;flex-direction:column;gap:10px;background:var(--sub);border-radius:var(--r);padding:14px 16px}
+.upbox[hidden]{display:none}
+.rv{gap:10px}
+.rv-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.rv-h b{font:600 17px/1.2 var(--f)}
+.rv-files,.rv-act{display:flex;flex-wrap:wrap;gap:8px}
+.rv-stage{display:flex;flex-direction:column;gap:10px}
+.rv-stage:empty{display:none}
+.rv-stage video,.rv-stage img{width:100%;max-height:70vh;border-radius:var(--r);background:#000;object-fit:contain}
 /* subtitles + processing */
 .panel{background:var(--paper);border:1.5px solid var(--line);border-radius:var(--r-lg);padding:16px;display:flex;flex-direction:column;gap:12px}
 .toggle{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;cursor:pointer}
@@ -446,7 +457,8 @@ var CFG = {
   wa: (qs.w||"").replace(/\D/g,""),
   lang: (qs.lang==="ru"||hash==="ru") ? "ru" : "pt",
   gen: hash==="gerar",
-  lab: hash==="mascaras"
+  lab: hash==="mascaras",
+  panel: hash==="painel"
 };
 var IN_FRAME = (function(){ try { return window.top!==window.self; } catch(e){ return true; } })();
 var ANSWER_MAX = 60, FREE_MAX = 90;
@@ -454,10 +466,10 @@ var ANSWER_MAX = 60, FREE_MAX = 90;
 /* ---------- strings ---------- */
 var T = {
 pt:{
- test:"teste", step:["Visita","Vídeo","Comprovante","3 perguntas","Permissão","Enviar"],
+ test:"teste", step:["Visita","Vídeo","Permissão","Comprovante","3 perguntas","Enviar"],
  introTitle:"Conte como foi a sua visita",
  introEyebrow:"Teste de avaliações em vídeo", introTime:"Leva uns 3 minutos",
- how:["Grave um vídeo curto","Confirme a visita","Envie pelo WhatsApp"],
+ how:["Grave um vídeo curto","Confirme a visita","Envie com um toque"],
  trust:[["Você decide o que é publicado","Nada vai ao ar sem a sua permissão."],["Pode usar uma máscara","Ela acompanha o seu rosto e esconde quem você é."],["R$ 20 pela participação","Pagamento via Pix depois do envio."]],
  visitLead:"Isso liga o vídeo à visita certa.", recommended:"Recomendado", modeLead:"Escolha o formato. Dá para trocar antes de gravar.",
  modeInfo:{guiado:{pitch:"A gente guia: uma pergunta de cada vez aparece na tela.",steps:["Uma pergunta curta aparece na tela","Você grava a resposta, de 10 a 30 segundos","Entre as perguntas a gravação pausa para você pensar"],meta:[["chatq","3 perguntas"],["clock","cerca de 1 min"]]},
@@ -496,12 +508,12 @@ pt:{
  errQ:"Responda as 3 perguntas.",
  permTitle:"Quem pode ver o vídeo?",
  perm:{privado:["Só a equipe do teste","Não publicamos. Usamos só para melhorar o serviço."],semrosto:["Pode publicar, sem meu rosto","Cortamos ou desfocamos o rosto antes de publicar."],comrosto:["Pode publicar como está","O vídeo aparece com rosto e voz."]},
- consent:"Autorizo o uso da minha imagem e voz neste vídeo, apenas na forma que escolhi acima. Posso pedir a remoção a qualquer momento pelo WhatsApp.",
+ consent:"Autorizo a Proba a receber e guardar este vídeo e a usar minha imagem e voz apenas na forma que escolhi acima. Posso pedir a remoção a qualquer momento pelo WhatsApp.",
  errPerm:"Escolha uma opção e confirme a autorização.",
- sendTitle:"Pronto para enviar", sendLead:"Envie o vídeo e o resumo pelo WhatsApp. Nada sai do celular antes disso.",
+ sendTitle:"Tudo pronto", sendLead:"Toque em Enviar. Seu vídeo já começou a subir enquanto você respondia.",
  share:"Enviar vídeo pelo WhatsApp", shareParts:"Enviar vídeos pelo WhatsApp", summary:"Enviar resumo no WhatsApp", copy:"Copiar resumo", copied:"Copiado", save:"Salvar vídeo no celular",
  shareFallback:"Seu celular não abriu o compartilhamento. Salve o vídeo e anexe no WhatsApp.",
- sumHead:"O resumo que vai junto", thanks:"Obrigada! Assim que recebermos, combinamos o Pix de R$ 20 pelo WhatsApp.",
+ sumHead:"O resumo que vai junto", thanks:"Recebemos! Vamos falar com você no WhatsApp para combinar o Pix de R$ 20.",
  demo:"Versão de demonstração: câmera e envio só funcionam na versão publicada no site.",
  foot:"Teste de avaliações em vídeo · Florianópolis",
  subsToggle:"Legendas automáticas", subsNote:"Só o áudio é enviado para transcrição automática. Não guardamos o áudio depois.",
@@ -509,20 +521,22 @@ pt:{
  reviewTitle:"Seu vídeo", reviewLead:"Assista, refaça qualquer parte e deixe com a sua cara.", partsTitle:"Partes", partRe:"Regravar", partRec:"Gravar", partPlay:"Assistir", partSkipped:"Pulada · dá para gravar agora", playAll:"Assistir tudo",
  stickTitle:"Figurinhas", stickLead:"Toque para colocar. Arraste no vídeo para mudar de lugar.", stickMax:"Máximo de 6. Toque numa delas no vídeo para ajustar.", stickSize:"Tamanho", stickDel:"Remover",
  musicTitle:"Música de fundo", musicLead:"Fica baixinha enquanto você fala.", music:{none:"Sem música",suave:"Suave",bossa:"Bossa",animada:"Animada"},
- againAll:"Apagar e gravar tudo de novo", againConfirm:"Toque de novo para apagar tudo", pPrep:"Preparando o vídeo…", reShoot:"Regravando a parte {n}",
+ againAll:"Apagar e gravar tudo de novo", againConfirm:"Toque de novo para apagar tudo", pPrep:"Preparando o vídeo…",
+ send:"Enviar", sending:"Enviando…", retry:"Tentar de novo", sentTitle:"Avaliação enviada", upRun:"Seu vídeo está subindo · {p}%", upDone:"Vídeo carregado", upFail:"A conexão falhou. Toque em Tentar de novo.", sendFail:"Não deu para enviar agora. Verifique a internet e tente de novo, ou envie pelo WhatsApp.", sendNoServer:"O envio direto não está disponível agora. Envie pelo WhatsApp.", viaWa:"Enviar vídeo pelo WhatsApp", saveCopy:"Salvar uma cópia no celular", saveReady:"Baixar o vídeo pronto", talkWa:"Falar com a gente no WhatsApp",
+ panel:{eyebrow:"Equipe",title:"Avaliações recebidas",lead:"Só para a equipe do teste. A chave fica salva neste navegador.",key:"Chave de acesso",enter:"Entrar",loading:"Carregando…",empty:"Ainda não chegou nenhuma avaliação.",fail:"Não deu para carregar. Tente de novo.",bad:"Chave incorreta.",refresh:"Atualizar",logout:"Sair",sum:"Resumo",make:"Montar vídeo",making:"Montando · {p}% · mantenha esta aba aberta",download:"Baixar vídeo",del:"Apagar",delConfirm:"Toque de novo para apagar de vez",loadingFiles:"Baixando as partes…"}, reShoot:"Regravando a parte {n}",
  maskNone:"Sem", maskBtn:"Máscara", maskLoading:"Preparando máscaras…", faceOut:"Mantenha o rosto na tela para a máscara funcionar", maskLocked:"A máscara fica até o fim da gravação",
  permMask:["Pode publicar, com a máscara","Seu rosto já está escondido pela máscara. Rostos de outras pessoas ficam desfocados."],
  labTitle:"Provador de máscaras", labLead:"Escolha uma foto com rosto: todas as máscaras aparecem nela. A foto não sai do aparelho.", labPick:"Escolher foto", labLoading:"Carregando…", labReady:"Pronto. Escolha uma foto.", labFail:"Não deu para carregar o reconhecimento de rosto.", labNoFace:"Nenhum rosto encontrado nessa foto.", labFound:"Rostos encontrados: {n}", labImgFail:"Não deu para abrir a imagem.",
  procTitle:"Preparando o vídeo final", pSubsLoad:"Legendas: baixando o reconhecedor de voz · {p}%", pSubsRun:"Legendas: transcrevendo a fala…", pSubsOk:"Legendas prontas", pSubsNone:"Legendas: não encontramos fala", pSubsFail:"Legendas: não deu neste celular",
  pFaceLoad:"Rostos: preparando…", pFaceMask:"Seu rosto vai com máscara, outros rostos desfocados", pFaceBlur:"Rostos de outras pessoas desfocados", pFaceFail:"Rostos: não deu para esconder neste celular. A gente esconde antes de publicar.",
- pRender:"Montando o vídeo · {p}% · mantenha a tela aberta", pDone:"Vídeo final pronto", sendNow:"Enviar o original sem esperar", procFail:"Não deu para preparar o vídeo final. Envie o original, a gente ajusta.",
+ pRender:"Montando o vídeo · {p}% · mantenha a tela aberta", pDone:"Vídeo final pronto", sendNow:"Enviar o original sem esperar", procFail:"Não deu para montar o vídeo neste aparelho.",
  gen:{title:"Gerador de links",lead:"Um link por cliente. O código liga o vídeo que chegar no WhatsApp à pessoa a quem pedimos.",base:"Endereço do site",wa:"WhatsApp do assistente (só números, com 55)",fmt:"Modo inicial",fmtA:"A · com perguntas",fmtB:"B · do seu jeito",fmtMix:"Alternar 2:1 (A, A, B)",svc:"Serviço",any:"Cliente escolhe",pro:"Profissional (opcional)",count:"Quantos links",prefix:"Prefixo do código",make:"Gerar",copyAll:"Copiar todos"}
 },
 ru:{
- test:"тест", step:["Визит","Видео","Подтверждение","3 вопроса","Разрешение","Отправка"],
+ test:"тест", step:["Визит","Видео","Разрешение","Подтверждение","3 вопроса","Отправка"],
  introTitle:"Расскажите, как прошёл визит",
  introEyebrow:"Тест видео-отзывов", introTime:"Займёт около 3 минут",
- how:["Снимите короткое видео","Подтвердите визит","Отправьте в WhatsApp"],
+ how:["Снимите короткое видео","Подтвердите визит","Отправьте одной кнопкой"],
  trust:[["Вы решаете, что публикуется","Без вашего разрешения ничего не выйдет."],["Можно снять в маске","Маска повторяет мимику и скрывает, кто вы."],["R$ 20 за участие","Оплата через Pix после отправки."]],
  visitLead:"Это свяжет видео с нужным визитом.", recommended:"Рекомендуем", modeLead:"Выберите формат. Сменить можно до начала записи.",
  modeInfo:{guiado:{pitch:"Мы ведём: на экране по одному появляются вопросы.",steps:["На экране появляется короткий вопрос","Вы записываете ответ, 10–30 секунд","Между вопросами запись на паузе — можно подумать"],meta:[["chatq","3 вопроса"],["clock","около 1 мин"]]},
@@ -561,12 +575,12 @@ ru:{
  errQ:"Ответьте на 3 вопроса.",
  permTitle:"Кто может увидеть видео?",
  perm:{privado:["Только команда теста","Не публикуем. Только для улучшения сервиса."],semrosto:["Можно публиковать, без лица","Перед публикацией обрежем или размоем лицо."],comrosto:["Можно публиковать как есть","Видео с лицом и голосом."]},
- consent:"Разрешаю использовать моё изображение и голос в этом видео только в выбранном выше виде. Могу попросить удалить в любой момент через WhatsApp.",
+ consent:"Разрешаю Пробе получить и хранить это видео и использовать моё изображение и голос только в выбранном выше виде. Могу попросить удалить в любой момент через WhatsApp.",
  errPerm:"Выберите вариант и подтвердите согласие.",
- sendTitle:"Готово к отправке", sendLead:"Отправьте видео и сводку в WhatsApp. До этого ничего не уходит с телефона.",
+ sendTitle:"Всё готово", sendLead:"Нажмите «Отправить». Видео начало загружаться, пока вы отвечали.",
  share:"Отправить видео в WhatsApp", shareParts:"Отправить видео в WhatsApp", summary:"Отправить сводку в WhatsApp", copy:"Скопировать сводку", copied:"Скопировано", save:"Сохранить видео в телефон",
  shareFallback:"Телефон не открыл меню «Поделиться». Сохраните видео и приложите в WhatsApp.",
- sumHead:"Сводка, которая уйдёт вместе с видео", thanks:"Спасибо! Как получим — договоримся о Pix R$ 20 в WhatsApp.",
+ sumHead:"Сводка, которая уйдёт вместе с видео", thanks:"Получили! Напишем вам в WhatsApp, чтобы договориться о Pix R$ 20.",
  demo:"Демо-версия: камера и отправка работают только в версии на сайте.",
  foot:"Тест видео-отзывов · Флорианополис",
  subsToggle:"Автосубтитры", subsNote:"На расшифровку отправляется только звук. После этого мы его не храним.",
@@ -574,13 +588,15 @@ ru:{
  reviewTitle:"Ваше видео", reviewLead:"Посмотрите, переснимите любую часть и оформите по-своему.", partsTitle:"Части", partRe:"Переснять", partRec:"Снять", partPlay:"Смотреть", partSkipped:"Пропущена · можно снять сейчас", playAll:"Смотреть всё",
  stickTitle:"Стикеры", stickLead:"Нажмите, чтобы добавить. Двигайте пальцем прямо на видео.", stickMax:"Максимум 6. Нажмите на стикер в видео, чтобы настроить.", stickSize:"Размер", stickDel:"Убрать",
  musicTitle:"Фоновая музыка", musicLead:"Становится тише, когда вы говорите.", music:{none:"Без музыки",suave:"Спокойная",bossa:"Босса",animada:"Бодрая"},
- againAll:"Удалить и снять всё заново", againConfirm:"Нажмите ещё раз — всё удалится", pPrep:"Готовим видео…", reShoot:"Пересъёмка части {n}",
+ againAll:"Удалить и снять всё заново", againConfirm:"Нажмите ещё раз — всё удалится", pPrep:"Готовим видео…",
+ send:"Отправить", sending:"Отправляем…", retry:"Попробовать ещё раз", sentTitle:"Отзыв отправлен", upRun:"Видео загружается · {p}%", upDone:"Видео загружено", upFail:"Связь прервалась. Нажмите «Попробовать ещё раз».", sendFail:"Сейчас отправить не получилось. Проверьте интернет и попробуйте ещё раз или отправьте через WhatsApp.", sendNoServer:"Прямая отправка сейчас недоступна. Отправьте через WhatsApp.", viaWa:"Отправить видео через WhatsApp", saveCopy:"Сохранить копию в телефон", saveReady:"Скачать готовое видео", talkWa:"Написать нам в WhatsApp",
+ panel:{eyebrow:"Команда",title:"Пришедшие отзывы",lead:"Только для команды теста. Ключ сохраняется в этом браузере.",key:"Ключ доступа",enter:"Войти",loading:"Загрузка…",empty:"Отзывов пока нет.",fail:"Не удалось загрузить. Попробуйте ещё раз.",bad:"Неверный ключ.",refresh:"Обновить",logout:"Выйти",sum:"Сводка",make:"Собрать ролик",making:"Собираем · {p}% · не закрывайте вкладку",download:"Скачать ролик",del:"Удалить",delConfirm:"Нажмите ещё раз — удалится насовсем",loadingFiles:"Загружаем части…"}, reShoot:"Пересъёмка части {n}",
  maskNone:"Без", maskBtn:"Маска", maskLoading:"Готовим маски…", faceOut:"Держите лицо в кадре, чтобы маска работала", maskLocked:"Маска остаётся до конца записи",
  permMask:["Можно публиковать, с маской","Ваше лицо уже скрыто маской. Чужие лица размыты."],
  labTitle:"Примерочная масок", labLead:"Выберите фото с лицом — на нём появятся все маски. Фото не покидает устройство.", labPick:"Выбрать фото", labLoading:"Загрузка…", labReady:"Готово. Выберите фото.", labFail:"Не удалось загрузить распознавание лица.", labNoFace:"На фото не найдено лицо.", labFound:"Найдено лиц: {n}", labImgFail:"Не удалось открыть изображение.",
  procTitle:"Готовим итоговое видео", pSubsLoad:"Субтитры: загрузка распознавания речи · {p}%", pSubsRun:"Субтитры: расшифровываем речь…", pSubsOk:"Субтитры готовы", pSubsNone:"Субтитры: речи не нашли", pSubsFail:"Субтитры: на этом телефоне не получилось",
  pFaceLoad:"Лица: подготовка…", pFaceMask:"Ваше лицо под маской, чужие лица размыты", pFaceBlur:"Чужие лица размыты", pFaceFail:"Лица: на этом телефоне скрыть не вышло. Скроем перед публикацией.",
- pRender:"Собираем видео · {p}% · не закрывайте экран", pDone:"Итоговое видео готово", sendNow:"Отправить исходное, не дожидаясь", procFail:"Не получилось подготовить итоговое видео. Отправьте исходное — доработаем.",
+ pRender:"Собираем видео · {p}% · не закрывайте экран", pDone:"Итоговое видео готово", sendNow:"Отправить исходное, не дожидаясь", procFail:"На этом устройстве собрать видео не получилось.",
  gen:{title:"Генератор ссылок",lead:"Одна ссылка на клиентку. Код связывает видео, пришедшее в WhatsApp, с тем, кого мы просили.",base:"Адрес сайта",wa:"WhatsApp помощника (только цифры, с 55)",fmt:"Режим по умолчанию",fmtA:"A · с подсказками",fmtB:"B · экспромт",fmtMix:"Чередовать 2:1 (A, A, B)",svc:"Услуга",any:"Выбирает клиентка",pro:"Мастер (необязательно)",count:"Сколько ссылок",prefix:"Префикс кода",make:"Создать",copyAll:"Скопировать все"}
 }};
 var L = CFG.lang;
@@ -663,7 +679,7 @@ document.getElementById("themeBtn").onclick=function(){ THEME=THEME==="dark"?"li
 document.getElementById("backBtn").onclick=function(){ if(S.step>0) go(S.step-1); };
 window.addEventListener("hashchange",function(){ location.reload(); });
 function stepsBar(){
-  var pg=document.getElementById("progress"), show=!CFG.gen&&!CFG.lab&&S.step>0;
+  var pg=document.getElementById("progress"), show=!CFG.gen&&!CFG.lab&&!CFG.panel&&S.step>0;
   pg.hidden=!show;
   document.getElementById("backBtn").hidden=!(show);
   [].forEach.call(document.querySelectorAll("#steps i"),function(el,i){ el.className=(i<S.step)?"on":""; });
@@ -674,7 +690,7 @@ function setBar(buttons){
   if(!buttons||!buttons.length){ bar.hidden=true; return; }
   bar.hidden=false;
   buttons=buttons.filter(Boolean); if(!buttons.length){ bar.hidden=true; return; }
-  buttons.forEach(function(b){ var el=document.createElement("button"); el.type="button"; el.className="btn "+(b.cls||"primary")+(b.icon&&!b.label?" icon":""); el.innerHTML=(b.icon?ic(b.icon):"")+(b.label?'<span>'+esc(b.label)+'</span>':""); if(b.aria) el.setAttribute("aria-label",b.aria); el.onclick=b.on; barIn.appendChild(el); });
+  buttons.forEach(function(b){ var el=document.createElement("button"); el.type="button"; el.className="btn "+(b.cls||"primary")+(b.icon&&!b.label?" icon":""); el.innerHTML=(b.icon?ic(b.icon):"")+(b.label?'<span>'+esc(b.label)+'</span>':""); if(b.aria) el.setAttribute("aria-label",b.aria); if(b.dis) el.disabled=true; el.onclick=b.on; barIn.appendChild(el); });
 }
 function backBtn(n){ return null; } /* back lives in the header */
 function head(i,title,lead){ return '<div class="shead"><p class="eyebrow">'+esc(t("step")[i-1])+'</p><h2>'+esc(title)+'</h2>'+(lead?'<p class="lead">'+esc(lead)+'</p>':'')+'</div>'; }
@@ -699,6 +715,7 @@ function render(){
   stepsBar();
   if(CFG.gen){ renderGen(); return; }
   if(CFG.lab){ renderLab(); return; }
+  if(CFG.panel){ renderPanel(); return; }
   var st=S.step, h="";
   if(st===0){
     var ctx=[]; if(S.service&&t("services")[S.service]) ctx.push(['sparkle',t("services")[S.service]]); if(S.pro) ctx.push(['pin',S.pro]);
@@ -723,9 +740,9 @@ function render(){
     setBar([backBtn(0),{label:t("next"),on:function(){ if(!S.service){S.err=t("errService");render();return;} go(2); }}]); return;
   }
   if(st===2){ renderVideoStep(); return; }
-  if(st===3){
+  if(st===4){
     var PR=t("proofs"), pic2={nfse:"receipt",pix:"pix",chat:"chat",recibo:"file",nenhum:"none"};
-    h='<div class="stack lg">'+head(3,t("proofTitle"),t("proofLead"))+
+    h='<div class="stack lg">'+head(4,t("proofTitle"),t("proofLead"))+
       '<div class="grid2">'+Object.keys(PR).map(function(k){ var on=S.proofs.indexOf(k)>-1;
         return '<label class="tile'+(k==="nenhum"?' wide':'')+'" for="proof-'+k+'"><input type="checkbox" name="proof" id="proof-'+k+'" value="'+k+'"'+(on?' checked':'')+'><span class="co-ic">'+ic(pic2[k])+'</span><b>'+esc(PR[k])+'</b><span class="tick">'+ic("check")+'</span></label>'; }).join("")+'</div>'+
       '<button type="button" class="drop" id="addpic"><span class="th">'+(S.photoUrl?'<img alt="" src="'+S.photoUrl+'">':ic("image"))+'</span><span><b>'+esc(S.photo?t("photoOk"):t("photo"))+'</b><span>'+esc(S.photo?S.photo.name:t("photoOpt")+" · "+t("photoNote"))+'</span></span></button>'+
@@ -738,25 +755,25 @@ function render(){
       app.querySelectorAll('input[name=proof]').forEach(function(o){ o.checked=S.proofs.indexOf(o.value)>-1; });
     }; });
     document.getElementById("addpic").onclick=function(){ pic.value=""; pic.click(); };
-    setBar([backBtn(2),{label:t("next"),on:function(){ if(!S.proofs.length){S.err=t("errProof");render();return;} go(4); }}]); return;
-  }
-  if(st===4){
-    function qc(n,i,q,o){ return '<div class="qcard'+(S[n]?' done':'')+'" id="qc-'+n+'"><div class="qh"><span class="qn">'+(S[n]?ic("check"):i)+'</span><p>'+esc(q)+'</p></div>'+chipGroup(n,o,S[n],false)+'</div>'; }
-    h='<div class="stack lg">'+head(4,t("qTitle"),t("qLead"))+qc("q1",1,t("q1"),t("q1o"))+qc("q2",2,t("q2"),t("q2o"))+qc("q3",3,t("q3"),t("q3o"))+errHtml()+'</div>';
-    paint(h);
-    ["q1","q2","q3"].forEach(function(n){ app.querySelectorAll('input[name='+n+']').forEach(function(r){ r.onchange=function(){ S[n]=r.value; var c=document.getElementById("qc-"+n); c.classList.add("done"); c.querySelector(".qn").innerHTML=ic("check","draw"); }; }); });
-    setBar([backBtn(3),{label:t("next"),on:function(){ if(!S.q1||!S.q2||!S.q3){S.err=t("errQ");render();return;} go(5); }}]); return;
+    setBar([backBtn(2),{label:t("next"),on:function(){ if(!S.proofs.length){S.err=t("errProof");render();return;} go(5); }}]); return;
   }
   if(st===5){
+    function qc(n,i,q,o){ return '<div class="qcard'+(S[n]?' done':'')+'" id="qc-'+n+'"><div class="qh"><span class="qn">'+(S[n]?ic("check"):i)+'</span><p>'+esc(q)+'</p></div>'+chipGroup(n,o,S[n],false)+'</div>'; }
+    h='<div class="stack lg">'+head(5,t("qTitle"),t("qLead"))+qc("q1",1,t("q1"),t("q1o"))+qc("q2",2,t("q2"),t("q2o"))+qc("q3",3,t("q3"),t("q3o"))+errHtml()+'</div>';
+    paint(h);
+    ["q1","q2","q3"].forEach(function(n){ app.querySelectorAll('input[name='+n+']').forEach(function(r){ r.onchange=function(){ S[n]=r.value; var c=document.getElementById("qc-"+n); c.classList.add("done"); c.querySelector(".qn").innerHTML=ic("check","draw"); }; }); });
+    setBar([backBtn(3),{label:t("next"),on:function(){ if(!S.q1||!S.q2||!S.q3){S.err=t("errQ");render();return;} go(6); }}]); return;
+  }
+  if(st===3){
     var P=JSON.parse(JSON.stringify(t("perm"))), icons={privado:"lock",semrosto:"mask",comrosto:"eye"};
     if(recorded() && maskSafe()){ P={privado:P.privado, semrosto:t("permMask")}; if(S.perm==="comrosto") S.perm=""; }
-    h='<div class="stack lg">'+head(5,t("permTitle"),t("permLead"))+'<div class="stack">'+Object.keys(P).map(function(k){
+    h='<div class="stack lg">'+head(3,t("permTitle"),t("permLead"))+'<div class="stack">'+Object.keys(P).map(function(k){
       return radioCard("perm",k,S.perm===k,icons[k],P[k][0],P[k][1]);
     }).join("")+'</div><label class="check" for="consent"><input type="checkbox" id="consent"'+(S.consent?' checked':'')+'><span class="box">'+ic("check")+'</span><span>'+esc(t("consent"))+(S.subs&&recorded()?' '+esc(t("consentAudio")):'')+'</span></label>'+errHtml()+'</div>';
     paint(h);
     app.querySelectorAll('input[name=perm]').forEach(function(r){ r.onchange=function(){ S.perm=r.value; }; });
     document.getElementById("consent").onchange=function(e){ S.consent=e.target.checked; };
-    setBar([backBtn(4),{label:t("next"),on:function(){ if(!S.perm||!S.consent){S.err=t("errPerm");render();return;} prepareFinal(); go(6); }}]); return;
+    setBar([backBtn(4),{label:t("next"),on:function(){ if(!S.perm||!S.consent){S.err=t("errPerm");render();return;} startUploads(); go(4); }}]); return;
   }
   if(st===6){ renderSend(); return; }
 }
@@ -783,7 +800,7 @@ function renderVideoStep(){
     h='<div class="stack lg">'+head(2,t("reviewTitle"),t("reviewLead"))+
       '<div class="stage pv" id="pvStage"><video id="pv" playsinline preload="auto"></video>'+
       '<button type="button" class="pv-play" id="pvPlay" aria-label="'+esc(t("playAll"))+'"><span>'+ic("play")+'</span></button>'+
-      '<div class="stk-layer" id="stkLayer"></div>'+
+      '<div class="stk-layer" id="stkLayer"></div><div class="pv-cue" id="pvCue" hidden></div>'+
       '<div class="pv-bar">'+cs.map(function(c,i){ return '<b style="flex-grow:'+Math.max(1,c.dur||1).toFixed(2)+'"><i id="pvb'+i+'"></i></b>'; }).join("")+'</div></div>'+
       '<div class="vmeta"><span class="pill-ok">'+ic("check","draw")+esc(t("recDone"))+' · '+mmss(totalDur())+'</span>'+
       (ml.length?'<span class="tag">'+ic("mask")+esc(ml.map(function(k){return MASKS[k][L];}).join(", "))+'</span>':'')+'</div>'+
@@ -854,7 +871,7 @@ function bindReview(){
   PV.playing=false; pvLoad(0);
   document.getElementById("pvPlay").onclick=function(){ if(STK_SEL>=0){ STK_SEL=-1; layoutStickers(); refreshStickerPanel(); } if(PV.playing) pvPause(); else pvPlay(); };
   v.onended=function(){ var cs=clipList(); if(PV.playing && PV.i<cs.length-1){ pvLoad(PV.i+1); pvPlay(); } else { pvPause(); pvLoad(0); } };
-  v.ontimeupdate=pvBarUI;
+  v.ontimeupdate=function(){ pvBarUI(); pvCueUI(); };
   app.querySelectorAll("[data-play]").forEach(function(b){ b.onclick=function(){ var idx=clipList().indexOf(S.clips[+b.dataset.play]); if(idx<0) return; pvLoad(idx); pvPlay(); var st=document.getElementById("pvStage"); if(st&&st.scrollIntoView) st.scrollIntoView({behavior:"smooth",block:"center"}); }; });
   app.querySelectorAll("[data-re]").forEach(function(b){ b.onclick=function(){ pvStop(); openCamera(+b.dataset.re); }; });
   app.querySelectorAll('input[name=mus]').forEach(function(r){ r.onchange=function(){ S.music=r.value; if(PV.playing) musicStart(); else musicTaste(); }; });
@@ -866,9 +883,11 @@ function bindReview(){
 var PV={i:0,playing:false};
 function pvEl(){ return document.getElementById("pv"); }
 function pvLoad(i){ var cs=clipList(), v=pvEl(); if(!v||!cs[i]) return; PV.i=i; if(cs[i].thumb) v.poster=cs[i].thumb; v.src=cs[i].url; pvBarUI(); pvParts(); }
-function pvPlay(){ var v=pvEl(); if(!v) return; PV.playing=true; var p=v.play(); if(p&&p.catch) p.catch(function(){}); var st=document.getElementById("pvStage"); if(st) st.classList.add("playing"); musicStart(); pvParts(); }
+function pvPlay(){ var v=pvEl(); if(!v) return; PV.playing=true; cancelAnimationFrame(PV.raf); PV.raf=requestAnimationFrame(pvTick); var p=v.play(); if(p&&p.catch) p.catch(function(){}); var st=document.getElementById("pvStage"); if(st) st.classList.add("playing"); musicStart(); pvParts(); }
 function pvPause(){ var v=pvEl(); PV.playing=false; if(v) try{ v.pause(); }catch(e){} var st=document.getElementById("pvStage"); if(st) st.classList.remove("playing"); musicStop(); pvParts(); }
 function pvStop(){ pvPause(); }
+function pvTick(){ if(!PV.playing) return; pvBarUI(); pvCueUI(); PV.raf=requestAnimationFrame(pvTick); }
+function pvCueUI(){ var el=document.getElementById("pvCue"); if(!el) return; var txt=null; if(S.subs){ var tt=pvGlobal(), cs=allCues(); for(var i=0;i<cs.length;i++){ if(tt>=cs[i].s&&tt<cs[i].e){ txt=cs[i].text; break; } } } if(txt){ if(el.textContent!==txt) el.textContent=txt; el.hidden=false; } else el.hidden=true; }
 function pvBarUI(){ var cs=clipList(), v=pvEl(); cs.forEach(function(c,i){ var el=document.getElementById("pvb"+i); if(!el) return; var f=i<PV.i?1:i>PV.i?0:(v&&c.dur?Math.min(1,(v.currentTime||0)/c.dur):0); el.style.width=(f*100)+"%"; }); }
 function pvParts(){ var cur=clipList()[PV.i]; app.querySelectorAll(".part").forEach(function(li){ li.classList.toggle("now",!!(PV.playing&&cur&&li.id==="part"+cur.q)); }); }
 function pvGlobal(){ var cs=clipList(), v=pvEl(), off=0; for(var i=0;i<PV.i&&i<cs.length;i++) off+=cs[i].dur||0; return off+((v&&v.currentTime)||0); }
@@ -897,7 +916,7 @@ function musicTaste(){
 /* ---------- stickers: placed on the review player, burned into the final video ---------- */
 function layoutStickers(){
   var layer=document.getElementById("stkLayer"), st=document.getElementById("pvStage"); if(!layer||!st) return;
-  var w=st.clientWidth;
+  var w=st.clientWidth; st.style.setProperty("--u",(w/W)+"px");
   layer.innerHTML=S.stickers.map(function(s,i){ return '<span class="stk'+(i===STK_SEL?' sel':'')+(i===STK_NEW?' new':'')+'" data-stk="'+i+'" style="left:'+(s.x*100).toFixed(2)+'%;top:'+(s.y*100).toFixed(2)+'%;font-size:'+(s.s*w).toFixed(1)+'px">'+s.e+'</span>'; }).join("");
   STK_NEW=-1;
   layer.querySelectorAll(".stk").forEach(function(el){
@@ -950,7 +969,7 @@ function nativeCards(){
 function bindNative(){ app.querySelectorAll("[data-nat]").forEach(function(b){ b.onclick=function(){ natTarget=+b.dataset.nat; natcam.value=""; natcam.click(); }; }); }
 
 natcam.onchange=function(){ var f=natcam.files&&natcam.files[0]; if(!f) return; var old=S.parts[natTarget]; if(old&&old.url) URL.revokeObjectURL(old.url); S.parts[natTarget]={file:f,url:URL.createObjectURL(f),at:f.lastModified?new Date(f.lastModified):new Date()}; S.err=""; render(); };
-pic.onchange=function(){ var f=pic.files&&pic.files[0]; if(!f) return; S.photo=f; if(S.photoUrl) URL.revokeObjectURL(S.photoUrl); S.photoUrl=URL.createObjectURL(f); render(); };
+pic.onchange=function(){ var f=pic.files&&pic.files[0]; if(!f) return; S.photo=f; setTimeout(startUploads,0); if(S.photoUrl) URL.revokeObjectURL(S.photoUrl); S.photoUrl=URL.createObjectURL(f); render(); };
 
 /* ---------- camera: live preview, questions burned into the frame, mic audio straight into the recorder ---------- */
 var CAM={open:false};
@@ -1135,7 +1154,7 @@ function stopRec(r,chunks,fallback,kind,q){
 }
 function startAnswer(){
   var c={q:CAM.q,chunks:[],achunks:[],mask:S.mask,facing:CAM.facing,at:new Date(),thumb:"",dur:0};
-  var mime=pickMime(), opts={videoBitsPerSecond:2500000,audioBitsPerSecond:128000}; if(mime) opts.mimeType=mime;
+  var mime=pickMime(), opts={videoBitsPerSecond:1800000,audioBitsPerSecond:96000}; if(mime) opts.mimeType=mime;
   try{ var st=clipStream(); try{ c.rec=new MediaRecorder(st,opts); }catch(e){ c.rec=new MediaRecorder(st); } c.rec.ondataavailable=function(e){ if(e.data&&e.data.size) c.chunks.push(e.data); }; c.rec.start(1000); }
   catch(e){ closeCamera(); S.native=true; render(); return; }
   c.mime=mime;
@@ -1237,14 +1256,13 @@ function summary(){
     var ml=maskList(), st=txState(), nc=allCues().length;
     lines.push("Máscara: "+(ml.length?ml.map(function(k){return MASKS[k].pt;}).join(", "):"nenhuma")+" · rostos de outros: "+(FACE.state==="ok"?"desfocados":"não processados"));
     lines.push("Figurinhas: "+(S.stickers.length?S.stickers.map(function(s){return s.e;}).join(" "):"nenhuma")+" · Música: "+P.music[S.music]);
-    lines.push("Legendas: "+(!S.subs?"desligadas":(st==="done"?(nc?("sim"+(S.cuesEdited?" (corrigidas pela cliente)":"")):"sem fala"):st==="fail"?"falhou":"em andamento"))+(PROC.useOriginal&&!PROC.final?" · enviado o original, sem montagem":""));
+    lines.push("Legendas: "+(!S.subs?"desligadas":(st==="done"?(nc?("sim"+(S.cuesEdited?" (corrigidas pela cliente)":"")):"sem fala"):st==="fail"?"falhou":"em andamento")));
   }
   return lines.join("\n");
 }
 
-/* ---------- send ---------- */
+/* ---------- send: one tap; the video is already uploading since the consent screen ---------- */
 function finalFiles(){ if(PROC.final) return [PROC.final]; return clipList().map(function(c){ return c.file; }); }
-function procWaiting(){ return recorded() && !PROC.final && !PROC.useOriginal && ["fail","skip",""].indexOf(PROC.state)<0; }
 function txState(){ var cs=clipList(); if(!cs.length) return ""; if(cs.some(function(c){ return c.txState==="run"||!c.txState; })) return "run"; if(cs.every(function(c){ return c.txState==="fail"; })) return "fail"; return "done"; }
 function subsStatusText(){
   if(!S.subs) return "";
@@ -1253,36 +1271,40 @@ function subsStatusText(){
   if(st==="done") return allCues().length?t("sReady"):t("sNone");
   return t("sFail");
 }
+/* optional copy for the client's own phone: assembled here, only when she asks */
 function procHtml(){
-  if(!recorded()) return "";
-  if(PROC.state==="skip" && !S.subs) return "";
-  var done=!!PROC.final||PROC.state==="skip";
-  var h='<div class="procbox" id="procbox"><h3>'+esc(done?t("pDone"):t("procTitle"))+'</h3>';
-  if(S.subs){ var st=txState(), ok=st==="done", bad=st==="fail"; h+='<p'+(bad?' class="bad"':'')+'><i>'+(ok?ic("check"):bad?'!':'<span class="spin"></span>')+'</i><span>'+esc(subsStatusText())+'</span></p>'; }
-  if(PROC.state==="wait" && (!S.subs||txState()!=="run")) h+='<p><i><span class="spin"></span></i><span>'+esc(t("pPrep"))+'</span></p>';
+  if(!PROC.state || PROC.state==="skip") return "";
+  var h='<div class="procbox" id="procbox"><h3>'+esc(PROC.final?t("pDone"):t("procTitle"))+'</h3>';
+  if(PROC.state==="wait") h+='<p><i><span class="spin"></span></i><span>'+esc(t("pPrep"))+'</span></p>';
   if(PROC.state==="render") h+='<p><i><span class="spin"></span></i><span>'+esc(fmt(t("pRender"),{p:Math.round(PROC.pct*100)}))+'</span></p><div class="prog"><i style="width:'+Math.round(PROC.pct*100)+'%"></i></div>';
   if(PROC.state==="fail") h+='<p class="bad"><i>!</i><span>'+esc(t("procFail"))+'</span></p>';
   return h+'</div>';
 }
+function upHtml(){
+  if(S.sent) return "";
+  var u=upInfo(); if(u.state==="none") return '<div id="upbox" hidden></div>';
+  return '<div class="upbox" id="upbox"><p class="status'+(u.state==="done"?' ok':u.state==="fail"?' warn':'')+'">'+
+    (u.state==="done"?ic("check","draw"):u.state==="fail"?ic("none"):'<span class="spin"></span>')+'<span>'+esc(u.state==="done"?t("upDone"):u.state==="fail"?t("upFail"):fmt(t("upRun"),{p:Math.round(u.pct*100)}))+'</span></p>'+
+    (u.state==="run"?'<div class="prog"><i style="width:'+Math.round(u.pct*100)+'%"></i></div>':'')+'</div>';
+}
 var procTimer=0;
 function procUI(){
-  if(CFG.gen||CFG.lab) return;
+  if(CFG.gen||CFG.lab||CFG.panel) return;
   if(S.step===2){ var sb=document.getElementById("subsbox"); if(sb && !PROC.editing){ var tmp=document.createElement("div"); tmp.innerHTML=subsCard(); if(tmp.firstChild){ sb.replaceWith(tmp.firstChild); bindSubs(); } } return; }
   if(S.step!==6) return;
-  var box=document.getElementById("procbox");
-  if(box && !PROC.justDone){ var tmp2=document.createElement("div"); tmp2.innerHTML=procHtml(); if(tmp2.firstChild) box.replaceWith(tmp2.firstChild); return; }
-  PROC.justDone=false; render();
+  if(PROC.justDone){ PROC.justDone=false; render(); return; }
+  [["upbox",upHtml()],["procbox",procHtml()]].forEach(function(p){ var el=document.getElementById(p[0]); if(!el||!p[1]) return; var tmp=document.createElement("div"); tmp.innerHTML=p[1]; if(tmp.firstChild) el.replaceWith(tmp.firstChild); });
 }
 function throttleUI(){ if(procTimer) return; procTimer=setTimeout(function(){ procTimer=0; procUI(); },300); }
 
 function renderSend(){
-  var wait=procWaiting();
-  var files = recorded() ? finalFiles() : S.parts.filter(function(p){return p;}).map(function(p){return p.file;});
-  var h='<div class="stack lg">'+head(6,t("sendTitle"),t("sendLead"));
-  if(recorded()) h+='<div class="stage" id="stage">'+(PROC.state==="render"?'':'<video src="'+(PROC.finalUrl||clipList()[0].url)+'" playsinline controls></video>')+'</div>';
-  h+=procHtml();
+  startUploads();
+  var h='<div class="stack lg">'+head(6,S.sent?t("sentTitle"):t("sendTitle"),S.sent?"":t("sendLead"));
   if(S.sent) h+='<div class="success"><span class="big">'+ic("check","draw")+'</span><p>'+esc(t("thanks"))+'</p></div>';
-  if(S.shareMsg) h+='<p class="note">'+ic("eye")+'<span>'+esc(S.shareMsg)+'</span></p>';
+  h+=upHtml();
+  if(S.sendErr) h+='<p class="err" role="alert">'+ic("none")+esc(S.sendErr)+'</p>';
+  if(recorded() && (PROC.state==="render"||PROC.final)) h+='<div class="stage" id="stage">'+(PROC.state==="render"?'':'<video src="'+PROC.finalUrl+'" playsinline controls></video>')+'</div>';
+  h+=procHtml();
   h+='<div class="actions" id="actions"></div>';
   h+='<details><summary>'+ic("chev")+esc(t("sumHead"))+'</summary><pre class="sum" id="sumtxt">'+esc(summary())+'</pre></details>';
   if(IN_FRAME) h+='<p class="note">'+ic("eye")+'<span>'+esc(t("demo"))+'</span></p>';
@@ -1291,21 +1313,168 @@ function renderSend(){
   if(PROC.state==="render" && PROC.stageEls){ var stg=document.getElementById("stage"); PROC.stageEls.forEach(function(el){ stg.appendChild(el); }); }
   var acts=document.getElementById("actions");
   function addBtn(label,cls,fn,dis,icon){ var b=document.createElement("button"); b.type="button"; b.className="btn block "+cls; b.innerHTML=(icon?ic(icon):"")+'<span>'+esc(label)+'</span>'; b.onclick=fn; if(dis) b.disabled=true; acts.appendChild(b); return b; }
-  addBtn("1. "+(files.length>1?t("shareParts"):t("share")),"primary",function(){ shareFiles(files.concat(S.photo?[S.photo]:[])); },wait,"send");
-  if(wait) addBtn(t("sendNow"),"ghost",function(){ PROC.useOriginal=true; if(PROC.cancel) try{ PROC.cancel(); }catch(e){} PROC.key=""; render(); });
-  var wa=document.createElement("a"); wa.className="btn block ghost"; wa.target="_blank"; wa.rel="noopener";
-  wa.href="https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(summary()); wa.innerHTML=ic("chat")+'<span>'+esc("2. "+t("summary"))+'</span>';
-  wa.onclick=function(){ S.sent=true; setTimeout(render,400); };
-  acts.appendChild(wa);
-  if(recorded()) addBtn(t("save"),"outline",function(){ finalFiles().forEach(function(f){ saveFile(f); }); },wait);
-  var cp=addBtn(t("copy"),"ghost",function(){
-    try{ navigator.clipboard.writeText(summary()).then(function(){ cp.innerHTML=ic("check","draw")+'<span>'+esc(t("copied"))+'</span>'; },selectSum); }catch(e){ selectSum(); }
-  });
-  setBar([]);
+  function waLink(label){ var wa=document.createElement("a"); wa.className="btn block ghost"; wa.target="_blank"; wa.rel="noopener"; wa.href="https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(summary()); wa.innerHTML=ic("chat")+'<span>'+esc(label)+'</span>'; acts.appendChild(wa); return wa; }
+  if(!S.sent && S.sendErr){
+    /* fallback: the old WhatsApp route, so a broken connection never loses the review */
+    var files=recorded()?finalFiles():S.parts.filter(function(p){return p;}).map(function(p){return p.file;});
+    addBtn("1. "+t("viaWa"),"outline",function(){ shareFiles(files.concat(S.photo?[S.photo]:[])); },false,"send");
+    waLink("2. "+t("summary"));
+  }
+  if(recorded()){
+    var ready=PROC.final||PROC.state==="skip", busy=PROC.state==="wait"||PROC.state==="render";
+    addBtn(ready?t("saveReady"):t("saveCopy"),"ghost",saveCopy,busy,"image");
+  }
+  if(S.sent && CFG.wa) waLink(t("talkWa"));
+  setBar(S.sent?[]:[{label:S.sending?t("sending"):(S.sendErr?t("retry"):t("send")),icon:"send",on:submitAll,dis:S.sending}]);
+}
+function saveCopy(){
+  if(PROC.final){ saveFile(PROC.final); return; }
+  if(PROC.state==="skip"){ saveFile(clipList()[0].file); return; }
+  prepareFinal(); render();
+}
+
+/* ---------- upload: each file in 5 MB pieces; a failed piece is retried, not the whole file ---------- */
+var API="";
+var SID=(function(){ try{ var a=new Uint8Array(8); crypto.getRandomValues(a); return Array.prototype.map.call(a,function(b){ return ("0"+b.toString(16)).slice(-2); }).join(""); }catch(e){ return (Date.now().toString(16)+"00000000").slice(0,16); } })();
+var UPM=new Map(), UID=new WeakMap(), CHUNK=5*1024*1024;
+function upCode(){ var c=String(CFG.code||"").replace(/[^A-Za-z0-9_-]/g,"").slice(0,40); return c||"sem-codigo"; }
+function uidOf(f){ var u=UID.get(f); if(!u){ u=Math.random().toString(36).slice(2,7); UID.set(f,u); } return u; }
+function extOf(f){ var ty=(f.type||"").toLowerCase(), m=/\.([a-z0-9]{2,5})$/i.exec(f.name||""); if(ty.indexOf("mp4")>-1) return ".mp4"; if(ty.indexOf("webm")>-1) return ".webm"; if(ty.indexOf("quicktime")>-1) return ".mov"; if(ty.indexOf("jpeg")>-1) return ".jpg"; if(ty.indexOf("png")>-1) return ".png"; if(ty.indexOf("heic")>-1) return ".heic"; return m?"."+m[1].toLowerCase():".bin"; }
+function upTargets(){
+  var out=[];
+  clipList().forEach(function(c){ if(c.file) out.push({f:c.file,name:"p"+(c.q+1)+"_"+uidOf(c.file)+extOf(c.file)}); });
+  S.parts.forEach(function(p,i){ if(p&&p.file) out.push({f:p.file,name:"p"+(i+1)+"_"+uidOf(p.file)+extOf(p.file)}); });
+  if(S.photo) out.push({f:S.photo,name:"comprovante_"+uidOf(S.photo)+extOf(S.photo)});
+  return out;
+}
+function startUploads(){ if(!API||!S.consent||IN_FRAME) return; upTargets().forEach(function(x){ if(!UPM.has(x.f)) UPM.set(x.f,upload(x.f,x.name)); }); }
+function upInfo(){
+  var ts=upTargets(); if(!ts.length||!API) return {state:"none",pct:0};
+  var size=0, done=0, st="done";
+  ts.forEach(function(x){ var j=UPM.get(x.f), sz=x.f.size||1; size+=sz; if(!j){ st=st==="fail"?st:"run"; return; } done+=j.state==="done"?sz:Math.min(sz,j.done); if(j.state==="fail") st="fail"; else if(j.state!=="done"&&st!=="fail") st="run"; });
+  return {state:st,pct:size?done/size:0};
+}
+function upKey(f){ var j=UPM.get(f); return (j&&j.key)||null; }
+function sleep(ms){ return new Promise(function(r){ setTimeout(r,ms); }); }
+function waitOnline(){ return navigator.onLine===false ? new Promise(function(r){ window.addEventListener("online",function(){ r(); },{once:true}); }) : Promise.resolve(); }
+function httpErr(r){ var e=new Error("http "+r.status); e.status=r.status; return e; }
+function retry(fn){
+  var delay=1000, i=0;
+  function attempt(){ return fn().catch(function(e){ i++; if((e.status&&e.status<500&&e.status!==429)||i>6) throw e; return waitOnline().then(function(){ return sleep(delay); }).then(function(){ delay=Math.min(delay*2,15000); return attempt(); }); }); }
+  return attempt();
+}
+function apiJSON(path,body){ return fetch(API+path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}).then(function(r){ if(!r.ok) throw httpErr(r); return r.json(); }); }
+function upload(file,name){
+  var job={name:name,done:0,state:"run",key:""};
+  job.p=retry(function(){ return apiJSON("/up/start",{code:upCode(),sid:SID,name:name,type:file.type||"video/mp4",size:file.size}); }).then(function(st){
+    var parts=[], n=Math.max(1,Math.ceil(file.size/CHUNK)), i=0;
+    function next(){
+      if(i>=n) return retry(function(){ return apiJSON("/up/done",{key:st.key,uploadId:st.uploadId,parts:parts}); });
+      var k=i, blob=file.slice(k*CHUNK,Math.min(file.size,(k+1)*CHUNK));
+      return retry(function(){ return fetch(API+"/up/part?key="+encodeURIComponent(st.key)+"&uploadId="+encodeURIComponent(st.uploadId)+"&n="+(k+1),{method:"PUT",body:blob}).then(function(r){ if(!r.ok) throw httpErr(r); return r.json(); }); })
+        .then(function(res){ parts.push({n:res.n,etag:res.etag}); job.done=Math.min(file.size,(k+1)*CHUNK); i++; throttleUI(); return next(); });
+    }
+    return next().then(function(){ job.key=st.key; job.state="done"; throttleUI(); return st.key; });
+  }).catch(function(e){ job.state="fail"; job.err=e; throttleUI(); throw e; });
+  job.p.catch(function(){});
+  return job;
+}
+function recipe(){
+  return {v:1,mode:S.mode,W:W,H:H,subs:S.subs,edited:S.cuesEdited,music:S.music,stickers:S.stickers,
+    clips:clipList().map(function(c){ return {q:c.q,key:upKey(c.file),dur:+(c.dur||0).toFixed(2),mask:c.mask,facing:c.facing,at:c.at,cues:(c.cues||[]).map(function(q){ return {s:+q.s.toFixed(2),e:+q.e.toFixed(2),text:q.text}; })}; }),
+    parts:S.parts.map(function(p){ return p&&p.file?upKey(p.file):null; }), photo:S.photo?upKey(S.photo):null};
+}
+function submitAll(){
+  if(S.sending||S.sent) return;
+  if(!API){ S.sendErr=t("sendNoServer"); render(); return; }
+  S.sending=true; S.sendErr="";
+  UPM.forEach(function(j,f){ if(j.state==="fail") UPM.delete(f); });
+  startUploads(); render();
+  var jobs=upTargets().map(function(x){ return UPM.get(x.f); });
+  Promise.all(jobs.map(function(j){ return j.p; })).then(function(){
+    return retry(function(){ return apiJSON("/submit",{code:upCode(),sid:SID,lang:L,summary:summary(),recipe:recipe(),files:jobs.map(function(j){ return j.key; })}); });
+  }).then(function(){ S.sent=true; S.sending=false; render(); window.scrollTo(0,0); })
+    .catch(function(e){ S.sending=false; S.sendErr=(e&&e.status===503)?t("sendNoServer"):t("sendFail"); render(); });
+}
+
+/* ---------- assistant page (#painel): reviews from storage, assemble on demand ---------- */
+var PANEL={key:"",items:null,err:"",loading:false,arm:-1,mk:-1};
+try{ PANEL.key=localStorage.getItem("proba-admin")||""; }catch(e){}
+function adminFetch(path,opt){ opt=opt||{}; opt.headers=Object.assign({},opt.headers||{},{"X-Admin-Key":PANEL.key}); return fetch(API+path,opt).then(function(r){ if(!r.ok) throw httpErr(r); return r; }); }
+function renderPanel(){
+  var P=t("panel"), h='<div class="stack lg"><div class="shead"><p class="eyebrow">'+esc(P.eyebrow)+'</p><h2>'+esc(P.title)+'</h2><p class="lead">'+esc(P.lead)+'</p></div>';
+  if(!PANEL.key){
+    h+='<div class="field"><label class="label" for="akey">'+esc(P.key)+'</label><input type="password" id="akey" autocomplete="current-password"></div>'+
+       (PANEL.err?'<p class="err">'+ic("none")+esc(PANEL.err)+'</p>':'')+'<button type="button" class="btn primary block" id="alog">'+esc(P.enter)+'</button>';
+  } else if(PANEL.err) h+='<p class="err">'+ic("none")+esc(PANEL.err)+'</p>';
+  else if(!PANEL.items) h+='<p class="status"><span class="spin"></span><span>'+esc(P.loading)+'</span></p>';
+  else if(!PANEL.items.length) h+='<p class="note">'+ic("eye")+'<span>'+esc(P.empty)+'</span></p>';
+  else h+=PANEL.items.map(panelCard).join("");
+  if(PANEL.key) h+='<div class="rv-act"><button type="button" class="btn ghost small" id="aref">'+esc(P.refresh)+'</button><button type="button" class="btn ghost small" id="aout">'+esc(P.logout)+'</button></div>';
+  h+='</div>';
+  paint(h); setBar([]);
+  var lg=document.getElementById("alog"); if(lg) lg.onclick=function(){ var v=document.getElementById("akey").value.trim(); if(!v) return; PANEL.key=v; PANEL.err=""; PANEL.items=null; try{ localStorage.setItem("proba-admin",v); }catch(e){} render(); };
+  var rf=document.getElementById("aref"); if(rf) rf.onclick=function(){ PANEL.err=""; PANEL.items=null; render(); };
+  var lo=document.getElementById("aout"); if(lo) lo.onclick=function(){ PANEL.key=""; PANEL.items=null; PANEL.err=""; try{ localStorage.removeItem("proba-admin"); }catch(e){} render(); };
+  app.querySelectorAll("[data-f]").forEach(function(b){ b.onclick=function(){ var p=b.dataset.f.split(":"); panelOpen(+p[0],PANEL.items[+p[0]].files[+p[1]]); }; });
+  app.querySelectorAll("[data-mk]").forEach(function(b){ b.onclick=function(){ panelMake(+b.dataset.mk); }; });
+  app.querySelectorAll("[data-del]").forEach(function(b){ b.onclick=function(){ var i=+b.dataset.del; if(PANEL.arm!==i){ PANEL.arm=i; b.querySelector("span").textContent=P.delConfirm; b.classList.add("armed"); return; } panelDelete(i); }; });
+  if(PANEL.key && !PANEL.items && !PANEL.err && !PANEL.loading) panelLoad();
+}
+function panelCard(it,i){
+  var P=t("panel"), d=new Date(it.ts), when=isNaN(d)?it.ts:d.toLocaleString(L==="ru"?"ru-RU":"pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
+  return '<div class="panel rv"><div class="rv-h"><b>#'+esc(it.code)+'</b><span class="small">'+esc(when)+'</span></div>'+
+    '<details><summary>'+ic("chev")+esc(P.sum)+'</summary><pre class="sum">'+esc(it.summary)+'</pre></details>'+
+    '<div class="rv-files">'+(it.files||[]).map(function(k,j){ return '<button type="button" class="btn ghost small" data-f="'+i+':'+j+'">'+ic(/comprovante/.test(k)?"image":"play")+'<span>'+esc(k.split("/").pop().replace(/_[a-z0-9]{5}\./,"."))+'</span></button>'; }).join("")+'</div>'+
+    '<div class="rv-stage" id="rvs'+i+'"></div>'+
+    '<div class="rv-act">'+(it.recipe&&it.recipe.clips&&it.recipe.clips.length?'<button type="button" class="btn primary small" data-mk="'+i+'">'+ic("video")+'<span>'+esc(P.make)+'</span></button>':'')+
+    '<button type="button" class="btn ghost small" data-del="'+i+'">'+ic("trash")+'<span>'+esc(P.del)+'</span></button></div></div>';
+}
+function panelLoad(){
+  var P=t("panel"); PANEL.loading=true;
+  adminFetch("/admin/list").then(function(r){ return r.json(); }).then(function(j){ PANEL.items=j.items||[]; })
+    .catch(function(e){ if(e.status===401){ PANEL.key=""; try{ localStorage.removeItem("proba-admin"); }catch(_){} PANEL.err=P.bad; } else PANEL.err=P.fail; })
+    .then(function(){ PANEL.loading=false; render(); });
+}
+var PANEL_BLOBS={};
+function panelBlob(key){ if(!PANEL_BLOBS[key]) PANEL_BLOBS[key]=adminFetch("/admin/file?key="+encodeURIComponent(key)).then(function(r){ return r.blob(); }).catch(function(e){ delete PANEL_BLOBS[key]; throw e; }); return PANEL_BLOBS[key]; }
+function panelOpen(i,key){
+  var box=document.getElementById("rvs"+i); if(!box) return;
+  box.innerHTML='<p class="status"><span class="spin"></span><span>'+esc(t("panel").loading)+'</span></p>';
+  panelBlob(key).then(function(b){ var u=URL.createObjectURL(b); box.innerHTML=/^image\//.test(b.type)||/comprovante/.test(key)?'<img alt="" src="'+u+'">':'<video src="'+u+'" controls playsinline autoplay></video>'; })
+    .catch(function(){ box.innerHTML='<p class="err">'+esc(t("panel").fail)+'</p>'; });
+}
+function panelMake(i){
+  var P=t("panel"), it=PANEL.items[i], r=it.recipe||{}, box=document.getElementById("rvs"+i); if(!box) return;
+  if(PANEL.mk>=0 && PANEL.mk!==i && PROC.state==="render") return;
+  ensureAC();                                   /* gesture-bound */
+  PANEL.mk=i; box.innerHTML='<p class="status"><span class="spin"></span><span>'+esc(P.loadingFiles)+'</span></p>';
+  var list=(r.clips||[]).filter(function(c){ return c.key; });
+  Promise.all(list.map(function(c){ return panelBlob(c.key); })).then(function(blobs){
+    clearClips();
+    list.forEach(function(c,k){ var b=blobs[k], f; try{ f=new File([b],c.key.split("/").pop(),{type:b.type}); }catch(e){ f=b; }
+      S.clips[c.q]={q:c.q,file:f,url:URL.createObjectURL(f),dur:c.dur||1,mask:c.mask,facing:c.facing,cues:c.cues||[],txState:"done",tx:Promise.resolve(c.cues||[])}; });
+    S.stickers=r.stickers||[]; S.music=r.music||"none"; S.subs=!!r.subs; S.mode=r.mode||S.mode;
+    prepareFinal();
+    var shown=false, iv=setInterval(function(){
+      if(PANEL.mk!==i){ clearInterval(iv); return; }
+      if(PROC.state==="render"){ if(!shown&&PROC.stageEls){ shown=true; box.innerHTML='<div class="stage" id="rvst'+i+'"></div><p class="status" id="rvp'+i+'"></p>'; var st=document.getElementById("rvst"+i); PROC.stageEls.forEach(function(el){ st.appendChild(el); }); } var pp=document.getElementById("rvp"+i); if(pp) pp.innerHTML='<span class="spin"></span><span>'+esc(fmt(P.making,{p:Math.round(PROC.pct*100)}))+'</span>'; }
+      else if(PROC.state==="done"||PROC.state==="skip"){ clearInterval(iv); var f2=PROC.final||clipList()[0].file, u=PROC.finalUrl||URL.createObjectURL(f2);
+        box.innerHTML='<video src="'+u+'" controls playsinline></video><a class="btn primary small" download="'+esc((f2.name||("proba_"+it.code+".mp4")))+'" href="'+u+'">'+ic("check")+'<span>'+esc(P.download)+'</span></a>'; }
+      else if(PROC.state==="fail"){ clearInterval(iv); box.innerHTML='<p class="err">'+esc(t("procFail"))+'</p>'; }
+    },300);
+  }).catch(function(){ box.innerHTML='<p class="err">'+esc(P.fail)+'</p>'; });
+}
+function panelDelete(i){
+  var it=PANEL.items[i];
+  adminFetch("/admin/delete",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:it.id})})
+    .then(function(){ PANEL.items.splice(i,1); PANEL.arm=-1; render(); })
+    .catch(function(){ PANEL.err=t("panel").fail; render(); });
 }
 
 /* ---------- subtitles: each part's audio -> small server -> Whisper large-v3 (Groq) ---------- */
 var STT_URL = qs.stt || "https://proba-legendas.evgenygaman.workers.dev/";   /* Cloudflare Worker -> Groq Whisper */
+API=String(qs.api||"https://proba-legendas.evgenygaman.workers.dev").replace(/\/+$/,"");   /* same worker: uploads + assistant page */
 var PROC={};
 function resetProc(){ if(PROC.cancel) try{ PROC.cancel(); }catch(e){} if(PROC.finalUrl) URL.revokeObjectURL(PROC.finalUrl); PROC={ac:PROC.ac||null,final:null,finalUrl:"",key:"",state:"",pct:0,useOriginal:false,editing:false,cancel:null}; }
 resetProc();
@@ -1928,7 +2097,7 @@ function renderGen(){
 }
 
 setLang(L);
-if(qs.debug) window.PROBA={S:S,summary:summary,totalDur:totalDur,proc:function(){ return PROC; }};
+if(qs.debug) window.PROBA={S:S,summary:summary,totalDur:totalDur,upload:upload,proc:function(){ return PROC; }};
 })();
 </script>
 </body></html>
