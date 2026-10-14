@@ -549,6 +549,17 @@ details[open] summary svg{transform:rotate(90deg)}
 .cam-q span i{display:inline-flex;gap:4px}
 .cam-q span i b{width:18px;height:3px;border-radius:2px;background:rgba(255,255,255,.3)}
 .cam-q span i b.on{background:#fff}
+.cam-q{padding-left:48px;padding-right:48px}
+.cam-qa{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:56px;border:0;background:transparent;color:#fff;display:grid;place-items:center;cursor:pointer;padding:0}
+.cam-qa svg{width:26px;height:26px}
+.cam-qa.prev{left:4px}.cam-qa.next{right:4px}
+.cam-qa[disabled]{opacity:.25;pointer-events:none}
+.cam-qa[hidden]{display:none}
+.cam-q small{font:500 12.5px/1.3 var(--f);color:rgba(255,255,255,.72)}
+.cam-q span i b.cur{background:#fff;width:26px}
+.cam-q span i b.ok{background:#7BE0A6}
+.cam-view{touch-action:none}
+.cam-zoom{position:absolute;z-index:3;left:50%;bottom:calc(210px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:rgba(18,19,22,.7);color:#fff;font:600 15px/1 var(--f);padding:8px 12px;border-radius:999px;pointer-events:none}
 .cam-q strong{font:600 19px/1.3 var(--f);color:#fff;letter-spacing:-.01em}
 .cam-bottom{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:48px 0 calc(16px + env(safe-area-inset-bottom,0px));background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.62) 45%)}
 .masks{display:flex;gap:12px;overflow-x:auto;padding:0 16px 12px;scrollbar-width:none;scroll-snap-type:x mandatory}
@@ -601,7 +612,7 @@ details[open] summary svg{transform:rotate(90deg)}
 
 <div class="cam" id="cam" hidden>
   <div class="cam-top"><span class="pill" id="camPill"></span><div class="cam-tr"><button type="button" class="cam-ib" id="camFlip" aria-label="Virar câmera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8.5h3l1.8-2.5h6.4L17 8.5h3V19H4z"/><path d="M9.5 13.5a2.5 2.5 0 0 1 4.3-1.7M14.5 13.5a2.5 2.5 0 0 1-4.3 1.7"/></svg></button><button type="button" class="cam-x" id="camClose"></button></div></div>
-  <div class="cam-view"><canvas id="camCanvas" width="720" height="1280"></canvas><div class="cam-q" id="camQ" hidden><span><i id="camDots"></i><em id="camQk"></em></span><strong id="camQt"></strong></div></div>
+  <div class="cam-view"><canvas id="camCanvas" width="720" height="1280"></canvas><div class="cam-q" id="camQ" hidden><button type="button" class="cam-qa prev" id="camQPrev"></button><button type="button" class="cam-qa next" id="camQNext"></button><span><i id="camDots"></i><em id="camQk"></em></span><strong id="camQt"></strong><small id="camQh"></small></div><div class="cam-zoom" id="camZoom" hidden></div></div>
   <div class="cam-bottom">
     <div class="masks" id="camMasks" role="group" aria-label="Máscaras" hidden></div>
     <div class="cam-tip" id="camTip"></div>
@@ -651,7 +662,7 @@ pt:{
  faceTitle:"Prefere não mostrar o rosto?", faceText:"Depois de gravar, você escolhe: mostrar o rosto, desfocar ou virar silhueta. Rostos de outras pessoas ficam desfocados sozinhos.", faceLink:"Ver as máscaras",
  qLead:"Respostas rápidas, sem certo ou errado.", permLead:"Dá para mudar de ideia depois: é só pedir pelo WhatsApp.", consentAudio:"Autorizo também o envio do áudio para gerar as legendas.",
  themeDay:"Tema claro", themeNight:"Tema escuro",
- introLead:"Um vídeo curto, gravado aqui no navegador. Sem baixar aplicativo.",
+ introLead:"Você grava um vídeo curto aqui mesmo, no navegador do celular. Não precisa baixar nenhum aplicativo.",
  pts:["Nada é publicado sem a sua permissão. Você escolhe no final.","Não precisa mostrar o rosto. Pode filmar só o resultado.","R$ 20 pela participação, via Pix.","Leva uns 3 minutos."],
  start:"Começar", next:"Continuar", back:"Voltar",
  visitTitle:"Sobre a visita", service:"Qual serviço?", pro:"Nome ou @ da profissional", proPh:"@studio.unhas", date:"Data da visita",
@@ -666,7 +677,7 @@ pt:{
   {label:"O que achou",q:"O que você gostou? E o que poderia ser melhor?",tip:"Seja sincera: o ponto fraco também ajuda quem vai escolher.",cam:"user"},
   {label:"O atendimento",q:"Foi pontual? Limpeza, preço combinado, voltaria?",tip:"Fale do que mais importou para você.",cam:"user"}],
  freeQ:{label:"Sua avaliação",q:"Fale sobre a sua visita, do jeito que quiser.",tip:"Resultado, atendimento, preço: o que importou para você.",cam:"user"},
- qOf:"Pergunta {n} de {m}", recAnswer:"Gravar resposta", stopAnswer:"Pronto", recFree:"Gravar", stopFree:"Parar",
+ qOf:"Pergunta {n} de {m}", qSwipe:"Deslize para o lado ou toque nas setas para trocar de pergunta.", qPrev:"Pergunta anterior", qNext:"Próxima pergunta", recAnswer:"Gravar resposta", stopAnswer:"Pronto", recFree:"Gravar", stopFree:"Parar",
  skip:"Pular", finish:"Concluir", flip:"Virar câmera", close:"Fechar", paused:"Pausado", ready:"Pronto para gravar", left:"faltam {s} s",
  recDone:"Vídeo gravado", again:"Gravar de novo", skipped:"pulada", answered:"respondida",
  rec:"Gravar", rerec:"Regravar", recorded:"Gravado", remove:"Apagar",
@@ -720,7 +731,7 @@ ru:{
  faceTitle:"Не хотите показывать лицо?", faceText:"После съёмки выберете: показать лицо, размыть его или сделать силуэт. Чужие лица размываются сами.", faceLink:"Посмотреть маски",
  qLead:"Быстрые ответы, правильных и неправильных нет.", permLead:"Передумать можно потом — просто напишите в WhatsApp.", consentAudio:"Также разрешаю отправить звук для создания субтитров.",
  themeDay:"Светлая тема", themeNight:"Тёмная тема",
- introLead:"Короткое видео прямо в браузере. Ничего не нужно скачивать.",
+ introLead:"Вы снимаете короткое видео прямо здесь, в браузере телефона. Приложение скачивать не нужно.",
  pts:["Ничего не публикуется без вашего разрешения. Выбираете в конце.","Лицо показывать не обязательно. Можно снять только результат.","R$ 20 за участие, через Pix.","Займёт около 3 минут."],
  start:"Начать", next:"Дальше", back:"Назад",
  visitTitle:"О визите", service:"Какая услуга?", pro:"Имя или @ мастера", proPh:"@studio.unhas", date:"Дата визита",
@@ -735,7 +746,7 @@ ru:{
   {label:"Что понравилось",q:"Что понравилось? А что могло быть лучше?",tip:"Будьте честны: минус тоже помогает тому, кто выбирает.",cam:"user"},
   {label:"Обслуживание",q:"Приняли вовремя? Чистота, цена как договаривались, вернётесь?",tip:"Скажите, что было важно лично вам.",cam:"user"}],
  freeQ:{label:"Ваш отзыв",q:"Расскажите о визите, как хотите.",tip:"Результат, обслуживание, цена — что было важно вам.",cam:"user"},
- qOf:"Вопрос {n} из {m}", recAnswer:"Записать ответ", stopAnswer:"Готово", recFree:"Записать", stopFree:"Стоп",
+ qOf:"Вопрос {n} из {m}", qSwipe:"Листайте в сторону или нажмите стрелки, чтобы выбрать другой вопрос.", qPrev:"Предыдущий вопрос", qNext:"Следующий вопрос", recAnswer:"Записать ответ", stopAnswer:"Готово", recFree:"Записать", stopFree:"Стоп",
  skip:"Пропустить", finish:"Завершить", flip:"Сменить камеру", close:"Закрыть", paused:"Пауза", ready:"Готово к записи", left:"осталось {s} с",
  recDone:"Видео записано", again:"Переснять", skipped:"пропущен", answered:"есть ответ",
  rec:"Снять", rerec:"Переснять", recorded:"Снято", remove:"Удалить",
@@ -822,6 +833,7 @@ var IC={
   flip:'<path d="M4 8.5h3l1.8-2.5h6.4L17 8.5h3V19H4z"/><path d="M9.5 13.5a2.5 2.5 0 0 1 4.3-1.7M14.5 13.5a2.5 2.5 0 0 1-4.3 1.7"/>',
   skip:'<path d="M6 5.5l9 6.5-9 6.5z"/><path d="M18 5.5v13"/>',
   chev:'<path d="M9 6l6 6-6 6"/>',
+  chevl:'<path d="M15 6l-6 6 6 6"/>',
   pin:'<path d="M12 21s7-6.3 7-11.5A7 7 0 0 0 5 9.5C5 14.7 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
   sparkle:'<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>',
   captions:'<rect x="3" y="5" width="18" height="14" rx="3"/><path d="M7 12.5h4M13 12.5h4M7 15.5h7"/>',
@@ -1307,22 +1319,62 @@ function openCamera(only){
 }
 /* Android Chrome exposes focus controls: keep autofocus continuous and allow tap-to-focus. iOS keeps focus to itself. */
 function setupFocus(track){
-  CAM.focusPoi=false;
+  CAM.focusPoi=false; CAM.zoomHw=null; CAM.zoom=1;
+  try{ var zc=track.getCapabilities?track.getCapabilities().zoom:null; if(zc&&zc.max>zc.min){ CAM.zoomHw=zc; CAM.zoom=(track.getSettings&&track.getSettings().zoom)||zc.min; } }catch(e){}
   try{
     var cap=track.getCapabilities?track.getCapabilities():{};
     if(cap.focusMode&&cap.focusMode.indexOf("continuous")>-1) track.applyConstraints({advanced:[{focusMode:"continuous"}]}).catch(function(){});
     CAM.focusPoi=!!(cap.pointsOfInterest||(cap.focusMode&&cap.focusMode.indexOf("single-shot")>-1));
   }catch(e){}
 }
-cv.addEventListener("pointerdown",function(ev){
+function tapFocus(cx0,cy0){
   if(!CAM.open||!CAM.focusPoi||!CAM.vtrack) return;
-  var r=cv.getBoundingClientRect(), x=(ev.clientX-r.left)/r.width, y=(ev.clientY-r.top)/r.height;
+  var r=cv.getBoundingClientRect(), x=(cx0-r.left)/r.width, y=(cy0-r.top)/r.height;
   try{
     CAM.vtrack.applyConstraints({advanced:[{pointsOfInterest:[{x:x,y:y}],focusMode:"single-shot"}]}).catch(function(){});
     setTimeout(function(){ try{ CAM.vtrack.applyConstraints({advanced:[{focusMode:"continuous"}]}).catch(function(){}); }catch(e){} },2500);
   }catch(e){}
-  var ring=document.createElement("span"); ring.className="focus-ring"; ring.style.left=ev.clientX+"px"; ring.style.top=ev.clientY+"px"; camEl.appendChild(ring); setTimeout(function(){ ring.remove(); },900);
-});
+  var ring=document.createElement("span"); ring.className="focus-ring"; ring.style.left=cx0+"px"; ring.style.top=cy0+"px"; camEl.appendChild(ring); setTimeout(function(){ ring.remove(); },900);
+}
+/* pinch to zoom: the camera's own zoom where the phone offers it, otherwise a digital crop up to 3x */
+var ZOOM_DIGI=3;
+function setZoom(z){
+  var hc=CAM.zoomHw, min=hc?hc.min:1, max=hc?Math.min(hc.max,hc.min*10):ZOOM_DIGI;
+  z=Math.max(min,Math.min(max,z)); if(!isFinite(z)) return; CAM.zoom=z;
+  if(hc){ clearTimeout(CAM.zT); var ap=function(){ CAM.zAt=performance.now(); try{ CAM.vtrack.applyConstraints({advanced:[{zoom:CAM.zoom}]}).catch(function(){}); }catch(e){} };
+    if(performance.now()-(CAM.zAt||0)>80) ap(); else CAM.zT=setTimeout(ap,80); }
+  var zb=document.getElementById("camZoom"); zb.textContent=(z/min).toFixed(1).replace(".",L==="ru"?",":".")+"×"; zb.hidden=false;
+  clearTimeout(CAM.zbT); CAM.zbT=setTimeout(function(){ zb.hidden=true; },1200);
+}
+(function(){
+  var view=document.querySelector(".cam-view"), PT={}, G={multi:false};
+  function dist(){ var k=Object.keys(PT); if(k.length<2) return 0; var a=PT[k[0]], b=PT[k[1]]; return Math.hypot(a.x-b.x,a.y-b.y); }
+  view.addEventListener("pointerdown",function(e){
+    if(!CAM.open||(e.target.closest&&e.target.closest("button"))) return;
+    PT[e.pointerId]={x:e.clientX,y:e.clientY,x0:e.clientX,y0:e.clientY};
+    if(Object.keys(PT).length>=2){ G.multi=true; G.d0=dist(); G.z0=CAM.zoom||1; }
+    try{ view.setPointerCapture(e.pointerId); }catch(x){}
+  });
+  view.addEventListener("pointermove",function(e){
+    var p=PT[e.pointerId]; if(!p) return; p.x=e.clientX; p.y=e.clientY;
+    if(G.multi&&Object.keys(PT).length>=2&&G.d0>20){ var hc=CAM.zoomHw, span=hc?(hc.min):1; setZoom(G.z0*(dist()/G.d0)); }
+  });
+  function end(e){
+    var p=PT[e.pointerId]; if(!p) return; delete PT[e.pointerId];
+    var left=Object.keys(PT).length;
+    if(G.multi){ if(!left) G.multi=false; else { var k=Object.keys(PT)[0]; PT[k].x0=PT[k].x; PT[k].y0=PT[k].y; } return; }
+    if(e.type==="pointercancel") return;
+    var dx=p.x-p.x0, dy=p.y-p.y0;
+    if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.4){ goQ(CAM.q+(dx<0?1:-1)); return; }
+    if(Math.abs(dx)<12&&Math.abs(dy)<12) tapFocus(e.clientX,e.clientY);
+  }
+  view.addEventListener("pointerup",end); view.addEventListener("pointercancel",end);
+  /* keep the page itself from zooming while the camera is open (iOS) */
+  document.addEventListener("gesturestart",function(e){ if(CAM&&CAM.open) e.preventDefault(); });
+  view.addEventListener("touchmove",function(e){ if(e.touches&&e.touches.length>1) e.preventDefault(); },{passive:false});
+})();
+document.getElementById("camQPrev").onclick=function(){ goQ(CAM.q-1); };
+document.getElementById("camQNext").onclick=function(){ goQ(CAM.q+1); };
 function loop(){
   /* camera delivers ~30 fps; ProMotion screens call rAF up to 120 times a second, so draw at camera pace only */
   var now=performance.now();
@@ -1332,7 +1384,7 @@ function loop(){
 function draw(){
   cx.fillStyle="#000"; cx.fillRect(0,0,W,H);
   if(src.readyState>=2 && src.videoWidth){
-    var vw=src.videoWidth, vh=src.videoHeight, s=Math.max(W/vw,H/vh), dw=vw*s, dh=vh*s;
+    var vw=src.videoWidth, vh=src.videoHeight, s=Math.max(W/vw,H/vh)*(CAM.zoomHw?1:(CAM.zoom||1)), dw=vw*s, dh=vh*s;
     try{ cx.drawImage(src,(W-dw)/2,(H-dh)/2,dw,dh); }catch(e){}
     if(FACE.state==="ok"){
       /* full-rate face tracking only when a mask must follow the face; otherwise ~10/s is enough to keep other faces blurred */
@@ -1383,7 +1435,11 @@ function camUI(){
   var maskWait = S.mask!=="none" && FACE.state!=="ok";
   elTip.textContent = maskWait ? t("maskLoading") : (CAM.noFace ? t("faceOut") : d.tip);
   var qbox=document.getElementById("camQ");
-  if(guided){ var wasHidden=qbox.hidden, qchanged=qbox.dataset.q!==String(CAM.q); qbox.hidden=false; document.getElementById("camQk").textContent=fmt(t("qOf"),{n:CAM.q+1,m:defs.length}); document.getElementById("camQt").textContent=d.q; document.getElementById("camDots").innerHTML=defs.map(function(_,i){ return '<b class="'+(i<=CAM.q?'on':'')+'"></b>'; }).join(""); if(qchanged&&!wasHidden){ qbox.style.animation="none"; void qbox.offsetWidth; qbox.style.animation=""; } qbox.dataset.q=String(CAM.q); }
+  if(guided){ var wasHidden=qbox.hidden, qchanged=qbox.dataset.q!==String(CAM.q); qbox.hidden=false; document.getElementById("camQk").textContent=fmt(t("qOf"),{n:CAM.q+1,m:defs.length}); document.getElementById("camQt").textContent=d.q; document.getElementById("camDots").innerHTML=defs.map(function(_,i){ return '<b class="'+(i===CAM.q?'cur':(answeredQ(i)?'ok':''))+'"></b>'; }).join("");
+    var canSw=!recording&&CAM.only==null&&defs.length>1, pv=document.getElementById("camQPrev"), nv=document.getElementById("camQNext");
+    pv.hidden=nv.hidden=!canSw; pv.disabled=CAM.q<=0||CAM.busy; nv.disabled=CAM.q>=defs.length-1||CAM.busy;
+    pv.innerHTML=ic("chevl"); nv.innerHTML=ic("chev"); pv.setAttribute("aria-label",t("qPrev")); nv.setAttribute("aria-label",t("qNext"));
+    var qh=document.getElementById("camQh"); qh.textContent=t("qSwipe"); qh.hidden=!canSw||!!CAM.qMoved||CAM.started; if(qchanged&&!wasHidden){ qbox.style.animation="none"; void qbox.offsetWidth; qbox.style.animation=""; } qbox.dataset.q=String(CAM.q); }
   else qbox.hidden=true;
   elShutter.className="shutter"+(recording?" on":"");
   elLabel.textContent = recording ? (guided?t("stopAnswer"):t("stopFree")) : (guided?t("recAnswer"):(CAM.pending.length?t("recMore"):t("recFree")));
@@ -1391,9 +1447,9 @@ function camUI(){
   elFlip.setAttribute("aria-label",t("flip")); elFlip.disabled = recording || CAM.busy;
   var answered=CAM.pending.length>0;
   if(guided){
-    var last=CAM.q>=defs.length-1;
-    var nl = (recording||CAM.only!=null) ? "" : (last&&answered ? t("finish") : t("skip"));
-    elNext.querySelector(".lbl").textContent=nl; document.getElementById("camNextIc").innerHTML=ic(last&&answered?"check":"skip"); elNext.style.visibility=nl?"visible":"hidden";
+    var last = answered && (answeredQ(CAM.q) ? nextQ()<0 : (function(){ var sk=CAM.skipped||{}, had=sk[CAM.q]; sk[CAM.q]=true; CAM.skipped=sk; var r=nextQ()<0; if(!had) delete sk[CAM.q]; return r; })());
+    var nl = (recording||CAM.only!=null) ? "" : (last ? t("finish") : t("skip"));
+    elNext.querySelector(".lbl").textContent=nl; document.getElementById("camNextIc").innerHTML=ic(last?"check":"skip"); elNext.style.visibility=nl?"visible":"hidden";
     elNext.disabled = recording || CAM.busy;
   } else { var nl2=(!recording&&CAM.pending.length&&CAM.only==null)?t("finish"):""; elNext.querySelector(".lbl").textContent=nl2; document.getElementById("camNextIc").innerHTML=ic("check"); elNext.style.visibility=nl2?"visible":"hidden"; elNext.disabled=recording||CAM.busy||!nl2; }
   var maxT=guided?ANSWER_MAX:FREE_MAX, frac=recording?Math.min(1,(CAM.elapsed-CAM.segStart)/maxT):0; document.getElementById("camRing").style.strokeDashoffset=String(245*(1-frac));
@@ -1487,16 +1543,28 @@ function stopAnswer(){
   advance();
 }
 function advance(){
-  var defs=qdefs();
-  if(CAM.q>=defs.length-1){ finish(); return; }
-  CAM.q++;
+  var defs=qdefs(), nx=nextQ();
+  if(nx<0){ finish(); return; }
+  CAM.q=nx;
   var want=defs[CAM.q].cam;
   if(want!==CAM.facing) flip(want); else camUI();
 }
-function skip(){
+function skip(){ CAM.skipped=CAM.skipped||{}; CAM.skipped[CAM.q]=true; advance(); }
+function answeredQ(i){ return CAM.pending.some(function(p){ return p.q===i; }); }
+/* where to go after answering or skipping: the next question without an answer, then any earlier one not skipped; -1 = done */
+function nextQ(){
+  var n=qdefs().length, sk=CAM.skipped||{};
+  for(var i=CAM.q+1;i<n;i++){ if(!answeredQ(i)) return i; }
+  for(var j=0;j<CAM.q;j++){ if(!answeredQ(j)&&!sk[j]) return j; }
+  return -1;
+}
+/* switch question by swipe or arrows (not while recording) */
+function goQ(i){
   var defs=qdefs();
-  if(CAM.q>=defs.length-1 && CAM.pending.length){ finish(); return; }
-  advance();
+  if(S.mode!=="guiado"||!CAM.open||CAM.state==="rec"||CAM.busy||CAM.only!=null) return;
+  if(i<0||i>=defs.length||i===CAM.q) return;
+  CAM.q=i; CAM.qMoved=true; if(CAM.skipped) delete CAM.skipped[i];
+  var want=defs[i].cam; if(want!==CAM.facing) flip(want); else camUI();
 }
 function flip(to){
   to=to||(CAM.facing==="user"?"environment":"user");
@@ -1505,8 +1573,8 @@ function flip(to){
   gum({audio:false,video:videoC(to)}).then(function(s){
     CAM.vtrack=s.getVideoTracks()[0]; setupFocus(CAM.vtrack); CAM.facing=to; src.srcObject=new MediaStream([CAM.vtrack]); return src.play().catch(function(){});
   }).catch(function(){
-    return gum({audio:false,video:videoC(CAM.facing)}).then(function(s){ CAM.vtrack=s.getVideoTracks()[0]; src.srcObject=new MediaStream([CAM.vtrack]); return src.play().catch(function(){}); });
-  }).then(function(){ CAM.busy=false; camUI(); });
+    return gum({audio:false,video:videoC(CAM.facing)}).then(function(s){ CAM.vtrack=s.getVideoTracks()[0]; setupFocus(CAM.vtrack); src.srcObject=new MediaStream([CAM.vtrack]); return src.play().catch(function(){}); });
+  }).catch(function(e){ diag("flip: "+(e&&e.message||e)); }).then(function(){ CAM.busy=false; camUI(); });
 }
 function finish(){
   if(CAM.state==="rec"){ CAM.finishing=true; stopAnswer(); return; }
