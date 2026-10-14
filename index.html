@@ -279,6 +279,13 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offs
 .pv-fx[hidden]{display:none}
 .part-act{display:flex;gap:6px;align-items:center}
 .btn.icon-s{width:42px;padding:0}
+.pv video.pv-v{opacity:0}
+.pv video.pv-v.on{opacity:1}
+.pv.loading .pv-play span{opacity:1!important;transform:none!important}
+.pv.loading .pv-play svg{display:none}
+.pv.loading .pv-play span::after{content:"";width:26px;height:26px;border-radius:50%;border:3px solid rgba(255,255,255,.35);border-top-color:#fff;animation:spin .8s linear infinite}
+.prv-row{display:flex;flex-direction:column;gap:8px}
+.prv-row .label{margin:0}
 /* subtitles + processing */
 .panel{background:var(--paper);border:1.5px solid var(--line);border-radius:var(--r-lg);padding:16px;display:flex;flex-direction:column;gap:12px}
 .toggle{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;cursor:pointer}
@@ -527,7 +534,7 @@ pt:{
  stickTitle:"Figurinhas", stickLead:"Toque para colocar. Arraste no vídeo para mudar de lugar.", stickMax:"Máximo de 6. Toque numa delas no vídeo para ajustar.", stickSize:"Tamanho", stickDel:"Remover",
  musicTitle:"Música de fundo", musicLead:"Fica baixinha enquanto você fala.", music:{none:"Sem música",suave:"Suave",bossa:"Bossa",animada:"Animada"},
  againAll:"Apagar e gravar tudo de novo", againConfirm:"Toque de novo para apagar tudo", pPrep:"Preparando o vídeo…", piece:"Trecho {n}", recMore:"Gravar próximo trecho", freeMore:"Pausa. Pense com calma e grave o próximo trecho, ou toque em Concluir.", addPiece:"Adicionar trecho", delPiece:"Apagar",
- fxTitle:"Seu rosto", fxLead:"Vale para as partes gravadas com a câmera da frente. O original fica só com a equipe da Proba.", face:{show:"Mostrar",blur:"Desfocar",silhouette:"Silhueta"}, fxLoading:"Preparando o efeito…",
+ prvTitle:"Privacidade", prvLead:"O original fica só com a equipe da Proba. Publicamos só a versão que você escolher.", fxTitle:"Rosto", fxLead:"Vale para as partes gravadas com a câmera da frente.", voiceTitle:"Voz", voice:{orig:"Original",alt:"Alterada"}, voiceLoading:"Preparando a voz…", face:{show:"Mostrar",blur:"Desfocar",silhouette:"Silhueta"}, fxLoading:"Preparando o efeito…",
  send:"Enviar", sending:"Enviando…", retry:"Tentar de novo", sentTitle:"Avaliação enviada", upRun:"Seu vídeo está subindo · {p}%", upDone:"Vídeo carregado", upFail:"A conexão falhou. Toque em Tentar de novo.", sendFail:"Não deu para enviar agora. Verifique a internet e tente de novo, ou envie pelo WhatsApp.", sendNoServer:"O envio direto não está disponível agora. Envie pelo WhatsApp.", viaWa:"Enviar vídeo pelo WhatsApp", saveCopy:"Salvar uma cópia no celular", saveReady:"Baixar o vídeo pronto", talkWa:"Falar com a gente no WhatsApp",
  panel:{eyebrow:"Equipe",title:"Avaliações recebidas",lead:"Só para a equipe da Proba. A chave fica salva neste navegador.",key:"Chave de acesso",enter:"Entrar",loading:"Carregando…",empty:"Ainda não chegou nenhuma avaliação.",fail:"Não deu para carregar. Tente de novo.",bad:"Chave incorreta.",refresh:"Atualizar",logout:"Sair",sum:"Resumo",make:"Montar vídeo",making:"Montando · {p}% · mantenha esta aba aberta",download:"Baixar vídeo",del:"Apagar",delConfirm:"Toque de novo para apagar de vez",loadingFiles:"Baixando as partes…"}, reShoot:"Regravando a parte {n}",
  maskNone:"Sem", maskBtn:"Máscara", maskLoading:"Preparando máscaras…", faceOut:"Mantenha o rosto na tela para a máscara funcionar", maskLocked:"A máscara fica até o fim da gravação",
@@ -595,7 +602,7 @@ ru:{
  stickTitle:"Стикеры", stickLead:"Нажмите, чтобы добавить. Двигайте пальцем прямо на видео.", stickMax:"Максимум 6. Нажмите на стикер в видео, чтобы настроить.", stickSize:"Размер", stickDel:"Убрать",
  musicTitle:"Фоновая музыка", musicLead:"Становится тише, когда вы говорите.", music:{none:"Без музыки",suave:"Спокойная",bossa:"Босса",animada:"Бодрая"},
  againAll:"Удалить и снять всё заново", againConfirm:"Нажмите ещё раз — всё удалится", pPrep:"Готовим видео…", piece:"Фрагмент {n}", recMore:"Записать следующий фрагмент", freeMore:"Пауза. Подумайте спокойно и запишите следующий фрагмент или нажмите «Завершить».", addPiece:"Добавить фрагмент", delPiece:"Удалить",
- fxTitle:"Ваше лицо", fxLead:"Действует на части, снятые фронтальной камерой. Оригинал хранится только у команды Пробы.", face:{show:"Показать",blur:"Размыть",silhouette:"Силуэт"}, fxLoading:"Готовим эффект…",
+ prvTitle:"Приватность", prvLead:"Оригинал хранится только у команды Пробы. Публикуется только выбранный вами вариант.", fxTitle:"Лицо", fxLead:"Действует на части, снятые фронтальной камерой.", voiceTitle:"Голос", voice:{orig:"Обычный",alt:"Изменённый"}, voiceLoading:"Готовим голос…", face:{show:"Показать",blur:"Размыть",silhouette:"Силуэт"}, fxLoading:"Готовим эффект…",
  send:"Отправить", sending:"Отправляем…", retry:"Попробовать ещё раз", sentTitle:"Отзыв отправлен", upRun:"Видео загружается · {p}%", upDone:"Видео загружено", upFail:"Связь прервалась. Нажмите «Попробовать ещё раз».", sendFail:"Сейчас отправить не получилось. Проверьте интернет и попробуйте ещё раз или отправьте через WhatsApp.", sendNoServer:"Прямая отправка сейчас недоступна. Отправьте через WhatsApp.", viaWa:"Отправить видео через WhatsApp", saveCopy:"Сохранить копию в телефон", saveReady:"Скачать готовое видео", talkWa:"Написать нам в WhatsApp",
  panel:{eyebrow:"Команда",title:"Пришедшие отзывы",lead:"Только для команды Пробы. Ключ сохраняется в этом браузере.",key:"Ключ доступа",enter:"Войти",loading:"Загрузка…",empty:"Отзывов пока нет.",fail:"Не удалось загрузить. Попробуйте ещё раз.",bad:"Неверный ключ.",refresh:"Обновить",logout:"Выйти",sum:"Сводка",make:"Собрать ролик",making:"Собираем · {p}% · не закрывайте вкладку",download:"Скачать ролик",del:"Удалить",delConfirm:"Нажмите ещё раз — удалится насовсем",loadingFiles:"Загружаем части…"}, reShoot:"Пересъёмка части {n}",
  maskNone:"Без", maskBtn:"Маска", maskLoading:"Готовим маски…", faceOut:"Держите лицо в кадре, чтобы маска работала", maskLocked:"Маска остаётся до конца записи",
@@ -617,7 +624,7 @@ var today=new Date(), iso=today.getFullYear()+"-"+String(today.getMonth()+1).pad
 var S = {
   step:0, service:CFG.service, pro:CFG.pro, date:iso,
   mode: CFG.format==="b" ? "livre" : "guiado", modeTouched:false,
-  clips:[], reshoots:0, stickers:[], music:"none", cuesEdited:false, face:"show",
+  clips:[], reshoots:0, stickers:[], music:"none", cuesEdited:false, face:"show", voice:"orig",
   native:false, parts:[null,null,null], subs:true, mask:"none",
   proofs:[], photo:null, q1:"", q2:"", q3:"", perm:"", consent:false,
   sent:false, err:"", shareMsg:"", camErr:""
@@ -806,7 +813,7 @@ function renderVideoStep(){
   if(recorded()){
     var cs=clipList(), ml=maskList();
     h='<div class="stack lg">'+head(2,t("reviewTitle"),t("reviewLead"))+
-      '<div class="stage pv" id="pvStage"><video id="pv" playsinline preload="auto"></video><canvas id="pvFx" class="pv-fx" width="720" height="1280" hidden></canvas>'+
+      '<div class="stage pv" id="pvStage">'+cs.map(function(c,i){ return '<video class="pv-v'+(i===0?' on':'')+'" muted playsinline preload="auto" src="'+c.url+'"'+(c.thumb?' poster="'+c.thumb+'"':'')+'></video>'; }).join("")+'<canvas id="pvFx" class="pv-fx" width="720" height="1280" hidden></canvas>'+
       '<button type="button" class="pv-play" id="pvPlay" aria-label="'+esc(t("playAll"))+'"><span>'+ic("play")+'</span></button>'+
       '<div class="stk-layer" id="stkLayer"></div><div class="pv-cue" id="pvCue" hidden></div>'+
       '<div class="pv-bar">'+cs.map(function(c,i){ return '<b style="flex-grow:'+Math.max(1,c.dur||1).toFixed(2)+'"><i id="pvb'+i+'"></i></b>'; }).join("")+'</div></div>'+
@@ -867,23 +874,20 @@ function partsList(){
 }
 function stickerPanelPlaceholder(){}
 function facePanel(){
-  if(!hasFront()) return "";
-  var F=t("face"), o={show:F.show,blur:F.blur}; if(!FX.segFail) o.silhouette=F.silhouette;
-  return '<div class="panel" id="facePanel"><div class="ph"><span class="co-ic">'+ic("eye")+'</span><span><strong>'+esc(t("fxTitle"))+'</strong><span class="sub">'+esc(t("fxLead"))+'</span></span></div>'+chipGroup("face",o,S.face,false)+
-    '<p class="status" id="fxStatus"'+(S.face!=="show"&&!fxReady(S.face)?'':' hidden')+'><span class="spin"></span><span>'+esc(t("fxLoading"))+'</span></p></div>';
+  var F=t("face"), V=t("voice"), o={show:F.show,blur:F.blur}; if(!FX.segFail) o.silhouette=F.silhouette;
+  var h='<div class="panel" id="facePanel"><div class="ph"><span class="co-ic">'+ic("eye")+'</span><span><strong>'+esc(t("prvTitle"))+'</strong><span class="sub">'+esc(t("prvLead"))+'</span></span></div>';
+  if(hasFront()) h+='<div class="prv-row"><p class="label">'+esc(t("fxTitle"))+'</p>'+chipGroup("face",o,S.face,false)+'<p class="small">'+esc(t("fxLead"))+'</p></div>';
+  h+='<div class="prv-row"><p class="label">'+esc(t("voiceTitle"))+'</p>'+chipGroup("voice",{orig:V.orig,alt:V.alt},S.voice,false)+'</div>';
+  return h+'<p class="status" id="fxStatus"'+((S.face!=="show"&&!fxReady(S.face))?'':' hidden')+'><span class="spin"></span><span>'+esc(t("fxLoading"))+'</span></p></div>';
 }
-function pvFxActive(){ var c=clipList()[PV.i]; return S.face!=="show" && !!c && c.facing==="user"; }
-function pvFxDraw(force){
-  var cv=document.getElementById("pvFx"), v=pvEl(); if(!cv||!v) return;
-  if(!pvFxActive()){ cv.hidden=true; return; }
-  if(v.readyState<2) return;
-  var now=performance.now(); if(!force && now-(PV.fxAt||0)<30) return; PV.fxAt=now;
-  var x=cv.getContext("2d"); x.drawImage(v,0,0,W,H);
-  if(!fxReady(S.face) || !applyFace(x,S.face)) fxCover(x);
-  cv.hidden=false;
+function setVoice(v){
+  S.voice=v; var st=document.getElementById("fxStatus"), was=PV.playing, pos=pvGlobal();
+  if(was) pvPause();
+  if(st){ st.hidden=false; st.querySelector("span:last-child").textContent=t("voiceLoading"); }
+  pvPrepare().then(function(){ var st2=document.getElementById("fxStatus"); if(st2){ st2.hidden=true; st2.querySelector("span:last-child").textContent=t("fxLoading"); } if(was) pvPlay(pos); });
 }
 function setFace(mode){
-  S.face=mode; FX.hold=null;
+  S.face=mode; FX.hold=null; FX.maskT=0;
   var st=document.getElementById("fxStatus"); if(st) st.hidden=(mode==="show"||fxReady(mode));
   pvFxDraw(true);
   fxLoad(mode).then(function(){
@@ -905,34 +909,129 @@ function musicPanel(){
 }
 function refreshStickerPanel(){ var p=document.getElementById("stkPanel"); if(!p) return; var tmp=document.createElement("div"); tmp.innerHTML=stickerPanel(); p.replaceWith(tmp.firstChild); bindStickers(); }
 function bindReview(){
-  var v=document.getElementById("pv"); if(!v) return;
-  PV.playing=false; pvLoad(0);
+  var vs=pvVids(); if(!vs.length) return;
+  vs.forEach(function(v){ v.muted=true; v.onloadeddata=v.onseeked=function(){ if(pvEl()===v) pvFxDraw(true); }; });
+  PV.playing=false; PV.pos=0; PV.cur=0; PV.i=0; pvShow(0); pvBarUI(); pvParts();
+  pvPrepare();
   document.getElementById("pvPlay").onclick=function(){ if(STK_SEL>=0){ STK_SEL=-1; layoutStickers(); refreshStickerPanel(); } if(PV.playing) pvPause(); else pvPlay(); };
-  v.onended=function(){ var cs=clipList(); if(PV.playing && PV.i<cs.length-1){ pvLoad(PV.i+1); pvPlay(); } else { pvPause(); pvLoad(0); } };
-  v.ontimeupdate=function(){ pvBarUI(); pvCueUI(); };
-  app.querySelectorAll("[data-play]").forEach(function(b){ b.onclick=function(){ var idx=clipList().indexOf(S.clips[+b.dataset.play]); if(idx<0) return; pvLoad(idx); pvPlay(); var st=document.getElementById("pvStage"); if(st&&st.scrollIntoView) st.scrollIntoView({behavior:"smooth",block:"center"}); }; });
+  app.querySelectorAll("[data-play]").forEach(function(b){ b.onclick=function(){ var idx=clipList().indexOf(S.clips[+b.dataset.play]); if(idx<0) return; var o=pvOffs(); pvPause(); pvSeekTo(o.offs[idx]); pvPlay(o.offs[idx]); var st=document.getElementById("pvStage"); if(st&&st.scrollIntoView) st.scrollIntoView({behavior:"smooth",block:"center"}); }; });
   app.querySelectorAll("[data-re]").forEach(function(b){ b.onclick=function(){ pvStop(); openCamera(+b.dataset.re); }; });
   app.querySelectorAll("[data-delclip]").forEach(function(b){ b.onclick=function(){ var i=+b.dataset.delclip, c=S.clips[i]; if(!c) return; pvStop(); if(c.url) URL.revokeObjectURL(c.url); S.clips[i]=null; resetProc(); render(); }; });
   app.querySelectorAll('input[name=mus]').forEach(function(r){ r.onchange=function(){ S.music=r.value; if(PV.playing) musicStart(); else musicTaste(); }; });
   app.querySelectorAll('input[name=face]').forEach(function(r){ r.onchange=function(){ setFace(r.value); }; });
-  v.onloadeddata=v.onseeked=function(){ pvFxDraw(true); };
+  app.querySelectorAll('input[name=voice]').forEach(function(r){ r.onchange=function(){ setVoice(r.value); }; });
   if(S.face!=="show") setFace(S.face);
   bindStickers(); layoutStickers();
   if(window.ResizeObserver){ try{ new ResizeObserver(function(){ layoutStickers(); }).observe(document.getElementById("pvStage")); }catch(e){} }
 }
 
-/* ---------- review player: plays the parts one after another; music is mixed in live ---------- */
-var PV={i:0,playing:false};
-function pvEl(){ return document.getElementById("pv"); }
-function pvLoad(i){ var cs=clipList(), v=pvEl(); if(!v||!cs[i]) return; PV.i=i; FX.hold=null; var fc=document.getElementById("pvFx"); if(fc) fc.hidden=true; if(cs[i].thumb) v.poster=cs[i].thumb; v.src=cs[i].url; pvBarUI(); pvParts(); }
-function pvPlay(){ var v=pvEl(); if(!v) return; PV.playing=true; cancelAnimationFrame(PV.raf); PV.raf=requestAnimationFrame(pvTick); var p=v.play(); if(p&&p.catch) p.catch(function(){}); var st=document.getElementById("pvStage"); if(st) st.classList.add("playing"); musicStart(); pvParts(); }
-function pvPause(){ var v=pvEl(); PV.playing=false; if(v) try{ v.pause(); }catch(e){} var st=document.getElementById("pvStage"); if(st) st.classList.remove("playing"); musicStop(); pvParts(); }
+/* ---------- review player ----------
+   Same design as the final assembly: the sound (decoded parts, original or altered voice) is the clock,
+   every part has its own preloaded muted <video>, and the picture follows the sound. No src swaps, so no stalls at seams. */
+var PV={i:0,playing:false,pos:0,base:0,from:0,srcs:[],raf:0,cur:-1,bufs:null,ready:null,mlAt:0,mlCost:20};
+function pvVids(){ return [].slice.call(document.querySelectorAll("#pvStage video.pv-v")); }
+function pvEl(){ return pvVids()[PV.cur<0?0:PV.cur]||null; }
+function pvDurs(){ var cs=clipList(); return cs.map(function(c,i){ var b=PV.bufs&&PV.bufs[i]; return b?b.duration:(c.dur||0); }); }
+function pvOffs(){ var d=pvDurs(), o=[], s=0; d.forEach(function(x){ o.push(s); s+=x; }); return {offs:o,durs:d,total:s}; }
+function pvGlobal(){ if(!PV.playing) return PV.pos; var ac=PROC.ac; return PV.from+(ac?ac.currentTime-PV.base:0); }
+function pvClipAt(tt,offs){ for(var i=offs.length-1;i>0;i--){ if(tt>=offs[i]) return i; } return 0; }
+/* audio for the player: decoded parts, with the voice altered when chosen */
+function pvPrepare(){
+  var cs=clipList(), alt=S.voice==="alt", key=cs.map(function(c){ return c.url; }).join(",")+"|"+S.voice;
+  if(PV.readyKey===key && PV.ready) return PV.ready;
+  PV.readyKey=key; PV.bufs=null;
+  PV.ready=Promise.all(cs.map(function(c){ return decodeClip(c).then(function(b){ return (b&&alt)?voiceAlt(c,b):b; }); })).then(function(bufs){ if(PV.readyKey===key) PV.bufs=bufs; return bufs; });
+  return PV.ready;
+}
+function pvShow(k){ pvVids().forEach(function(v,i){ v.classList.toggle("on",i===k); }); }
+function pvSeekTo(tt){
+  var o=pvOffs(), k=pvClipAt(tt,o.offs), vs=pvVids(); PV.i=k; PV.pos=tt;
+  if(PV.cur!==k){ if(vs[PV.cur]) try{ vs[PV.cur].pause(); }catch(e){} PV.cur=k; FX.hold=null; pvShow(k); }
+  var v=vs[k]; if(v){ try{ v.currentTime=Math.max(0,tt-o.offs[k]); }catch(e){} }
+  pvBarUI(); pvCueUI(); pvParts(); pvFxDraw(true);
+}
+function pvPlay(from){
+  var st=document.getElementById("pvStage"); if(!st) return;
+  var ac=ensureAC(); if(!ac) return;
+  if(from!=null) PV.pos=from;
+  st.classList.add("loading");
+  var myGen=(PV.gen=(PV.gen||0)+1);
+  pvPrepare().then(function(bufs){
+    if(PV.gen!==myGen) return;
+    st.classList.remove("loading");
+    var o=pvOffs(); if(PV.pos>=o.total-0.05) PV.pos=0;
+    pvStopSources();
+    var base=ac.currentTime+0.06;
+    bufs.forEach(function(b,i){ if(!b) return; var end=o.offs[i]+b.duration; if(end<=PV.pos) return;
+      var s=ac.createBufferSource(); s.buffer=b; s.connect(ac.destination);
+      var at=Math.max(0,o.offs[i]-PV.pos), off=Math.max(0,PV.pos-o.offs[i]); s.start(base+at,off); PV.srcs.push(s); });
+    PV.from=PV.pos; PV.base=base; PV.playing=true; PV.cur=-1;
+    st.classList.add("playing");
+    musicStart(PV.pos);
+    cancelAnimationFrame(PV.raf); PV.raf=requestAnimationFrame(pvTick);
+    pvParts();
+  });
+}
+function pvStopSources(){ PV.srcs.forEach(function(s){ try{ s.stop(); }catch(e){} }); PV.srcs=[]; }
+function pvPause(){
+  if(PV.playing) PV.pos=pvGlobal();
+  PV.gen=(PV.gen||0)+1; PV.playing=false; cancelAnimationFrame(PV.raf); pvStopSources();
+  pvVids().forEach(function(v){ try{ v.pause(); }catch(e){} });
+  var st=document.getElementById("pvStage"); if(st){ st.classList.remove("playing"); st.classList.remove("loading"); }
+  musicStop(); pvParts();
+}
 function pvStop(){ pvPause(); }
-function pvTick(){ if(!PV.playing) return; pvBarUI(); pvCueUI(); pvFxDraw(); PV.raf=requestAnimationFrame(pvTick); }
-function pvCueUI(){ var el=document.getElementById("pvCue"); if(!el) return; var txt=null; if(S.subs){ var tt=pvGlobal(), cs=allCues(); for(var i=0;i<cs.length;i++){ if(tt>=cs[i].s&&tt<cs[i].e){ txt=cs[i].text; break; } } } if(txt){ if(el.textContent!==txt) el.textContent=txt; el.hidden=false; } else el.hidden=true; }
-function pvBarUI(){ var cs=clipList(), v=pvEl(); cs.forEach(function(c,i){ var el=document.getElementById("pvb"+i); if(!el) return; var f=i<PV.i?1:i>PV.i?0:(v&&c.dur?Math.min(1,(v.currentTime||0)/c.dur):0); el.style.width=(f*100)+"%"; }); }
+function pvLoad(i){ var o=pvOffs(); pvPause(); pvSeekTo(o.offs[i]||0); }
+function pvTick(){
+  if(!PV.playing) return;
+  var o=pvOffs(), tt=pvGlobal();
+  if(tt>=o.total-0.03){ pvPause(); pvSeekTo(0); return; }
+  if(tt>=0){
+    var k=pvClipAt(tt,o.offs), vs=pvVids(), v=vs[k], local=tt-o.offs[k], now=performance.now();
+    if(k!==PV.cur){ if(vs[PV.cur]) try{ vs[PV.cur].pause(); }catch(e){} PV.cur=k; PV.i=k; FX.hold=null; pvShow(k); if(v){ if(Math.abs((v.currentTime||0)-local)>0.12) try{ v.currentTime=local; }catch(e){} var p=v.play(); if(p&&p.catch) p.catch(function(){}); } pvParts(); }
+    else if(v){
+      if(!v.seeking && Math.abs(v.currentTime-local)>0.3 && now-(PV.seekAt||0)>400 && local<o.durs[k]-0.2){ PV.seekAt=now; try{ v.currentTime=local+0.05; }catch(e){} }
+      if(v.paused && !v.ended && local<o.durs[k]-0.1){ var p2=v.play(); if(p2&&p2.catch) p2.catch(function(){}); }
+    }
+  }
+  pvBarUI(); pvCueUI(); pvFxDraw();
+  PV.raf=requestAnimationFrame(pvTick);
+}
+function pvCueUI(){ var el=document.getElementById("pvCue"); if(!el) return; var txt=null; if(S.subs){ var tt=pvGlobal(), cs=allCues(PV.bufs?pvDurs():null); for(var i=0;i<cs.length;i++){ if(tt>=cs[i].s&&tt<cs[i].e){ txt=cs[i].text; break; } } } if(txt){ if(el.textContent!==txt) el.textContent=txt; el.hidden=false; } else el.hidden=true; }
+function pvBarUI(){ var o=pvOffs(), tt=pvGlobal(); o.durs.forEach(function(d,i){ var el=document.getElementById("pvb"+i); if(!el) return; var f=Math.max(0,Math.min(1,(tt-o.offs[i])/(d||1))); el.style.width=(f*100)+"%"; }); }
 function pvParts(){ var cur=clipList()[PV.i]; app.querySelectorAll(".part").forEach(function(li){ li.classList.toggle("now",!!(PV.playing&&cur&&li.id==="part"+cur.q)); }); }
-function pvGlobal(){ var cs=clipList(), v=pvEl(), off=0; for(var i=0;i<PV.i&&i<cs.length;i++) off+=cs[i].dur||0; return off+((v&&v.currentTime)||0); }
+function pvFxActive(){ var c=clipList()[PV.cur<0?PV.i:PV.cur]; return S.face!=="show" && !!c && c.facing==="user"; }
+/* the picture is redrawn every frame; the face/figure model runs at most ~10 times a second on the phone */
+function pvFxDraw(force){
+  var cv=document.getElementById("pvFx"), v=pvEl(); if(!cv||!v) return;
+  if(!pvFxActive()){ cv.hidden=true; return; }
+  if(v.readyState<2) return;
+  var now=performance.now(), x=cv.getContext("2d");
+  x.drawImage(v,0,0,W,H);
+  var fresh=force || now-PV.mlAt>=Math.max(90,PV.mlCost*4);
+  if(!fxReady(S.face)){ fxCover(x); }
+  else { var t0=performance.now(); if(!applyFace(x,S.face,fresh)) fxCover(x); if(fresh){ PV.mlAt=now; PV.mlCost=performance.now()-t0; } }
+  cv.hidden=false;
+}
+
+/* ---------- voice: lowered pitch, same speed (WSOLA time-stretch + resample), done off the main thread ---------- */
+var VOICE_RATIO=0.82;   /* about 3.5 semitones lower */
+var VOICE_WORKER_SRC="onmessage=function(e){var x=e.data.x,q=e.data.q,N=1536,Hs=N>>1,Ha=Hs/q,tol=192,L=x.length,outLen=Math.floor(L*q)+N,st=new Float32Array(outLen),win=new Float32Array(N),k,i;for(i=0;i<N;i++)win[i]=0.5-0.5*Math.cos(2*Math.PI*i/(N-1));var prev=0,frames=Math.floor((outLen-N)/Hs);for(k=0;k<frames;k++){var ideal=Math.round(k*Ha),pos=ideal;if(k>0){var nat=prev+Hs,best=-1e30,lo=Math.max(0,ideal-tol),hi=Math.min(L-N,ideal+tol);for(var d=lo;d<=hi;d+=2){var c=0;for(var j=0;j<Hs;j+=8){var a=nat+j<L?x[nat+j]:0;c+=a*x[d+j];}if(c>best){best=c;pos=d;}}}if(pos+N>L)break;var o=k*Hs;for(i=0;i<N;i++)st[o+i]+=x[pos+i]*win[i];prev=pos;}var out=new Float32Array(L);for(i=0;i<L;i++){var p=i*q,i0=p|0,f=p-i0;out[i]=(st[i0]||0)*(1-f)+(st[i0+1]||0)*f;}postMessage(out,[out.buffer]);};";
+var VOICE_W=null;
+function voiceWorker(){ if(!VOICE_W){ try{ VOICE_W=URL.createObjectURL(new Blob([VOICE_WORKER_SRC],{type:"text/javascript"})); }catch(e){ VOICE_W=""; } } return VOICE_W; }
+function voiceShiftArray(x){
+  return new Promise(function(res,rej){
+    var u=voiceWorker(); if(!u){ rej(new Error("no worker")); return; }
+    var w=new Worker(u); w.onmessage=function(e){ w.terminate(); res(e.data); }; w.onerror=function(e){ w.terminate(); rej(e); };
+    var copy=new Float32Array(x); w.postMessage({x:copy,q:VOICE_RATIO},[copy.buffer]);
+  });
+}
+function voiceAlt(c,b){
+  if(c.altP) return c.altP;
+  var ac=ensureAC();
+  c.altP=voiceShiftArray(b.getChannelData(0)).then(function(out){ var nb=ac.createBuffer(1,out.length,b.sampleRate); nb.getChannelData(0).set(out); return nb; }).catch(function(){ c.altP=null; return b; });
+  return c.altP;
+}
 
 var MUS={src:null,g:null,taste:0,gen:0};
 function musicSrcStop(){ if(MUS.src){ try{ MUS.src.stop(); }catch(e){} MUS.src=null; MUS.g=null; } }
@@ -1100,10 +1199,8 @@ function wrapLines(text,maxW){
 }
 function rr(x,y,w,h,r){ cx.beginPath(); cx.moveTo(x+r,y); cx.arcTo(x+w,y,x+w,y+h,r); cx.arcTo(x+w,y+h,x,y+h,r); cx.arcTo(x,y+h,x,y,r); cx.arcTo(x,y,x+w,y,r); cx.closePath(); }
 function watermark(){
-  var p=S.date.split("-");
   rcx.save(); rcx.textBaseline="alphabetic"; rcx.shadowColor="rgba(0,0,0,.5)"; rcx.shadowBlur=8;
   rcx.fillStyle="#FFFFFF"; rcx.font='700 36px "Golos Text", Arial, sans-serif'; rcx.fillText("proba",84,86);
-  rcx.fillStyle="rgba(255,255,255,.85)"; rcx.font='500 22px "Golos Text", Arial, sans-serif'; rcx.fillText((L==="ru"?"визит ":"visita ")+p[2]+"."+p[1]+"."+p[0],84,116);
   rcx.restore();
 }
 function chapterTag(label){
@@ -1298,7 +1395,7 @@ function summary(){
   );
   if(recorded()){
     var ml=maskList(), st=txState(), nc=allCues().length;
-    lines.push("Rosto: "+(!hasFront()?"não aparece (câmera de trás)":({show:"visível",blur:"desfocado",silhouette:"silhueta"})[S.face])+" · rostos de outros: "+(FACE.state==="ok"?"desfocados":"não processados"));
+    lines.push("Rosto: "+(!hasFront()?"não aparece (câmera de trás)":({show:"visível",blur:"desfocado",silhouette:"silhueta"})[S.face])+" · rostos de outros: "+(FACE.state==="ok"?"desfocados":"não processados")+" · voz: "+(S.voice==="alt"?"alterada":"original"));
     lines.push("Figurinhas: "+(S.stickers.length?S.stickers.map(function(s){return s.e;}).join(" "):"nenhuma")+" · Música: "+P.music[S.music]);
     lines.push("Legendas: "+(!S.subs?"desligadas":(st==="done"?(nc?("sim"+(S.cuesEdited?" (corrigidas pela cliente)":"")):"sem fala"):st==="fail"?"falhou":"em andamento")));
   }
@@ -1423,7 +1520,7 @@ function upload(file,name){
   return job;
 }
 function recipe(){
-  return {v:1,mode:S.mode,W:W,H:H,face:S.face,subs:S.subs,edited:S.cuesEdited,music:S.music,stickers:S.stickers,
+  return {v:1,mode:S.mode,W:W,H:H,face:S.face,voice:S.voice,subs:S.subs,edited:S.cuesEdited,music:S.music,stickers:S.stickers,
     clips:clipList().map(function(c){ return {q:c.q,key:upKey(c.file),dur:+(c.dur||0).toFixed(2),mask:c.mask,facing:c.facing,at:c.at,cues:(c.cues||[]).map(function(q){ return {s:+q.s.toFixed(2),e:+q.e.toFixed(2),text:q.text}; })}; }),
     parts:S.parts.map(function(p){ return p&&p.file?upKey(p.file):null; }), photo:S.photo?upKey(S.photo):null};
 }
@@ -1497,7 +1594,7 @@ function panelMake(i){
     clearClips();
     list.forEach(function(c,k){ var b=blobs[k], f; try{ f=new File([b],c.key.split("/").pop(),{type:b.type}); }catch(e){ f=b; }
       S.clips[c.q]={q:c.q,file:f,url:URL.createObjectURL(f),dur:c.dur||1,mask:c.mask,facing:c.facing,cues:c.cues||[],txState:"done",tx:Promise.resolve(c.cues||[])}; });
-    S.stickers=r.stickers||[]; S.music=r.music||"none"; S.face=r.face||"show"; S.subs=!!r.subs; S.mode=r.mode||S.mode;
+    S.stickers=r.stickers||[]; S.music=r.music||"none"; S.face=r.face||"show"; S.voice=r.voice||"orig"; S.subs=!!r.subs; S.mode=r.mode||S.mode;
     prepareFinal();
     var shown=false, iv=setInterval(function(){
       if(PANEL.mk!==i){ clearInterval(iv); return; }
@@ -1583,7 +1680,7 @@ function bindSubs(){
 }
 
 /* ---------- final video = parts in order + stickers + subtitles + voice mixed with music ---------- */
-function finalKey(){ return clipList().map(function(c){return c.url;}).join(",")+"|"+(S.subs?cuesKey():"-")+"|"+S.music+"|"+S.face+"|"+S.stickers.map(function(s){ return [s.e,s.x.toFixed(3),s.y.toFixed(3),s.s].join(":"); }).join(","); }
+function finalKey(){ return clipList().map(function(c){return c.url;}).join(",")+"|"+(S.subs?cuesKey():"-")+"|"+S.music+"|"+S.face+"|"+S.voice+"|"+S.stickers.map(function(s){ return [s.e,s.x.toFixed(3),s.y.toFixed(3),s.s].join(":"); }).join(","); }
 function prepareFinal(){
   var cs=clipList(); if(!cs.length) return;
   var key=finalKey();
@@ -1600,9 +1697,9 @@ function prepareFinal(){
   var myKey=key, musP=S.music!=="none"?makeMusic(S.music):Promise.resolve(null);
   Promise.all([S.subs?startTranscription():null, S.face!=="show"?fxLoad(S.face):null]).then(function(){
     if(PROC.key!==myKey) return;
-    var plain = cs.length===1 && !S.stickers.length && S.music==="none" && !(S.subs&&allCues().length) && (S.face==="show"||!hasFront());
+    var plain = cs.length===1 && !S.stickers.length && S.music==="none" && !(S.subs&&allCues().length) && (S.face==="show"||!hasFront()) && S.voice==="orig";
     if(plain){ PROC.state="skip"; PROC.justDone=true; procUI(); return; }
-    return Promise.all(cs.map(decodeClip)).then(function(bufs){
+    return Promise.all(cs.map(decodeClip)).then(function(bufs){ return S.voice==="alt" ? Promise.all(bufs.map(function(b,i){ return b?voiceAlt(cs[i],b):null; })) : bufs; }).then(function(bufs){
       if(PROC.key!==myKey) return;
       var durs=bufs.map(function(b,i){ return b?b.duration:cs[i].dur; }), offs=[], o=0; durs.forEach(function(d){ offs.push(o); o+=d; });
       return musP.then(function(mb){
@@ -2084,33 +2181,37 @@ function loadSeg(){
 function fxReady(mode){ return mode==="blur" ? FACE.state==="ok" : (mode==="silhouette" ? !!FX.seg : true); }
 function fxLoad(mode){ if(mode==="blur") return loadFace(); if(mode==="silhouette") return loadSeg(); return Promise.resolve(); }
 /* soft blur of a region by down- and up-scaling (works in every browser, unlike ctx.filter) */
-function softBlur(x,X,Y,Wd,Hd,clipEllipse){
+function softBlur(x,X,Y,Wd,Hd,clipEllipse,alpha){
   X=Math.max(0,X); Y=Math.max(0,Y); Wd=Math.min(x.canvas.width-X,Wd); Hd=Math.min(x.canvas.height-Y,Hd); if(Wd<4||Hd<4) return;
-  var sw=Math.max(3,Math.round(Wd/20)), sh=Math.max(3,Math.round(Hd/20));
+  var sw=Math.max(2,Math.round(Wd/42)), sh=Math.max(2,Math.round(Hd/42));
   FX.blr.width=sw; FX.blr.height=sh; FX.blx.imageSmoothingEnabled=true; FX.blx.drawImage(x.canvas,X,Y,Wd,Hd,0,0,sw,sh);
   x.save();
   if(clipEllipse){ x.beginPath(); x.ellipse(X+Wd/2,Y+Hd/2,Wd/2,Hd/2,0,0,Math.PI*2); x.clip(); }
+  if(alpha!=null) x.globalAlpha=alpha;
   x.imageSmoothingEnabled=true; x.imageSmoothingQuality="high"; x.drawImage(FX.blr,0,0,sw,sh,X,Y,Wd,Hd);
-  x.fillStyle="rgba(255,255,255,.10)"; x.fillRect(X,Y,Wd,Hd);
+  x.fillStyle="rgba(236,234,228,.22)"; x.fillRect(X,Y,Wd,Hd);
   x.restore();
 }
-function fxBlur(x){
+function fxBlur(x,fresh){
   if(FACE.state!=="ok") return false;
   var w=x.canvas.width, h=x.canvas.height, box=null, res=null;
-  FX.fcx.drawImage(x.canvas,0,0,360,640);
-  try{ res=FACE.lm.detectForVideo(FX.fc,fxTs()); }catch(e){}
-  var fl=res&&res.faceLandmarks;
-  if(fl&&fl.length){ var best=0; fl.forEach(function(f){ var b=faceBox(f,function(p){ return [p.x*w,p.y*h,0]; }); if(b.w*b.h>best){ best=b.w*b.h; box=b; } }); FX.hold={b:box,t:performance.now()}; }
-  else if(FX.hold && performance.now()-FX.hold.t<1200) box=FX.hold.b;
+  if(fresh||!FX.hold){
+    FX.fcx.drawImage(x.canvas,0,0,360,640);
+    try{ res=FACE.lm.detectForVideo(FX.fc,fxTs()); }catch(e){}
+    var fl=res&&res.faceLandmarks;
+    if(fl&&fl.length){ var best=0; fl.forEach(function(f){ var b=faceBox(f,function(p){ return [p.x*w,p.y*h,0]; }); if(b.w*b.h>best){ best=b.w*b.h; box=b; } }); FX.hold={b:box,t:performance.now()}; }
+  }
+  if(!box && FX.hold) box=FX.hold.b;            /* keep the last place until the face is found again */
   if(!box) return true;
-  var cx0=box.x+box.w/2, cy0=box.y+box.h*0.40, rx=box.w*0.86, ry=box.h*0.98;
-  softBlur(x,cx0-rx,cy0-ry,rx*2,ry*2,true);
+  var cx0=box.x+box.w/2, cy0=box.y+box.h*0.36, rx=box.w*1.08, ry=box.h*1.25;
+  softBlur(x,cx0-rx*1.18,cy0-ry*1.14,rx*2.36,ry*2.28,true,0.55);
+  softBlur(x,cx0-rx,cy0-ry,rx*2,ry*2,true,1);
   return true;
 }
-function fxSil(x){
+function fxSil(x,fresh){
   if(!FX.seg) return false;
   var w=x.canvas.width, h=x.canvas.height, got=false;
-  FX.scx.drawImage(x.canvas,0,0,180,320);
+  if(fresh||!FX.maskT){ FX.scx.drawImage(x.canvas,0,0,180,320);
   try{
     FX.seg.segmentForVideo(FX.sc,fxTs(),function(r){
       var m=r&&r.confidenceMasks&&r.confidenceMasks[0]; if(!m) return;
@@ -2120,8 +2221,8 @@ function fxSil(x){
       for(var i=0,j=0;i<a.length;i++,j+=4){ var v=a[i]; v=v<0.3?0:(v>0.6?1:(v-0.3)/0.3); d[j]=0; d[j+1]=0; d[j+2]=0; d[j+3]=v*255; }
       FX.mx.putImageData(FX.mimg,0,0); got=true;
     });
-  }catch(e){}
-  if(got) FX.maskT=performance.now(); else if(performance.now()-FX.maskT>1200) return false;
+  }catch(e){} }
+  if(got) FX.maskT=performance.now(); else if(!FX.maskT) return false;
   x.save(); x.fillStyle="rgba(255,246,236,.12)"; x.fillRect(0,0,w,h); x.restore();          /* backlit look */
   if(FX.tmp.width!==w||FX.tmp.height!==h){ FX.tmp.width=w; FX.tmp.height=h; }
   var t=FX.tx; t.save(); t.clearRect(0,0,w,h); t.imageSmoothingEnabled=true; t.drawImage(FX.mask,0,0,w,h);
@@ -2130,7 +2231,7 @@ function fxSil(x){
   x.drawImage(FX.tmp,0,0);
   return true;
 }
-function applyFace(x,mode){ if(mode==="blur") return fxBlur(x); if(mode==="silhouette") return fxSil(x); return true; }
+function applyFace(x,mode,fresh){ fresh=fresh!==false; if(mode==="blur") return fxBlur(x,fresh); if(mode==="silhouette") return fxSil(x,fresh); return true; }
 /* until the models are ready, the review player hides the whole frame instead of risking a visible face */
 function fxCover(x){ softBlur(x,0,0,x.canvas.width,x.canvas.height,false); }
 
