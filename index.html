@@ -275,6 +275,10 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offs
 .rv-stage{display:flex;flex-direction:column;gap:10px}
 .rv-stage:empty{display:none}
 .rv-stage video,.rv-stage img{width:100%;max-height:70vh;border-radius:var(--r);background:#000;object-fit:contain}
+.pv-fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.pv-fx[hidden]{display:none}
+.part-act{display:flex;gap:6px;align-items:center}
+.btn.icon-s{width:42px;padding:0}
 /* subtitles + processing */
 .panel{background:var(--paper);border:1.5px solid var(--line);border-radius:var(--r-lg);padding:16px;display:flex;flex-direction:column;gap:12px}
 .toggle{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;cursor:pointer}
@@ -458,11 +462,11 @@ var CFG = {
   wa: (qs.w||"").replace(/\D/g,""),
   lang: (qs.lang==="ru"||hash==="ru") ? "ru" : "pt",
   gen: hash==="gerar",
-  lab: hash==="mascaras",
+  lab: false,
   panel: hash==="painel"
 };
 var IN_FRAME = (function(){ try { return window.top!==window.self; } catch(e){ return true; } })();
-var ANSWER_MAX = 60, FREE_MAX = 90;
+var ANSWER_MAX = 60, FREE_MAX = 90, FREE_PIECES = 8, FREE_TOTAL = 180;
 
 /* ---------- strings ---------- */
 var T = {
@@ -471,11 +475,11 @@ pt:{
  introTitle:"Conte como foi a sua visita",
  introEyebrow:"Avaliação em vídeo", introTime:"Leva uns 3 minutos",
  how:["Grave um vídeo curto","Confirme a visita"],
- trust:[["Você decide o que é publicado","Nada vai ao ar sem a sua permissão."],["Pode usar uma máscara","Ela acompanha o seu rosto e esconde quem você é."],["R$ 20 pela participação","Pagamento via Pix depois do envio."]],
+ trust:[["Você decide o que é publicado","Nada vai ao ar sem a sua permissão."],["Pode esconder o rosto","Desfoque ou silhueta: você escolhe depois de gravar."],["R$ 20 pela participação","Pagamento via Pix depois do envio."]],
  visitLead:"Isso liga o vídeo à visita certa.", recommended:"Recomendado", modeLead:"Escolha o formato. Dá para trocar antes de gravar.",
  modeInfo:{guiado:{pitch:"A gente guia: uma pergunta de cada vez aparece na tela.",steps:["Uma pergunta curta aparece na tela","Você grava a resposta, de 10 a 30 segundos","Entre as perguntas a gravação pausa para você pensar"],meta:[["chatq","3 perguntas"],["clock","cerca de 1 min"]]},
-           livre:{pitch:"Um vídeo só, contando a visita com as suas palavras.",steps:["Toque em gravar quando estiver pronta","Fale do resultado, do atendimento e do preço","Toque de novo para terminar"],meta:[["video","1 vídeo"],["clock","até 1 min 30 s"]]}},
- faceTitle:"Prefere não mostrar o rosto?", faceText:"Na câmera, escolha uma máscara antes de gravar. Ela acompanha o seu rosto e esconde quem você é. Rostos de outras pessoas ficam desfocados sozinhos.", faceLink:"Ver as máscaras",
+           livre:{pitch:"Você conta do seu jeito, em um ou vários trechos.",steps:["Toque em gravar quando estiver pronta","Pode pausar para pensar e continuar em outro trecho","Toque em Concluir quando terminar"],meta:[["video","em trechos"],["clock","até 3 min"]]}},
+ faceTitle:"Prefere não mostrar o rosto?", faceText:"Depois de gravar, você escolhe: mostrar o rosto, desfocar ou virar silhueta. Rostos de outras pessoas ficam desfocados sozinhos.", faceLink:"Ver as máscaras",
  qLead:"Respostas rápidas, sem certo ou errado.", permLead:"Dá para mudar de ideia depois: é só pedir pelo WhatsApp.", consentAudio:"Autorizo também o envio do áudio para gerar as legendas.",
  themeDay:"Tema claro", themeNight:"Tema escuro",
  introLead:"Um vídeo curto, gravado aqui no navegador. Sem baixar aplicativo.",
@@ -485,7 +489,7 @@ pt:{
  services:{manicure:"Manicure",pedicure:"Pedicure",sobrancelha:"Sobrancelha",cilios:"Cílios",cabelo:"Cabelo",outro:"Outro"},
  errService:"Escolha o serviço.",
  modeTitle:"Como prefere gravar?",
- modes:{guiado:["Com perguntas","As perguntas aparecem na tela e você responde uma de cada vez. São 3, de 10 a 30 segundos cada."],livre:["Do seu jeito","Você fala livremente sobre a visita, até 1 minuto e meio."]},
+ modes:{guiado:["Com perguntas","As perguntas aparecem na tela e você responde uma de cada vez. São 3, de 10 a 30 segundos cada."],livre:["Do seu jeito","Você fala livremente sobre a visita, com pausas se quiser."]},
  camNote:"O navegador vai pedir acesso à câmera e ao microfone. Nada sai do seu celular enquanto você grava.",
  openCam:"Abrir câmera", camFail:"Não deu para abrir a câmera aqui. Grave com a câmera do celular, uma resposta por vez.",
  questions:[
@@ -509,7 +513,7 @@ pt:{
  errQ:"Responda as 3 perguntas.",
  permTitle:"Quem pode ver o vídeo?",
  perm:{privado:["Só a equipe da Proba","Não publicamos. Usamos só para melhorar o serviço."],semrosto:["Pode publicar, sem meu rosto","Cortamos ou desfocamos o rosto antes de publicar."],comrosto:["Pode publicar como está","O vídeo aparece com rosto e voz."]},
- consent:"Autorizo a Proba a receber e guardar este vídeo e a usar minha imagem e voz apenas na forma que escolhi acima. Posso pedir a remoção a qualquer momento pelo WhatsApp.",
+ consent:"Autorizo a Proba a receber e guardar este vídeo e a usar minha imagem e voz apenas na forma que escolhi acima. O original fica só com a equipe da Proba. Posso pedir a remoção a qualquer momento pelo WhatsApp.",
  errPerm:"Escolha uma opção e confirme a autorização.",
  sendTitle:"Tudo pronto", sendLead:"Toque em Enviar. Seu vídeo já começou a subir enquanto você respondia.",
  share:"Enviar vídeo pelo WhatsApp", shareParts:"Enviar vídeos pelo WhatsApp", summary:"Enviar resumo no WhatsApp", copy:"Copiar resumo", copied:"Copiado", save:"Salvar vídeo no celular",
@@ -522,11 +526,12 @@ pt:{
  reviewTitle:"Seu vídeo", reviewLead:"Assista, refaça qualquer parte e deixe com a sua cara.", partsTitle:"Partes", partRe:"Regravar", partRec:"Gravar", partPlay:"Assistir", partSkipped:"Pulada · dá para gravar agora", playAll:"Assistir tudo",
  stickTitle:"Figurinhas", stickLead:"Toque para colocar. Arraste no vídeo para mudar de lugar.", stickMax:"Máximo de 6. Toque numa delas no vídeo para ajustar.", stickSize:"Tamanho", stickDel:"Remover",
  musicTitle:"Música de fundo", musicLead:"Fica baixinha enquanto você fala.", music:{none:"Sem música",suave:"Suave",bossa:"Bossa",animada:"Animada"},
- againAll:"Apagar e gravar tudo de novo", againConfirm:"Toque de novo para apagar tudo", pPrep:"Preparando o vídeo…",
+ againAll:"Apagar e gravar tudo de novo", againConfirm:"Toque de novo para apagar tudo", pPrep:"Preparando o vídeo…", piece:"Trecho {n}", recMore:"Gravar próximo trecho", freeMore:"Pausa. Pense com calma e grave o próximo trecho, ou toque em Concluir.", addPiece:"Adicionar trecho", delPiece:"Apagar",
+ fxTitle:"Seu rosto", fxLead:"Vale para as partes gravadas com a câmera da frente. O original fica só com a equipe da Proba.", face:{show:"Mostrar",blur:"Desfocar",silhouette:"Silhueta"}, fxLoading:"Preparando o efeito…",
  send:"Enviar", sending:"Enviando…", retry:"Tentar de novo", sentTitle:"Avaliação enviada", upRun:"Seu vídeo está subindo · {p}%", upDone:"Vídeo carregado", upFail:"A conexão falhou. Toque em Tentar de novo.", sendFail:"Não deu para enviar agora. Verifique a internet e tente de novo, ou envie pelo WhatsApp.", sendNoServer:"O envio direto não está disponível agora. Envie pelo WhatsApp.", viaWa:"Enviar vídeo pelo WhatsApp", saveCopy:"Salvar uma cópia no celular", saveReady:"Baixar o vídeo pronto", talkWa:"Falar com a gente no WhatsApp",
  panel:{eyebrow:"Equipe",title:"Avaliações recebidas",lead:"Só para a equipe da Proba. A chave fica salva neste navegador.",key:"Chave de acesso",enter:"Entrar",loading:"Carregando…",empty:"Ainda não chegou nenhuma avaliação.",fail:"Não deu para carregar. Tente de novo.",bad:"Chave incorreta.",refresh:"Atualizar",logout:"Sair",sum:"Resumo",make:"Montar vídeo",making:"Montando · {p}% · mantenha esta aba aberta",download:"Baixar vídeo",del:"Apagar",delConfirm:"Toque de novo para apagar de vez",loadingFiles:"Baixando as partes…"}, reShoot:"Regravando a parte {n}",
  maskNone:"Sem", maskBtn:"Máscara", maskLoading:"Preparando máscaras…", faceOut:"Mantenha o rosto na tela para a máscara funcionar", maskLocked:"A máscara fica até o fim da gravação",
- permMask:["Pode publicar, com a máscara","Seu rosto já está escondido pela máscara. Rostos de outras pessoas ficam desfocados."],
+ permMask:["Pode publicar, com o rosto escondido","Do jeito que você escolheu no vídeo. Rostos de outras pessoas também ficam desfocados."],
  labTitle:"Provador de máscaras", labLead:"Escolha uma foto com rosto: todas as máscaras aparecem nela. A foto não sai do aparelho.", labPick:"Escolher foto", labLoading:"Carregando…", labReady:"Pronto. Escolha uma foto.", labFail:"Não deu para carregar o reconhecimento de rosto.", labNoFace:"Nenhum rosto encontrado nessa foto.", labFound:"Rostos encontrados: {n}", labImgFail:"Não deu para abrir a imagem.",
  procTitle:"Preparando o vídeo final", pSubsLoad:"Legendas: baixando o reconhecedor de voz · {p}%", pSubsRun:"Legendas: transcrevendo a fala…", pSubsOk:"Legendas prontas", pSubsNone:"Legendas: não encontramos fala", pSubsFail:"Legendas: não deu neste celular",
  pFaceLoad:"Rostos: preparando…", pFaceMask:"Seu rosto vai com máscara, outros rostos desfocados", pFaceBlur:"Rostos de outras pessoas desfocados", pFaceFail:"Rostos: não deu para esconder neste celular. A gente esconde antes de publicar.",
@@ -538,11 +543,11 @@ ru:{
  introTitle:"Расскажите, как прошёл визит",
  introEyebrow:"Видео-отзыв", introTime:"Займёт около 3 минут",
  how:["Снимите короткое видео","Подтвердите визит"],
- trust:[["Вы решаете, что публикуется","Без вашего разрешения ничего не выйдет."],["Можно снять в маске","Маска повторяет мимику и скрывает, кто вы."],["R$ 20 за участие","Оплата через Pix после отправки."]],
+ trust:[["Вы решаете, что публикуется","Без вашего разрешения ничего не выйдет."],["Можно скрыть лицо","Размытие или силуэт — выберете после съёмки."],["R$ 20 за участие","Оплата через Pix после отправки."]],
  visitLead:"Это свяжет видео с нужным визитом.", recommended:"Рекомендуем", modeLead:"Выберите формат. Сменить можно до начала записи.",
  modeInfo:{guiado:{pitch:"Мы ведём: на экране по одному появляются вопросы.",steps:["На экране появляется короткий вопрос","Вы записываете ответ, 10–30 секунд","Между вопросами запись на паузе — можно подумать"],meta:[["chatq","3 вопроса"],["clock","около 1 мин"]]},
-           livre:{pitch:"Одно видео: рассказываете о визите своими словами.",steps:["Нажмите «записать», когда будете готовы","Расскажите о результате, обслуживании и цене","Нажмите ещё раз, чтобы закончить"],meta:[["video","1 видео"],["clock","до 1,5 мин"]]}},
- faceTitle:"Не хотите показывать лицо?", faceText:"В камере выберите маску до записи. Она повторяет вашу мимику и скрывает, кто вы. Чужие лица размываются сами.", faceLink:"Посмотреть маски",
+           livre:{pitch:"Рассказываете своими словами, одним или несколькими фрагментами.",steps:["Нажмите «записать», когда будете готовы","Можно поставить паузу, подумать и продолжить новым фрагментом","Нажмите «Завершить», когда закончите"],meta:[["video","фрагментами"],["clock","до 3 мин"]]}},
+ faceTitle:"Не хотите показывать лицо?", faceText:"После съёмки выберете: показать лицо, размыть его или сделать силуэт. Чужие лица размываются сами.", faceLink:"Посмотреть маски",
  qLead:"Быстрые ответы, правильных и неправильных нет.", permLead:"Передумать можно потом — просто напишите в WhatsApp.", consentAudio:"Также разрешаю отправить звук для создания субтитров.",
  themeDay:"Светлая тема", themeNight:"Тёмная тема",
  introLead:"Короткое видео прямо в браузере. Ничего не нужно скачивать.",
@@ -552,7 +557,7 @@ ru:{
  services:{manicure:"Маникюр",pedicure:"Педикюр",sobrancelha:"Брови",cilios:"Ресницы",cabelo:"Волосы",outro:"Другое"},
  errService:"Выберите услугу.",
  modeTitle:"Как удобнее снимать?",
- modes:{guiado:["С подсказками","Вопросы появляются на экране, вы отвечаете по одному. Их 3, по 10–30 секунд."],livre:["Экспромт","Рассказываете свободно, до полутора минут."]},
+ modes:{guiado:["С подсказками","Вопросы появляются на экране, вы отвечаете по одному. Их 3, по 10–30 секунд."],livre:["Экспромт","Рассказываете свободно, можно с паузами."]},
  camNote:"Браузер попросит доступ к камере и микрофону. Пока вы снимаете, ничего не уходит с телефона.",
  openCam:"Открыть камеру", camFail:"Здесь камера не открылась. Снимите обычной камерой телефона, по одному ответу.",
  questions:[
@@ -576,7 +581,7 @@ ru:{
  errQ:"Ответьте на 3 вопроса.",
  permTitle:"Кто может увидеть видео?",
  perm:{privado:["Только команда Пробы","Не публикуем. Только для улучшения сервиса."],semrosto:["Можно публиковать, без лица","Перед публикацией обрежем или размоем лицо."],comrosto:["Можно публиковать как есть","Видео с лицом и голосом."]},
- consent:"Разрешаю Пробе получить и хранить это видео и использовать моё изображение и голос только в выбранном выше виде. Могу попросить удалить в любой момент через WhatsApp.",
+ consent:"Разрешаю Пробе получить и хранить это видео и использовать моё изображение и голос только в выбранном выше виде. Оригинал хранится только у команды Пробы. Могу попросить удалить в любой момент через WhatsApp.",
  errPerm:"Выберите вариант и подтвердите согласие.",
  sendTitle:"Всё готово", sendLead:"Нажмите «Отправить». Видео начало загружаться, пока вы отвечали.",
  share:"Отправить видео в WhatsApp", shareParts:"Отправить видео в WhatsApp", summary:"Отправить сводку в WhatsApp", copy:"Скопировать сводку", copied:"Скопировано", save:"Сохранить видео в телефон",
@@ -589,11 +594,12 @@ ru:{
  reviewTitle:"Ваше видео", reviewLead:"Посмотрите, переснимите любую часть и оформите по-своему.", partsTitle:"Части", partRe:"Переснять", partRec:"Снять", partPlay:"Смотреть", partSkipped:"Пропущена · можно снять сейчас", playAll:"Смотреть всё",
  stickTitle:"Стикеры", stickLead:"Нажмите, чтобы добавить. Двигайте пальцем прямо на видео.", stickMax:"Максимум 6. Нажмите на стикер в видео, чтобы настроить.", stickSize:"Размер", stickDel:"Убрать",
  musicTitle:"Фоновая музыка", musicLead:"Становится тише, когда вы говорите.", music:{none:"Без музыки",suave:"Спокойная",bossa:"Босса",animada:"Бодрая"},
- againAll:"Удалить и снять всё заново", againConfirm:"Нажмите ещё раз — всё удалится", pPrep:"Готовим видео…",
+ againAll:"Удалить и снять всё заново", againConfirm:"Нажмите ещё раз — всё удалится", pPrep:"Готовим видео…", piece:"Фрагмент {n}", recMore:"Записать следующий фрагмент", freeMore:"Пауза. Подумайте спокойно и запишите следующий фрагмент или нажмите «Завершить».", addPiece:"Добавить фрагмент", delPiece:"Удалить",
+ fxTitle:"Ваше лицо", fxLead:"Действует на части, снятые фронтальной камерой. Оригинал хранится только у команды Пробы.", face:{show:"Показать",blur:"Размыть",silhouette:"Силуэт"}, fxLoading:"Готовим эффект…",
  send:"Отправить", sending:"Отправляем…", retry:"Попробовать ещё раз", sentTitle:"Отзыв отправлен", upRun:"Видео загружается · {p}%", upDone:"Видео загружено", upFail:"Связь прервалась. Нажмите «Попробовать ещё раз».", sendFail:"Сейчас отправить не получилось. Проверьте интернет и попробуйте ещё раз или отправьте через WhatsApp.", sendNoServer:"Прямая отправка сейчас недоступна. Отправьте через WhatsApp.", viaWa:"Отправить видео через WhatsApp", saveCopy:"Сохранить копию в телефон", saveReady:"Скачать готовое видео", talkWa:"Написать нам в WhatsApp",
  panel:{eyebrow:"Команда",title:"Пришедшие отзывы",lead:"Только для команды Пробы. Ключ сохраняется в этом браузере.",key:"Ключ доступа",enter:"Войти",loading:"Загрузка…",empty:"Отзывов пока нет.",fail:"Не удалось загрузить. Попробуйте ещё раз.",bad:"Неверный ключ.",refresh:"Обновить",logout:"Выйти",sum:"Сводка",make:"Собрать ролик",making:"Собираем · {p}% · не закрывайте вкладку",download:"Скачать ролик",del:"Удалить",delConfirm:"Нажмите ещё раз — удалится насовсем",loadingFiles:"Загружаем части…"}, reShoot:"Пересъёмка части {n}",
  maskNone:"Без", maskBtn:"Маска", maskLoading:"Готовим маски…", faceOut:"Держите лицо в кадре, чтобы маска работала", maskLocked:"Маска остаётся до конца записи",
- permMask:["Можно публиковать, с маской","Ваше лицо уже скрыто маской. Чужие лица размыты."],
+ permMask:["Можно публиковать со скрытым лицом","Так, как вы выбрали в видео. Чужие лица тоже размыты."],
  labTitle:"Примерочная масок", labLead:"Выберите фото с лицом — на нём появятся все маски. Фото не покидает устройство.", labPick:"Выбрать фото", labLoading:"Загрузка…", labReady:"Готово. Выберите фото.", labFail:"Не удалось загрузить распознавание лица.", labNoFace:"На фото не найдено лицо.", labFound:"Найдено лиц: {n}", labImgFail:"Не удалось открыть изображение.",
  procTitle:"Готовим итоговое видео", pSubsLoad:"Субтитры: загрузка распознавания речи · {p}%", pSubsRun:"Субтитры: расшифровываем речь…", pSubsOk:"Субтитры готовы", pSubsNone:"Субтитры: речи не нашли", pSubsFail:"Субтитры: на этом телефоне не получилось",
  pFaceLoad:"Лица: подготовка…", pFaceMask:"Ваше лицо под маской, чужие лица размыты", pFaceBlur:"Чужие лица размыты", pFaceFail:"Лица: на этом телефоне скрыть не вышло. Скроем перед публикацией.",
@@ -611,7 +617,7 @@ var today=new Date(), iso=today.getFullYear()+"-"+String(today.getMonth()+1).pad
 var S = {
   step:0, service:CFG.service, pro:CFG.pro, date:iso,
   mode: CFG.format==="b" ? "livre" : "guiado", modeTouched:false,
-  clips:[], reshoots:0, stickers:[], music:"none", cuesEdited:false,
+  clips:[], reshoots:0, stickers:[], music:"none", cuesEdited:false, face:"show",
   native:false, parts:[null,null,null], subs:true, mask:"none",
   proofs:[], photo:null, q1:"", q2:"", q3:"", perm:"", consent:false,
   sent:false, err:"", shareMsg:"", camErr:""
@@ -784,7 +790,8 @@ function clipList(){ return S.clips.filter(Boolean); }
 function hasVideo(){ return recorded() || S.parts.some(function(p){return p&&p.file;}); }
 function totalDur(){ return clipList().reduce(function(a,c){ return a+(c.dur||0); },0); }
 function maskList(){ var m=[]; clipList().forEach(function(c){ if(c.mask&&c.mask!=="none"&&m.indexOf(c.mask)<0) m.push(c.mask); }); return m; }
-function maskSafe(){ var u=clipList().filter(function(c){ return c.facing==="user"; }); return u.length>0 && u.every(function(c){ return c.mask&&c.mask!=="none"; }); }
+function hasFront(){ return clipList().some(function(c){ return c.facing==="user"; }); }
+function maskSafe(){ return S.face!=="show" && hasFront(); }
 function clearClips(){ pvStop(); S.clips.forEach(function(c){ if(c&&c.url) URL.revokeObjectURL(c.url); }); S.clips=[]; S.reshoots=0; S.cuesEdited=false; S.sent=false; resetProc(); }
 function resetVideo(){ clearClips(); }
 
@@ -799,13 +806,13 @@ function renderVideoStep(){
   if(recorded()){
     var cs=clipList(), ml=maskList();
     h='<div class="stack lg">'+head(2,t("reviewTitle"),t("reviewLead"))+
-      '<div class="stage pv" id="pvStage"><video id="pv" playsinline preload="auto"></video>'+
+      '<div class="stage pv" id="pvStage"><video id="pv" playsinline preload="auto"></video><canvas id="pvFx" class="pv-fx" width="720" height="1280" hidden></canvas>'+
       '<button type="button" class="pv-play" id="pvPlay" aria-label="'+esc(t("playAll"))+'"><span>'+ic("play")+'</span></button>'+
       '<div class="stk-layer" id="stkLayer"></div><div class="pv-cue" id="pvCue" hidden></div>'+
       '<div class="pv-bar">'+cs.map(function(c,i){ return '<b style="flex-grow:'+Math.max(1,c.dur||1).toFixed(2)+'"><i id="pvb'+i+'"></i></b>'; }).join("")+'</div></div>'+
       '<div class="vmeta"><span class="pill-ok">'+ic("check","draw")+esc(t("recDone"))+' · '+mmss(totalDur())+'</span>'+
       (ml.length?'<span class="tag">'+ic("mask")+esc(ml.map(function(k){return MASKS[k][L];}).join(", "))+'</span>':'')+'</div>'+
-      partsList()+stickerPanel()+musicPanel()+subsCard()+
+      facePanel()+partsList()+stickerPanel()+musicPanel()+subsCard()+
       '<button type="button" class="btn ghost block" id="again">'+ic("video")+'<span>'+esc(t("againAll"))+'</span></button>';
   } else if(S.native){
     h='<div class="stack lg">'+head(2,t("modeTitle"))+'<p class="note">'+ic("eye")+'<span>'+esc(t("camFail"))+'</span></p>'+nativeCards();
@@ -819,8 +826,7 @@ function renderVideoStep(){
         return radioCard("mode",k,S.mode===k,k==="guiado"?"chatq":"mic",M[k][0],inf.pitch,extra,k==="guiado"?t("recommended"):"");
       }).join("")+'</div>'+
       '<div class="facecard"><div class="row"><span class="co-ic">'+ic("mask")+'</span><div><h3>'+esc(t("faceTitle"))+'</h3><p class="small">'+esc(t("faceText"))+'</p></div></div>'+
-      '<div class="swatches">'+MASK_ORDER.filter(function(k){return k!=="none";}).map(function(k){ return '<span title="'+esc(MASKS[k][L])+'" style="background:'+MASKS[k].sw+'"></span>'; }).join("")+'</div>'+
-      '<a class="link" href="#mascaras">'+esc(t("faceLink"))+ic("chev")+'</a></div>'+
+      '</div>'+
       '<p class="small" style="display:flex;gap:8px;align-items:flex-start">'+ic("lock").replace('<svg ','<svg style="width:16px;height:16px;flex:0 0 auto;margin-top:2px" ')+'<span>'+esc(t("camNote"))+'</span></p>';
     if(S.camErr) h+='<p class="err">'+esc(S.camErr)+'</p>';
   }
@@ -843,15 +849,47 @@ function renderVideoStep(){
   }
 }
 function partsList(){
-  var defs=qdefs();
-  return '<div class="section"><p class="label">'+esc(t("partsTitle"))+'</p><ul class="parts">'+defs.map(function(d,i){
-    var c=S.clips[i], n=defs.length>1?(i+1)+' · ':'';
+  var defs=qdefs(), guided=S.mode==="guiado", rows;
+  if(guided) rows=defs.map(function(d,i){ return {i:i,label:(defs.length>1?(i+1)+' · ':'')+d.label}; });
+  else { var n=0; rows=S.clips.map(function(c,i){ return c?{i:i,label:fmt(t("piece"),{n:++n})}:null; }).filter(Boolean); }
+  var canDel=!guided && rows.length>1;
+  var h='<div class="section"><p class="label">'+esc(t("partsTitle"))+'</p><ul class="parts">'+rows.map(function(r){
+    var c=S.clips[r.i], i=r.i;
     if(c) return '<li class="part" id="part'+i+'"><button type="button" class="th" data-play="'+i+'"'+(c.thumb?' style="background-image:url('+c.thumb+')"':'')+' aria-label="'+esc(t("partPlay"))+'">'+ic("play")+'</button>'+
-      '<div><b>'+n+esc(d.label)+'</b><small>'+mmss(c.dur)+(c.mask&&c.mask!=="none"?' · '+esc(MASKS[c.mask][L]):'')+'</small></div>'+
-      '<button type="button" class="btn outline small" data-re="'+i+'">'+ic("redo")+'<span>'+esc(t("partRe"))+'</span></button></li>';
-    return '<li class="part skip" id="part'+i+'"><span class="th">'+ic("video")+'</span><div><b>'+n+esc(d.label)+'</b><small>'+esc(t("partSkipped"))+'</small></div>'+
+      '<div><b>'+esc(r.label)+'</b><small>'+mmss(c.dur)+'</small></div>'+
+      '<div class="part-act">'+(canDel?'<button type="button" class="btn ghost small icon-s" data-delclip="'+i+'" aria-label="'+esc(t("delPiece"))+'">'+ic("trash")+'</button>':'')+
+      '<button type="button" class="btn outline small" data-re="'+i+'">'+ic("redo")+'<span>'+esc(t("partRe"))+'</span></button></div></li>';
+    return '<li class="part skip" id="part'+i+'"><span class="th">'+ic("video")+'</span><div><b>'+esc(r.label)+'</b><small>'+esc(t("partSkipped"))+'</small></div>'+
       '<button type="button" class="btn ghost small" data-re="'+i+'">'+ic("video")+'<span>'+esc(t("partRec"))+'</span></button></li>';
-  }).join("")+'</ul></div>';
+  }).join("")+'</ul>';
+  if(!guided && rows.length<FREE_PIECES && totalDur()<FREE_TOTAL) h+='<button type="button" class="btn ghost small" data-re="'+S.clips.length+'">'+ic("video")+'<span>'+esc(t("addPiece"))+'</span></button>';
+  return h+'</div>';
+}
+function stickerPanelPlaceholder(){}
+function facePanel(){
+  if(!hasFront()) return "";
+  var F=t("face"), o={show:F.show,blur:F.blur}; if(!FX.segFail) o.silhouette=F.silhouette;
+  return '<div class="panel" id="facePanel"><div class="ph"><span class="co-ic">'+ic("eye")+'</span><span><strong>'+esc(t("fxTitle"))+'</strong><span class="sub">'+esc(t("fxLead"))+'</span></span></div>'+chipGroup("face",o,S.face,false)+
+    '<p class="status" id="fxStatus"'+(S.face!=="show"&&!fxReady(S.face)?'':' hidden')+'><span class="spin"></span><span>'+esc(t("fxLoading"))+'</span></p></div>';
+}
+function pvFxActive(){ var c=clipList()[PV.i]; return S.face!=="show" && !!c && c.facing==="user"; }
+function pvFxDraw(force){
+  var cv=document.getElementById("pvFx"), v=pvEl(); if(!cv||!v) return;
+  if(!pvFxActive()){ cv.hidden=true; return; }
+  if(v.readyState<2) return;
+  var now=performance.now(); if(!force && now-(PV.fxAt||0)<30) return; PV.fxAt=now;
+  var x=cv.getContext("2d"); x.drawImage(v,0,0,W,H);
+  if(!fxReady(S.face) || !applyFace(x,S.face)) fxCover(x);
+  cv.hidden=false;
+}
+function setFace(mode){
+  S.face=mode; FX.hold=null;
+  var st=document.getElementById("fxStatus"); if(st) st.hidden=(mode==="show"||fxReady(mode));
+  pvFxDraw(true);
+  fxLoad(mode).then(function(){
+    if(mode==="silhouette"&&FX.segFail){ S.face="blur"; render(); return; }
+    var st2=document.getElementById("fxStatus"); if(st2) st2.hidden=true; pvFxDraw(true);
+  });
 }
 function stickerPanel(){
   var s=S.stickers[STK_SEL], full=S.stickers.length>=STK_MAX;
@@ -874,7 +912,11 @@ function bindReview(){
   v.ontimeupdate=function(){ pvBarUI(); pvCueUI(); };
   app.querySelectorAll("[data-play]").forEach(function(b){ b.onclick=function(){ var idx=clipList().indexOf(S.clips[+b.dataset.play]); if(idx<0) return; pvLoad(idx); pvPlay(); var st=document.getElementById("pvStage"); if(st&&st.scrollIntoView) st.scrollIntoView({behavior:"smooth",block:"center"}); }; });
   app.querySelectorAll("[data-re]").forEach(function(b){ b.onclick=function(){ pvStop(); openCamera(+b.dataset.re); }; });
+  app.querySelectorAll("[data-delclip]").forEach(function(b){ b.onclick=function(){ var i=+b.dataset.delclip, c=S.clips[i]; if(!c) return; pvStop(); if(c.url) URL.revokeObjectURL(c.url); S.clips[i]=null; resetProc(); render(); }; });
   app.querySelectorAll('input[name=mus]').forEach(function(r){ r.onchange=function(){ S.music=r.value; if(PV.playing) musicStart(); else musicTaste(); }; });
+  app.querySelectorAll('input[name=face]').forEach(function(r){ r.onchange=function(){ setFace(r.value); }; });
+  v.onloadeddata=v.onseeked=function(){ pvFxDraw(true); };
+  if(S.face!=="show") setFace(S.face);
   bindStickers(); layoutStickers();
   if(window.ResizeObserver){ try{ new ResizeObserver(function(){ layoutStickers(); }).observe(document.getElementById("pvStage")); }catch(e){} }
 }
@@ -882,11 +924,11 @@ function bindReview(){
 /* ---------- review player: plays the parts one after another; music is mixed in live ---------- */
 var PV={i:0,playing:false};
 function pvEl(){ return document.getElementById("pv"); }
-function pvLoad(i){ var cs=clipList(), v=pvEl(); if(!v||!cs[i]) return; PV.i=i; if(cs[i].thumb) v.poster=cs[i].thumb; v.src=cs[i].url; pvBarUI(); pvParts(); }
+function pvLoad(i){ var cs=clipList(), v=pvEl(); if(!v||!cs[i]) return; PV.i=i; FX.hold=null; var fc=document.getElementById("pvFx"); if(fc) fc.hidden=true; if(cs[i].thumb) v.poster=cs[i].thumb; v.src=cs[i].url; pvBarUI(); pvParts(); }
 function pvPlay(){ var v=pvEl(); if(!v) return; PV.playing=true; cancelAnimationFrame(PV.raf); PV.raf=requestAnimationFrame(pvTick); var p=v.play(); if(p&&p.catch) p.catch(function(){}); var st=document.getElementById("pvStage"); if(st) st.classList.add("playing"); musicStart(); pvParts(); }
 function pvPause(){ var v=pvEl(); PV.playing=false; if(v) try{ v.pause(); }catch(e){} var st=document.getElementById("pvStage"); if(st) st.classList.remove("playing"); musicStop(); pvParts(); }
 function pvStop(){ pvPause(); }
-function pvTick(){ if(!PV.playing) return; pvBarUI(); pvCueUI(); PV.raf=requestAnimationFrame(pvTick); }
+function pvTick(){ if(!PV.playing) return; pvBarUI(); pvCueUI(); pvFxDraw(); PV.raf=requestAnimationFrame(pvTick); }
 function pvCueUI(){ var el=document.getElementById("pvCue"); if(!el) return; var txt=null; if(S.subs){ var tt=pvGlobal(), cs=allCues(); for(var i=0;i<cs.length;i++){ if(tt>=cs[i].s&&tt<cs[i].e){ txt=cs[i].text; break; } } } if(txt){ if(el.textContent!==txt) el.textContent=txt; el.hidden=false; } else el.hidden=true; }
 function pvBarUI(){ var cs=clipList(), v=pvEl(); cs.forEach(function(c,i){ var el=document.getElementById("pvb"+i); if(!el) return; var f=i<PV.i?1:i>PV.i?0:(v&&c.dur?Math.min(1,(v.currentTime||0)/c.dur):0); el.style.width=(f*100)+"%"; }); }
 function pvParts(){ var cur=clipList()[PV.i]; app.querySelectorAll(".part").forEach(function(li){ li.classList.toggle("now",!!(PV.playing&&cur&&li.id==="part"+cur.q)); }); }
@@ -986,8 +1028,8 @@ function openCamera(only){
   pvStop(); S.camErr=""; var one=(typeof only==="number")?only:null;
   if(!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder)){ S.native=true; render(); return; }
   try{ var fsr=camEl.requestFullscreen||camEl.webkitRequestFullscreen; if(fsr){ camEl.hidden=false; var fp=fsr.call(camEl,{navigationUI:"hide"}); if(fp&&fp.catch) fp.catch(function(){}); } }catch(e){}
-  var defs=qdefs(), q0=one==null?0:Math.min(one,defs.length-1);
-  CAM={open:true,q:q0,only:one,state:"idle",facing:defs[q0].cam,audio:null,vtrack:null,vstream:null,cur:null,pending:[],raf:0,elapsed:0,tick:null,segStart:0,direct:false,started:false,busy:false,finishing:false,closing:false,startedAt:null};
+  var defs=qdefs(), qi=one==null?0:one, q0=Math.min(qi,defs.length-1);
+  CAM={open:true,q:qi,only:one,state:"idle",facing:defs[q0].cam,audio:null,vtrack:null,vstream:null,cur:null,pending:[],raf:0,elapsed:0,tick:null,segStart:0,direct:false,started:false,busy:false,finishing:false,closing:false,startedAt:null};
   loadFace(); buildMaskChips(); document.getElementById("camMasks").hidden=true;
   gum({audio:{echoCancellation:true,noiseSuppression:true},video:videoC(CAM.facing)}).then(function(s){
     CAM.audio=s.getAudioTracks()[0]; CAM.vtrack=s.getVideoTracks()[0]; setupFocus(CAM.vtrack);
@@ -1083,7 +1125,8 @@ function camUI(){
   if(guided){ var wasHidden=qbox.hidden, qchanged=qbox.dataset.q!==String(CAM.q); qbox.hidden=false; document.getElementById("camQk").textContent=fmt(t("qOf"),{n:CAM.q+1,m:defs.length}); document.getElementById("camQt").textContent=d.q; document.getElementById("camDots").innerHTML=defs.map(function(_,i){ return '<b class="'+(i<=CAM.q?'on':'')+'"></b>'; }).join(""); if(qchanged&&!wasHidden){ qbox.style.animation="none"; void qbox.offsetWidth; qbox.style.animation=""; } qbox.dataset.q=String(CAM.q); }
   else qbox.hidden=true;
   elShutter.className="shutter"+(recording?" on":"");
-  elLabel.textContent = recording ? (guided?t("stopAnswer"):t("stopFree")) : (guided?t("recAnswer"):t("recFree"));
+  elLabel.textContent = recording ? (guided?t("stopAnswer"):t("stopFree")) : (guided?t("recAnswer"):(CAM.pending.length?t("recMore"):t("recFree")));
+  if(!guided && !recording && CAM.pending.length && CAM.only==null && !maskWait) elTip.textContent=t("freeMore");
   elFlip.setAttribute("aria-label",t("flip")); elFlip.disabled = recording || CAM.busy;
   var answered=CAM.pending.length>0;
   if(guided){
@@ -1091,11 +1134,11 @@ function camUI(){
     var nl = (recording||CAM.only!=null) ? "" : (last&&answered ? t("finish") : t("skip"));
     elNext.querySelector(".lbl").textContent=nl; document.getElementById("camNextIc").innerHTML=ic(last&&answered?"check":"skip"); elNext.style.visibility=nl?"visible":"hidden";
     elNext.disabled = recording || CAM.busy;
-  } else { elNext.style.visibility="hidden"; elNext.disabled=true; }
+  } else { var nl2=(!recording&&CAM.pending.length&&CAM.only==null)?t("finish"):""; elNext.querySelector(".lbl").textContent=nl2; document.getElementById("camNextIc").innerHTML=ic("check"); elNext.style.visibility=nl2?"visible":"hidden"; elNext.disabled=recording||CAM.busy||!nl2; }
   var maxT=guided?ANSWER_MAX:FREE_MAX, frac=recording?Math.min(1,(CAM.elapsed-CAM.segStart)/maxT):0; document.getElementById("camRing").style.strokeDashoffset=String(245*(1-frac));
   elShutter.disabled = CAM.busy || maskWait;
   [].forEach.call(document.querySelectorAll("#camMasks .mchip"),function(b){ b.setAttribute("aria-pressed", b.dataset.k===S.mask); b.disabled = CAM.started; });
-  var mb=document.getElementById("camMaskBtn"), mbox=document.getElementById("camMasks"), canMask=FACE.state!=="fail"&&!IN_FRAME;
+  var mb=document.getElementById("camMaskBtn"), mbox=document.getElementById("camMasks"), canMask=false;
   mb.style.visibility=canMask?"visible":"hidden"; mb.disabled=!canMask||CAM.started||recording;
   if(CAM.started && !mbox.hidden){ mbox.hidden=true; }
   mb.setAttribute("aria-expanded",String(!mbox.hidden));
@@ -1172,7 +1215,8 @@ function stopAnswer(){
     c.file=r[0]; c.audio=r[1]; if(c.file) c.url=URL.createObjectURL(c.file); c.rec=c.arec=null; c.chunks=c.achunks=null;
   });
   CAM.pending.push(c);
-  if(CAM.finishing||CAM.only!=null||S.mode==="livre"){ finish(); return; }
+  if(CAM.finishing||CAM.only!=null){ finish(); return; }
+  if(S.mode==="livre"){ var tot=CAM.pending.reduce(function(a,p){ return a+p.dur; },0); if(CAM.pending.length>=FREE_PIECES||tot>=FREE_TOTAL){ finish(); return; } CAM.q++; camUI(); return; }
   advance();
 }
 function advance(){
@@ -1254,7 +1298,7 @@ function summary(){
   );
   if(recorded()){
     var ml=maskList(), st=txState(), nc=allCues().length;
-    lines.push("Máscara: "+(ml.length?ml.map(function(k){return MASKS[k].pt;}).join(", "):"nenhuma")+" · rostos de outros: "+(FACE.state==="ok"?"desfocados":"não processados"));
+    lines.push("Rosto: "+(!hasFront()?"não aparece (câmera de trás)":({show:"visível",blur:"desfocado",silhouette:"silhueta"})[S.face])+" · rostos de outros: "+(FACE.state==="ok"?"desfocados":"não processados"));
     lines.push("Figurinhas: "+(S.stickers.length?S.stickers.map(function(s){return s.e;}).join(" "):"nenhuma")+" · Música: "+P.music[S.music]);
     lines.push("Legendas: "+(!S.subs?"desligadas":(st==="done"?(nc?("sim"+(S.cuesEdited?" (corrigidas pela cliente)":"")):"sem fala"):st==="fail"?"falhou":"em andamento")));
   }
@@ -1379,7 +1423,7 @@ function upload(file,name){
   return job;
 }
 function recipe(){
-  return {v:1,mode:S.mode,W:W,H:H,subs:S.subs,edited:S.cuesEdited,music:S.music,stickers:S.stickers,
+  return {v:1,mode:S.mode,W:W,H:H,face:S.face,subs:S.subs,edited:S.cuesEdited,music:S.music,stickers:S.stickers,
     clips:clipList().map(function(c){ return {q:c.q,key:upKey(c.file),dur:+(c.dur||0).toFixed(2),mask:c.mask,facing:c.facing,at:c.at,cues:(c.cues||[]).map(function(q){ return {s:+q.s.toFixed(2),e:+q.e.toFixed(2),text:q.text}; })}; }),
     parts:S.parts.map(function(p){ return p&&p.file?upKey(p.file):null; }), photo:S.photo?upKey(S.photo):null};
 }
@@ -1453,7 +1497,7 @@ function panelMake(i){
     clearClips();
     list.forEach(function(c,k){ var b=blobs[k], f; try{ f=new File([b],c.key.split("/").pop(),{type:b.type}); }catch(e){ f=b; }
       S.clips[c.q]={q:c.q,file:f,url:URL.createObjectURL(f),dur:c.dur||1,mask:c.mask,facing:c.facing,cues:c.cues||[],txState:"done",tx:Promise.resolve(c.cues||[])}; });
-    S.stickers=r.stickers||[]; S.music=r.music||"none"; S.subs=!!r.subs; S.mode=r.mode||S.mode;
+    S.stickers=r.stickers||[]; S.music=r.music||"none"; S.face=r.face||"show"; S.subs=!!r.subs; S.mode=r.mode||S.mode;
     prepareFinal();
     var shown=false, iv=setInterval(function(){
       if(PANEL.mk!==i){ clearInterval(iv); return; }
@@ -1539,7 +1583,7 @@ function bindSubs(){
 }
 
 /* ---------- final video = parts in order + stickers + subtitles + voice mixed with music ---------- */
-function finalKey(){ return clipList().map(function(c){return c.url;}).join(",")+"|"+(S.subs?cuesKey():"-")+"|"+S.music+"|"+S.stickers.map(function(s){ return [s.e,s.x.toFixed(3),s.y.toFixed(3),s.s].join(":"); }).join(","); }
+function finalKey(){ return clipList().map(function(c){return c.url;}).join(",")+"|"+(S.subs?cuesKey():"-")+"|"+S.music+"|"+S.face+"|"+S.stickers.map(function(s){ return [s.e,s.x.toFixed(3),s.y.toFixed(3),s.s].join(":"); }).join(","); }
 function prepareFinal(){
   var cs=clipList(); if(!cs.length) return;
   var key=finalKey();
@@ -1554,9 +1598,9 @@ function prepareFinal(){
     return v;
   });
   var myKey=key, musP=S.music!=="none"?makeMusic(S.music):Promise.resolve(null);
-  (S.subs?startTranscription():Promise.resolve()).then(function(){
+  Promise.all([S.subs?startTranscription():null, S.face!=="show"?fxLoad(S.face):null]).then(function(){
     if(PROC.key!==myKey) return;
-    var plain = cs.length===1 && !S.stickers.length && S.music==="none" && !(S.subs&&allCues().length);
+    var plain = cs.length===1 && !S.stickers.length && S.music==="none" && !(S.subs&&allCues().length) && (S.face==="show"||!hasFront());
     if(plain){ PROC.state="skip"; PROC.justDone=true; procUI(); return; }
     return Promise.all(cs.map(decodeClip)).then(function(bufs){
       if(PROC.key!==myKey) return;
@@ -1567,7 +1611,7 @@ function prepareFinal(){
         PROC.state="render"; PROC.justDone=true;
         var c=document.createElement("canvas"); c.width=W; c.height=H; c.className="stage-canvas";
         PROC.stageEls=vids.concat([c]); procUI();
-        return renderPass(vids,c,mix,cues,offs,durs).then(function(file){
+        return renderPass(vids,c,mix,cues,offs,durs,cs.map(function(c){ return c.facing; })).then(function(file){
           if(PROC.key!==myKey) return;
           PROC.final=file; PROC.finalUrl=URL.createObjectURL(file); PROC.state="done"; PROC.stageEls=null; PROC.justDone=true; procUI();
         });
@@ -1595,7 +1639,7 @@ function mixAudio(bufs,offs,durs,mbuf){
 }
 function softLim(x){ var a=x<0?-x:x; if(a<=0.85) return x; var y=0.85+0.15*Math.tanh((a-0.85)/0.15); return x<0?-y:y; }
 
-function renderPass(vids,c,buf,cues,offs,durs){
+function renderPass(vids,c,buf,cues,offs,durs,facings){
   return new Promise(function(resolve,reject){
     var x=c.getContext("2d"), base=document.createElement("canvas"); base.width=W; base.height=H;
     var bx=base.getContext("2d"); bx.fillStyle="#000"; bx.fillRect(0,0,W,H);
@@ -1609,7 +1653,7 @@ function renderPass(vids,c,buf,cues,offs,durs){
     rec.ondataavailable=function(e){ if(e.data&&e.data.size) chunks.push(e.data); };
     /* The audio clock is the master. The picture follows it: the right part plays, and whenever a <video> falls behind
        (Safari stalls at seams) it is re-seeked instead of recording a frozen frame. */
-    var dur=buf.duration, raf=0, done=false, started=false, startAt=0, off0=0, lastSeek=0, cur=-1, sprites=stickerSprites();
+    var dur=buf.duration, raf=0, done=false, started=false, startAt=0, off0=0, lastSeek=0, cur=-1, sprites=stickerSprites(), fxMode=S.face, lastDraw=0, lastVC=-1;
     function stopAll(){ cancelAnimationFrame(raf); try{ node.stop(); }catch(e){} vids.forEach(function(v){ try{ v.pause(); }catch(e){} }); }
     PROC.cancel=function(){ if(done) return; done=true; stopAll(); try{ rec.onstop=null; rec.stop(); }catch(e){} reject(new Error("cancel")); };
     function audioPos(){ return started ? off0+(ac.currentTime-startAt) : 0; }
@@ -1619,7 +1663,7 @@ function renderPass(vids,c,buf,cues,offs,durs){
       var k=clipAt(tt), v=vids[k], local=tt-offs[k], now=performance.now();
       if(k!==cur){
         if(cur>=0) try{ vids[cur].pause(); }catch(e){}
-        cur=k; if(Math.abs((v.currentTime||0)-local)>0.12){ try{ v.currentTime=Math.max(0,local); }catch(e){} lastSeek=now; }
+        cur=k; FX.hold=null; if(Math.abs((v.currentTime||0)-local)>0.12){ try{ v.currentTime=Math.max(0,local); }catch(e){} lastSeek=now; }
         var p0=v.play(); if(p0&&p0.catch) p0.catch(function(){});
         return;
       }
@@ -1627,7 +1671,8 @@ function renderPass(vids,c,buf,cues,offs,durs){
       if(v.paused && !v.ended && local<durs[k]-0.1){ var p1=v.play(); if(p1&&p1.catch) p1.catch(function(){}); }
     }
     function paint(tt){
-      var v=vids[cur]; if(v && v.readyState>=2 && !v.seeking){ try{ bx.drawImage(v,0,0,W,H); }catch(e){} }
+      var v=vids[cur], now=performance.now();
+      if(v && v.readyState>=2 && !v.seeking && (now-lastDraw>=30||cur!==lastVC)){ lastDraw=now; lastVC=cur; try{ bx.drawImage(v,0,0,W,H); if(fxMode!=="show"&&facings&&facings[cur]==="user") applyFace(bx,fxMode); }catch(e){} }
       x.drawImage(base,0,0); drawStickers(x,sprites); var cue=cueAt(tt); if(cue) drawCue(x,cue);
     }
     function loop(){
@@ -1817,7 +1862,7 @@ function loadFace(){
       return mk("GPU").catch(function(){ return mk("CPU"); });
     });
   });
-  FACE.loading=Promise.all([lmP,loadMesh()]).then(function(r){ FACE.lm=r[0]; FACE.mesh=r[1]; FACE.state="ok"; if(CAM.open) { buildMaskChips(); camUI(); } return r[0]; })
+  FACE.loading=lmP.then(function(lm){ var r=[lm]; FACE.lm=lm; FACE.state="ok"; if(CAM.open) { buildMaskChips(); camUI(); } return r[0]; })
     .catch(function(e){ FACE.state="fail"; FACE.err=String(e&&e.message||e); if(CAM.open){ S.mask="none"; buildMaskChips(); camUI(); } return null; });
   return FACE.loading;
 }
@@ -2012,6 +2057,82 @@ function processFaces(x,faces,map,facing,maskKey,w,h){
   });
   return {author:author>=0,masked:masked};
 }
+
+
+/* ---------- face privacy, chosen after recording: blur (frosted oval) or silhouette (documentary backlight) ----------
+   Applied to parts filmed with the front camera, live in the review player and when the final video is assembled.
+   The original stays private with the Proba team; only the chosen version is published. */
+var MP_SEG="https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_segmenter/float16/latest/selfie_segmenter.tflite";
+var FX={seg:null,segP:null,segFail:false,ts:0,hold:null,maskT:0};
+FX.fc=document.createElement("canvas"); FX.fc.width=360; FX.fc.height=640; FX.fcx=FX.fc.getContext("2d");
+FX.sc=document.createElement("canvas"); FX.sc.width=180; FX.sc.height=320; FX.scx=FX.sc.getContext("2d");
+FX.mask=document.createElement("canvas"); FX.mask.width=180; FX.mask.height=320; FX.mx=FX.mask.getContext("2d");
+FX.tmp=document.createElement("canvas"); FX.tmp.width=W; FX.tmp.height=H; FX.tx=FX.tmp.getContext("2d");
+FX.blr=document.createElement("canvas"); FX.blx=FX.blr.getContext("2d");
+function fxTs(){ FX.ts=Math.max(FX.ts+1,performance.now()); return FX.ts; }
+function loadSeg(){
+  if(FX.segP) return FX.segP;
+  FX.segP=importFirst(MP_URLS).then(function(mod){
+    var V=mod.ImageSegmenter?mod:(mod.default||mod);
+    return V.FilesetResolver.forVisionTasks(MP_WASM).then(function(fs){
+      function mk(dl){ return V.ImageSegmenter.createFromOptions(fs,{baseOptions:{modelAssetPath:MP_SEG,delegate:dl},runningMode:"VIDEO",outputCategoryMask:false,outputConfidenceMasks:true}); }
+      return mk("GPU").catch(function(){ return mk("CPU"); });
+    });
+  }).then(function(s){ FX.seg=s; return s; }).catch(function(){ FX.segFail=true; return null; });
+  return FX.segP;
+}
+function fxReady(mode){ return mode==="blur" ? FACE.state==="ok" : (mode==="silhouette" ? !!FX.seg : true); }
+function fxLoad(mode){ if(mode==="blur") return loadFace(); if(mode==="silhouette") return loadSeg(); return Promise.resolve(); }
+/* soft blur of a region by down- and up-scaling (works in every browser, unlike ctx.filter) */
+function softBlur(x,X,Y,Wd,Hd,clipEllipse){
+  X=Math.max(0,X); Y=Math.max(0,Y); Wd=Math.min(x.canvas.width-X,Wd); Hd=Math.min(x.canvas.height-Y,Hd); if(Wd<4||Hd<4) return;
+  var sw=Math.max(3,Math.round(Wd/20)), sh=Math.max(3,Math.round(Hd/20));
+  FX.blr.width=sw; FX.blr.height=sh; FX.blx.imageSmoothingEnabled=true; FX.blx.drawImage(x.canvas,X,Y,Wd,Hd,0,0,sw,sh);
+  x.save();
+  if(clipEllipse){ x.beginPath(); x.ellipse(X+Wd/2,Y+Hd/2,Wd/2,Hd/2,0,0,Math.PI*2); x.clip(); }
+  x.imageSmoothingEnabled=true; x.imageSmoothingQuality="high"; x.drawImage(FX.blr,0,0,sw,sh,X,Y,Wd,Hd);
+  x.fillStyle="rgba(255,255,255,.10)"; x.fillRect(X,Y,Wd,Hd);
+  x.restore();
+}
+function fxBlur(x){
+  if(FACE.state!=="ok") return false;
+  var w=x.canvas.width, h=x.canvas.height, box=null, res=null;
+  FX.fcx.drawImage(x.canvas,0,0,360,640);
+  try{ res=FACE.lm.detectForVideo(FX.fc,fxTs()); }catch(e){}
+  var fl=res&&res.faceLandmarks;
+  if(fl&&fl.length){ var best=0; fl.forEach(function(f){ var b=faceBox(f,function(p){ return [p.x*w,p.y*h,0]; }); if(b.w*b.h>best){ best=b.w*b.h; box=b; } }); FX.hold={b:box,t:performance.now()}; }
+  else if(FX.hold && performance.now()-FX.hold.t<1200) box=FX.hold.b;
+  if(!box) return true;
+  var cx0=box.x+box.w/2, cy0=box.y+box.h*0.40, rx=box.w*0.86, ry=box.h*0.98;
+  softBlur(x,cx0-rx,cy0-ry,rx*2,ry*2,true);
+  return true;
+}
+function fxSil(x){
+  if(!FX.seg) return false;
+  var w=x.canvas.width, h=x.canvas.height, got=false;
+  FX.scx.drawImage(x.canvas,0,0,180,320);
+  try{
+    FX.seg.segmentForVideo(FX.sc,fxTs(),function(r){
+      var m=r&&r.confidenceMasks&&r.confidenceMasks[0]; if(!m) return;
+      var a=m.getAsFloat32Array(), mw=m.width, mh=m.height;
+      if(FX.mask.width!==mw||FX.mask.height!==mh||!FX.mimg){ FX.mask.width=mw; FX.mask.height=mh; FX.mimg=FX.mx.createImageData(mw,mh); }
+      var d=FX.mimg.data;
+      for(var i=0,j=0;i<a.length;i++,j+=4){ var v=a[i]; v=v<0.3?0:(v>0.6?1:(v-0.3)/0.3); d[j]=0; d[j+1]=0; d[j+2]=0; d[j+3]=v*255; }
+      FX.mx.putImageData(FX.mimg,0,0); got=true;
+    });
+  }catch(e){}
+  if(got) FX.maskT=performance.now(); else if(performance.now()-FX.maskT>1200) return false;
+  x.save(); x.fillStyle="rgba(255,246,236,.12)"; x.fillRect(0,0,w,h); x.restore();          /* backlit look */
+  if(FX.tmp.width!==w||FX.tmp.height!==h){ FX.tmp.width=w; FX.tmp.height=h; }
+  var t=FX.tx; t.save(); t.clearRect(0,0,w,h); t.imageSmoothingEnabled=true; t.drawImage(FX.mask,0,0,w,h);
+  t.globalCompositeOperation="source-in"; t.fillStyle="#0B0C0F"; t.fillRect(0,0,w,h); t.restore();
+  x.save(); x.shadowColor="rgba(255,232,204,.9)"; x.shadowBlur=w*0.03; x.drawImage(FX.tmp,0,0); x.restore();   /* rim light */
+  x.drawImage(FX.tmp,0,0);
+  return true;
+}
+function applyFace(x,mode){ if(mode==="blur") return fxBlur(x); if(mode==="silhouette") return fxSil(x); return true; }
+/* until the models are ready, the review player hides the whole frame instead of risking a visible face */
+function fxCover(x){ softBlur(x,0,0,x.canvas.width,x.canvas.height,false); }
 
 /* ---------- mask fitting room (#mascaras): a photo + every mask ---------- */
 function renderLab(){
