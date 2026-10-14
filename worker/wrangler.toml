@@ -1,0 +1,14 @@
+# Proba server (Cloudflare Worker): subtitles, key points, uploads, assistant API.
+# Secrets GROQ_API_KEY and ADMIN_KEY live in Cloudflare and are not touched by deploys.
+name = "proba-legendas"
+main = "src/index.js"
+compatibility_date = "2025-09-01"
+account_id = "80d8ca0fc74d7988e4500024eb93aa54"
+workers_dev = true
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "proba-videos"
+
+[observability]
+enabled = true
