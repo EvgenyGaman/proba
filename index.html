@@ -1522,7 +1522,7 @@ function finish(){
     resetProc(); S.sent=false; ev("rec");
     closeCamera(); render();
     if(S.subs) startTranscription();
-  });
+  }).catch(function(e){ diag("finish: "+(e&&e.message||e)); try{ closeCamera(); }catch(x){} CAM.closing=false; CAM.busy=false; render(); });
 }
 function closeCamera(){
   stopTick(); cancelAnimationFrame(CAM.raf);
