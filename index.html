@@ -684,7 +684,7 @@ pt:{
  perm:{privado:["Só a equipe da Proba","Não publicamos. Usamos só para melhorar o serviço."],semrosto:["Pode publicar, sem meu rosto","Cortamos ou desfocamos o rosto antes de publicar."],comrosto:["Pode publicar como está","O vídeo aparece com rosto e voz."]},
  consent:"Autorizo a Proba a receber e guardar este vídeo e a usar minha imagem e voz apenas na forma que escolhi acima. O original fica só com a equipe da Proba. Posso pedir a remoção a qualquer momento pelo WhatsApp.",
  errPerm:"Escolha uma opção e confirme a autorização.",
- sendTitle:"Tudo pronto", sendLead:"Toque em Enviar. Seu vídeo já começou a subir enquanto você respondia.",
+ sendTitle:"Tudo pronto", sendLead:"Estamos enviando sua avaliação. Não feche esta página até aparecer “Avaliação enviada”.",
  share:"Enviar vídeo pelo WhatsApp", shareParts:"Enviar vídeos pelo WhatsApp", summary:"Enviar resumo no WhatsApp", copy:"Copiar resumo", copied:"Copiado", save:"Salvar vídeo no celular",
  shareFallback:"Seu celular não abriu o compartilhamento. Salve o vídeo e anexe no WhatsApp.",
  sumHead:"O resumo que vai junto", thanks:"Recebemos! Vamos falar com você no WhatsApp para combinar o Pix de R$ 20.",
@@ -753,7 +753,7 @@ ru:{
  perm:{privado:["Только команда Пробы","Не публикуем. Только для улучшения сервиса."],semrosto:["Можно публиковать, без лица","Перед публикацией обрежем или размоем лицо."],comrosto:["Можно публиковать как есть","Видео с лицом и голосом."]},
  consent:"Разрешаю Пробе получить и хранить это видео и использовать моё изображение и голос только в выбранном выше виде. Оригинал хранится только у команды Пробы. Могу попросить удалить в любой момент через WhatsApp.",
  errPerm:"Выберите вариант и подтвердите согласие.",
- sendTitle:"Всё готово", sendLead:"Нажмите «Отправить». Видео начало загружаться, пока вы отвечали.",
+ sendTitle:"Всё готово", sendLead:"Отправляем ваш отзыв. Не закрывайте страницу, пока не появится «Отзыв отправлен».",
  share:"Отправить видео в WhatsApp", shareParts:"Отправить видео в WhatsApp", summary:"Отправить сводку в WhatsApp", copy:"Скопировать сводку", copied:"Скопировано", save:"Сохранить видео в телефон",
  shareFallback:"Телефон не открыл меню «Поделиться». Сохраните видео и приложите в WhatsApp.",
  sumHead:"Сводка, которая уйдёт вместе с видео", thanks:"Получили! Напишем вам в WhatsApp, чтобы договориться о Pix R$ 20.",
@@ -1519,7 +1519,7 @@ function finish(){
     if(only==null) clearClips();
     var n=qdefs().length; while(S.clips.length<n) S.clips.push(null);
     pend.forEach(function(c){ if(!c.file) return; var old=S.clips[c.q]; if(old){ if(old.url) URL.revokeObjectURL(old.url); S.reshoots++; } S.clips[c.q]=c; });
-    resetProc(); S.sent=false; ev("rec");
+    resetProc(); S.sent=false; S.autoSent=false; S.sendErr=""; ev("rec");
     closeCamera(); render();
     if(S.subs) startTranscription();
   }).catch(function(e){ diag("finish: "+(e&&e.message||e)); try{ closeCamera(); }catch(x){} CAM.closing=false; CAM.busy=false; render(); });
@@ -1638,7 +1638,9 @@ function renderSend(){
     addBtn(ready?t("saveReady"):t("saveCopy"),"ghost",saveCopy,busy,"image");
   }
   if(S.sent && CFG.wa) waLink(t("talkWa"));
-  setBar(S.sent?[]:[{label:S.sending?t("sending"):(S.sendErr?t("retry"):t("send")),icon:"send",on:submitAll,dis:S.sending}]);
+  /* no "Send" tap: reaching this screen sends the review on its own; a button appears only if sending failed */
+  setBar((!S.sent&&S.sendErr&&!S.sending)?[{label:t("retry"),icon:"send",on:submitAll}]:[]);
+  if(!S.sent && !S.sending && !S.sendErr && !S.autoSent){ S.autoSent=true; setTimeout(submitAll,0); }
 }
 function saveCopy(){
   if(PROC.final){ saveFile(PROC.final); return; }
