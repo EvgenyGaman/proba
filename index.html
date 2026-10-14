@@ -421,6 +421,33 @@ html.panel-mode header.top,html.panel-mode #foot{display:none}
   .pn-detail{padding:18px 16px}
   .fn{grid-template-columns:1fr}
 }
+.card.wide{grid-column:1/-1}
+.logs{display:flex;flex-direction:column;gap:6px;max-height:320px;overflow:auto}
+.logs div{display:grid;grid-template-columns:120px 110px 1fr;gap:10px;font-size:13px;align-items:baseline}
+.logs span{color:var(--ink3)}
+.logs code{font:12px/1.4 ui-monospace,Menlo,monospace;color:var(--ink2);overflow-wrap:anywhere}
+.thp .th-g{display:flex;flex-direction:column;gap:6px}
+.thp .label{margin:4px 0 0}
+.th-row{display:grid;grid-template-columns:10px 1fr 36px;gap:8px;align-items:center}
+.th-row.off .th-in{text-decoration:line-through;color:var(--ink3)}
+.th-in{font-size:15px;padding:9px 10px;border-radius:10px}
+.th-x{all:unset;cursor:pointer;width:36px;height:36px;display:grid;place-items:center;border-radius:10px;color:var(--ink3)}
+.th-x svg{width:18px;height:18px}
+.th-dot{width:8px;height:8px;border-radius:999px;background:var(--ink3);flex:0 0 auto}
+.th-dot.th-pos{background:var(--ok)} .th-dot.th-neg{background:var(--bad)}
+.th-add{all:unset;cursor:pointer;font:600 13px/1 var(--f);color:var(--ink2);padding:6px 0}
+.th-empty{margin:0}
+.th-rates{display:flex;flex-direction:column;gap:6px}
+.th-rate{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:14px}
+.seg3{display:flex;gap:4px;background:var(--sub);border-radius:999px;padding:3px}
+.seg3 button{all:unset;cursor:pointer;width:36px;height:30px;display:grid;place-items:center;border-radius:999px;font-size:16px;opacity:.55;transition:all .15s var(--ease)}
+.seg3 button[aria-pressed="true"]{background:var(--paper);opacity:1;box-shadow:var(--shadow)}
+.pv-cue mark{background:none;color:#FFD84D}
+.th-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.th-list li{display:flex;gap:8px;align-items:baseline}
+.th-list em{color:var(--ink3);font-size:12px}
+.asp{display:flex;flex-direction:column;gap:6px}
+.asp .hb-row{grid-template-columns:minmax(110px,30%) 1fr 44px 110px}
 /* subtitles + processing */
 .panel{background:var(--paper);border:1.5px solid var(--line);border-radius:var(--r-lg);padding:16px;display:flex;flex-direction:column;gap:12px}
 .toggle{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;cursor:pointer}
@@ -668,11 +695,11 @@ pt:{
  reviewTitle:"Seu vídeo", reviewLead:"Assista, refaça qualquer parte e deixe com a sua cara.", partsTitle:"Partes", partRe:"Regravar", partRec:"Gravar", partPlay:"Assistir", partSkipped:"Pulada · dá para gravar agora", playAll:"Assistir tudo",
  stickTitle:"Figurinhas", stickLead:"Toque para colocar. Arraste no vídeo para mudar de lugar.", stickMax:"Máximo de 6. Toque numa delas no vídeo para ajustar.", stickSize:"Tamanho", stickDel:"Remover",
  musicTitle:"Música de fundo", musicLead:"Fica baixinha enquanto você fala.", music:{none:"Sem música",suave:"Suave",bossa:"Bossa",animada:"Animada"},
- againAll:"Apagar e gravar tudo de novo", againConfirm:"Toque de novo para apagar tudo", pPrep:"Preparando o vídeo…", rulesTitle:"Regras da avaliação", rulesCheck:"Li e concordo com as regras.", errRules:"Marque que leu as regras para continuar.",
+ againAll:"Apagar e gravar tudo de novo", againConfirm:"Toque de novo para apagar tudo", pPrep:"Preparando o vídeo…", th:{title:"O principal do seu vídeo",lead:"Destacamos os pontos que você falou. Confira, corrija se precisar e confirme.",loading:"Destacando os pontos principais…",fail:"Não deu para destacar os pontos agora.",none:"Os pontos aparecem quando as legendas ficam prontas.",retry:"Tentar de novo",pros:"Pontos positivos",cons:"Pontos negativos",empty:"Nenhum.",add:"Adicionar",remove:"Remover",restore:"Voltar",aspTitle:"Sua nota para cada item",asp:{resultado:"Resultado",atendimento:"Atendimento",pontualidade:"Pontualidade",limpeza:"Limpeza",preco:"Preço combinado"},rate:{pos:"Bom",mix:"Mais ou menos",neg:"Ruim",na:"Não sei"},voltTitle:"Voltaria?",volt:{sim:"Sim",talvez:"Talvez",nao:"Não",na:"—"},ok:"Está tudo certo",confirmed:"Confirmado",errConfirm:"Confira os pontos principais e toque em “Está tudo certo”."}, rulesTitle:"Regras da avaliação", rulesCheck:"Li e concordo com as regras.", errRules:"Marque que leu as regras para continuar.",
  rules:["Fale só da sua própria visita, que aconteceu de verdade.","Seja sincera: conte o que gostou e o que poderia ser melhor.","Os R$ 20 são pela participação e não dependem da sua opinião.","Não mostre documentos, telas com dados pessoais nem outras pessoas. Rostos de outros são desfocados sozinhos.","Sem ofensas, preconceito ou acusações: fale da sua experiência.","Sem propaganda, links ou contatos."], piece:"Trecho {n}", recMore:"Gravar próximo trecho", freeMore:"Pausa. Pense com calma e grave o próximo trecho, ou toque em Concluir.", addPiece:"Adicionar trecho", delPiece:"Apagar",
  prvTitle:"Privacidade", prvLead:"O original fica só com a equipe da Proba. Publicamos só a versão que você escolher.", fxTitle:"Rosto", fxLead:"Vale para as partes gravadas com a câmera da frente.", voiceTitle:"Voz", voice:{orig:"Original",alt:"Alterada"}, voiceLoading:"Preparando a voz…", face:{show:"Mostrar",blur:"Desfocar",silhouette:"Silhueta"}, fxLoading:"Preparando o efeito…",
  send:"Enviar", sending:"Enviando…", retry:"Tentar de novo", sentTitle:"Avaliação enviada", upRun:"Seu vídeo está subindo · {p}%", upDone:"Vídeo carregado", upFail:"A conexão falhou. Toque em Tentar de novo.", sendFail:"Não deu para enviar agora. Verifique a internet e tente de novo, ou envie pelo WhatsApp.", sendNoServer:"O envio direto não está disponível agora. Envie pelo WhatsApp.", viaWa:"Enviar vídeo pelo WhatsApp", saveCopy:"Salvar uma cópia no celular", saveReady:"Baixar o vídeo pronto", talkWa:"Falar com a gente no WhatsApp",
- panel:{eyebrow:"Equipe",title:"Avaliações recebidas",lead:"Só para a equipe da Proba. A chave fica salva neste navegador.",key:"Chave de acesso",enter:"Entrar",loading:"Carregando…",empty:"Ainda não chegou nenhuma avaliação.",fail:"Não deu para carregar. Tente de novo.",bad:"Chave incorreta.",refresh:"Atualizar",logout:"Sair",sum:"Resumo",make:"Montar vídeo final",making:"Montando · {p}% · mantenha esta aba aberta",download:"Baixar vídeo",del:"Apagar",delConfirm:"Toque de novo para apagar de vez",loadingFiles:"Baixando as partes…",nav:{overview:"Visão geral",queue:"Avaliações",board:"Quadro",links:"Gerar links"},st:{novo:"Novas",analise:"Em análise",aprovado:"Aprovadas",pago:"Pagas",recusado:"Recusadas"},st1:{novo:"Nova",analise:"Em análise",aprovado:"Aprovada",pago:"Paga",recusado:"Recusada"},all:"Todas",search:"Buscar por código",kTotal:"Recebidas",kToday:"Hoje",kWait:"Aguardando análise",kAppr:"Aprovação",kPix:"Pix a pagar",funnel:"Funil por link",funnelLead:"Quantas pessoas chegaram a cada etapa. Contamos só o código do link e a etapa, sem dados pessoais.",arm:{a:"Link A · começa com perguntas",b:"Link B · começa do seu jeito"},fs:{open:"Abriram o link",start:"Começaram",visit:"Visita preenchida",cam:"Abriram a câmera",rec:"Gravaram",consent:"Autorizaram",sent:"Enviaram"},perDay:"Avaliações por dia",perDayLead:"Últimos 14 dias. Toque num dia para ver as avaliações.",privacy:"Privacidade escolhida",fmt:"Formato",survey:"Respostas às 3 perguntas",none:"Sem dados ainda",avgDur:"Duração média",avgRe:"Regravações por avaliação",editedSubs:"Legendas corrigidas",editedShort:"corrigidas",faceL:{show:"Rosto visível",blur:"Rosto desfocado",silhouette:"Silhueta",none:"Sem rosto (câmera de trás)"},voiceL:{orig:"Voz original",alt:"Voz alterada"},modeL:{guiado:"Com perguntas",livre:"Do seu jeito"},tabs:{final:"Vídeo final",parts:"Partes",proof:"Comprovante",info:"Dados"},act:{analise:"Em análise",aprovar:"Aprovar",recusar:"Recusar",pago:"Pix pago",unpaid:"Desmarcar Pix"},reasonL:"Motivo",reasons:{semcomp:"Sem comprovante",naoreal:"Não parece visita real",ofensa:"Conteúdo impróprio",vazio:"Vídeo sem conteúdo",dup:"Duplicada",outro:"Outro"},checkT:"Checklist",checks:{comp:"Comprovante confere",real:"Parece visita real",rosto:"Rosto conforme a permissão",dados:"Sem dados pessoais nem ofensas"},note:"Notas internas",notePh:"Visível só para a equipe",saved:"Salvo",pickOne:"Escolha uma avaliação na lista",finalNone:"O vídeo final ainda não foi montado.",finalSaving:"Salvando o vídeo final no servidor…",finalSaved:"Salvo no servidor",fields:{service:"Serviço",pro:"Profissional",date:"Visita",mode:"Modo",dur:"Duração",parts:"Partes",reshoots:"Regravações",face:"Rosto",voice:"Voz",subs:"Legendas",stickers:"Figurinhas",music:"Música",perm:"Permissão",proofs:"Comprovante",q1:"P1 · onde encontrou",q2:"P2 · já avaliou",q3:"P3 · assistiria vídeos",device:"Aparelho",lang:"Idioma",rules:"Regras"},yes:"sim",no:"não",drop:"Arraste para cá",boardLead:"Arraste os cartões entre as colunas. Toque num cartão para abrir.",oldItem:"Avaliação enviada antes do novo formato: veja o resumo abaixo."}, reShoot:"Regravando a parte {n}",
+ panel:{eyebrow:"Equipe",title:"Avaliações recebidas",lead:"Só para a equipe da Proba. A chave fica salva neste navegador.",key:"Chave de acesso",enter:"Entrar",loading:"Carregando…",empty:"Ainda não chegou nenhuma avaliação.",fail:"Não deu para carregar. Tente de novo.",bad:"Chave incorreta.",refresh:"Atualizar",logout:"Sair",sum:"Resumo",make:"Montar vídeo final",making:"Montando · {p}% · mantenha esta aba aberta",download:"Baixar vídeo",del:"Apagar",delConfirm:"Toque de novo para apagar de vez",loadingFiles:"Baixando as partes…",nav:{overview:"Visão geral",queue:"Avaliações",board:"Quadro",links:"Gerar links"},st:{novo:"Novas",analise:"Em análise",aprovado:"Aprovadas",pago:"Pagas",recusado:"Recusadas"},st1:{novo:"Nova",analise:"Em análise",aprovado:"Aprovada",pago:"Paga",recusado:"Recusada"},all:"Todas",search:"Buscar por código",kTotal:"Recebidas",kToday:"Hoje",kWait:"Aguardando análise",kAppr:"Aprovação",kPix:"Pix a pagar",funnel:"Funil por link",funnelLead:"Quantas pessoas chegaram a cada etapa. Contamos só o código do link e a etapa, sem dados pessoais.",arm:{a:"Link A · começa com perguntas",b:"Link B · começa do seu jeito"},fs:{open:"Abriram o link",start:"Começaram",visit:"Visita preenchida",cam:"Abriram a câmera",rec:"Gravaram",consent:"Autorizaram",sent:"Enviaram"},perDay:"Avaliações por dia",perDayLead:"Últimos 14 dias. Toque num dia para ver as avaliações.",privacy:"Privacidade escolhida",fmt:"Formato",survey:"Respostas às 3 perguntas",none:"Sem dados ainda",avgDur:"Duração média",avgRe:"Regravações por avaliação",editedSubs:"Legendas corrigidas",editedShort:"corrigidas",faceL:{show:"Rosto visível",blur:"Rosto desfocado",silhouette:"Silhueta",none:"Sem rosto (câmera de trás)"},voiceL:{orig:"Voz original",alt:"Voz alterada"},modeL:{guiado:"Com perguntas",livre:"Do seu jeito"},tabs:{final:"Vídeo final",parts:"Partes",proof:"Comprovante",info:"Dados"},act:{analise:"Em análise",aprovar:"Aprovar",recusar:"Recusar",pago:"Pix pago",unpaid:"Desmarcar Pix"},reasonL:"Motivo",reasons:{semcomp:"Sem comprovante",naoreal:"Não parece visita real",ofensa:"Conteúdo impróprio",vazio:"Vídeo sem conteúdo",dup:"Duplicada",outro:"Outro"},checkT:"Checklist",checks:{comp:"Comprovante confere",real:"Parece visita real",rosto:"Rosto conforme a permissão",dados:"Sem dados pessoais nem ofensas"},note:"Notas internas",notePh:"Visível só para a equipe",saved:"Salvo",pickOne:"Escolha uma avaliação na lista",finalNone:"O vídeo final ainda não foi montado.",finalSaving:"Salvando o vídeo final no servidor…",finalSaved:"Salvo no servidor",fields:{service:"Serviço",pro:"Profissional",date:"Visita",mode:"Modo",dur:"Duração",parts:"Partes",reshoots:"Regravações",face:"Rosto",voice:"Voz",subs:"Legendas",stickers:"Figurinhas",music:"Música",perm:"Permissão",proofs:"Comprovante",q1:"P1 · onde encontrou",q2:"P2 · já avaliou",q3:"P3 · assistiria vídeos",device:"Aparelho",lang:"Idioma",rules:"Regras"},yes:"sim",no:"não",drop:"Arraste para cá",thTitle:"Pontos principais",thOk:"Confirmado pela cliente, sem mudanças.",thEdited:"Confirmado pela cliente, com correções.",thNotOk:"A cliente não confirmou.",thNeu:"Observações",thOwn:"adicionado pela cliente",thAi:"IA",useful:"Utilidade do vídeo (nota da equipe)",usefulL:{alta:"Alta",media:"Média",baixa:"Baixa"},usefulLead:"Quanto o vídeo ajuda quem vai escolher. Serve para recompensar autores e ordenar vídeos, não muda a nota da profissional.",aspT:"Notas por item (confirmadas pelas clientes)",aspLead:"Parte de avaliações positivas em cada item. É o dado de entrada da fórmula de ranking.",logs:"Problemas técnicos",logsLead:"Erros e travamentos enviados pelos celulares das clientes, para a equipe técnica.",boardLead:"Arraste os cartões entre as colunas. Toque num cartão para abrir.",oldItem:"Avaliação enviada antes do novo formato: veja o resumo abaixo."}, reShoot:"Regravando a parte {n}",
  maskNone:"Sem", maskBtn:"Máscara", maskLoading:"Preparando máscaras…", faceOut:"Mantenha o rosto na tela para a máscara funcionar", maskLocked:"A máscara fica até o fim da gravação",
  permMask:["Pode publicar, com o rosto escondido","Do jeito que você escolheu no vídeo. Rostos de outras pessoas também ficam desfocados."],
  labTitle:"Provador de máscaras", labLead:"Escolha uma foto com rosto: todas as máscaras aparecem nela. A foto não sai do aparelho.", labPick:"Escolher foto", labLoading:"Carregando…", labReady:"Pronto. Escolha uma foto.", labFail:"Não deu para carregar o reconhecimento de rosto.", labNoFace:"Nenhum rosto encontrado nessa foto.", labFound:"Rostos encontrados: {n}", labImgFail:"Não deu para abrir a imagem.",
@@ -737,11 +764,11 @@ ru:{
  reviewTitle:"Ваше видео", reviewLead:"Посмотрите, переснимите любую часть и оформите по-своему.", partsTitle:"Части", partRe:"Переснять", partRec:"Снять", partPlay:"Смотреть", partSkipped:"Пропущена · можно снять сейчас", playAll:"Смотреть всё",
  stickTitle:"Стикеры", stickLead:"Нажмите, чтобы добавить. Двигайте пальцем прямо на видео.", stickMax:"Максимум 6. Нажмите на стикер в видео, чтобы настроить.", stickSize:"Размер", stickDel:"Убрать",
  musicTitle:"Фоновая музыка", musicLead:"Становится тише, когда вы говорите.", music:{none:"Без музыки",suave:"Спокойная",bossa:"Босса",animada:"Бодрая"},
- againAll:"Удалить и снять всё заново", againConfirm:"Нажмите ещё раз — всё удалится", pPrep:"Готовим видео…", rulesTitle:"Правила отзыва", rulesCheck:"Я ознакомлен(а) с правилами и согласен(на).", errRules:"Отметьте, что ознакомились с правилами.",
+ againAll:"Удалить и снять всё заново", againConfirm:"Нажмите ещё раз — всё удалится", pPrep:"Готовим видео…", th:{title:"Главное из вашего видео",lead:"Мы выделили, что вы сказали. Проверьте, поправьте при необходимости и подтвердите.",loading:"Выделяем главное…",fail:"Сейчас выделить главное не получилось.",none:"Главное появится, когда будут готовы субтитры.",retry:"Попробовать ещё раз",pros:"Плюсы",cons:"Минусы",empty:"Нет.",add:"Добавить",remove:"Убрать",restore:"Вернуть",aspTitle:"Ваша оценка по пунктам",asp:{resultado:"Результат",atendimento:"Обслуживание",pontualidade:"Пунктуальность",limpeza:"Чистота",preco:"Цена как договаривались"},rate:{pos:"Хорошо",mix:"Так себе",neg:"Плохо",na:"Не знаю"},voltTitle:"Вернётесь?",volt:{sim:"Да",talvez:"Может быть",nao:"Нет",na:"—"},ok:"Всё верно",confirmed:"Подтверждено",errConfirm:"Проверьте главное и нажмите «Всё верно»."}, rulesTitle:"Правила отзыва", rulesCheck:"Я ознакомлен(а) с правилами и согласен(на).", errRules:"Отметьте, что ознакомились с правилами.",
  rules:["Рассказывайте только о своём визите, который действительно был.","Будьте честны: что понравилось и что можно улучшить.","R$ 20 — за участие, они не зависят от вашего мнения.","Не показывайте документы, экраны с личными данными и других людей. Чужие лица размываются сами.","Без оскорблений, дискриминации и обвинений — говорите о своём опыте.","Без рекламы, ссылок и контактов."], piece:"Фрагмент {n}", recMore:"Записать следующий фрагмент", freeMore:"Пауза. Подумайте спокойно и запишите следующий фрагмент или нажмите «Завершить».", addPiece:"Добавить фрагмент", delPiece:"Удалить",
  prvTitle:"Приватность", prvLead:"Оригинал хранится только у команды Пробы. Публикуется только выбранный вами вариант.", fxTitle:"Лицо", fxLead:"Действует на части, снятые фронтальной камерой.", voiceTitle:"Голос", voice:{orig:"Обычный",alt:"Изменённый"}, voiceLoading:"Готовим голос…", face:{show:"Показать",blur:"Размыть",silhouette:"Силуэт"}, fxLoading:"Готовим эффект…",
  send:"Отправить", sending:"Отправляем…", retry:"Попробовать ещё раз", sentTitle:"Отзыв отправлен", upRun:"Видео загружается · {p}%", upDone:"Видео загружено", upFail:"Связь прервалась. Нажмите «Попробовать ещё раз».", sendFail:"Сейчас отправить не получилось. Проверьте интернет и попробуйте ещё раз или отправьте через WhatsApp.", sendNoServer:"Прямая отправка сейчас недоступна. Отправьте через WhatsApp.", viaWa:"Отправить видео через WhatsApp", saveCopy:"Сохранить копию в телефон", saveReady:"Скачать готовое видео", talkWa:"Написать нам в WhatsApp",
- panel:{eyebrow:"Команда",title:"Пришедшие отзывы",lead:"Только для команды Пробы. Ключ сохраняется в этом браузере.",key:"Ключ доступа",enter:"Войти",loading:"Загрузка…",empty:"Отзывов пока нет.",fail:"Не удалось загрузить. Попробуйте ещё раз.",bad:"Неверный ключ.",refresh:"Обновить",logout:"Выйти",sum:"Сводка",make:"Собрать ролик",making:"Собираем · {p}% · не закрывайте вкладку",download:"Скачать ролик",del:"Удалить",delConfirm:"Нажмите ещё раз — удалится насовсем",loadingFiles:"Загружаем части…",nav:{overview:"Обзор",queue:"Отзывы",board:"Доска",links:"Ссылки"},st:{novo:"Новые",analise:"На проверке",aprovado:"Одобрены",pago:"Оплачены",recusado:"Отклонены"},st1:{novo:"Новый",analise:"На проверке",aprovado:"Одобрен",pago:"Оплачен",recusado:"Отклонён"},all:"Все",search:"Поиск по коду",kTotal:"Получено",kToday:"Сегодня",kWait:"Ждут проверки",kAppr:"Одобряемость",kPix:"Pix к оплате",funnel:"Воронка по ссылкам",funnelLead:"Сколько людей дошло до каждого шага. Учитываем только код ссылки и шаг, без личных данных.",arm:{a:"Ссылка A · сначала с подсказками",b:"Ссылка B · сначала экспромт"},fs:{open:"Открыли ссылку",start:"Начали",visit:"Заполнили визит",cam:"Открыли камеру",rec:"Сняли",consent:"Дали согласие",sent:"Отправили"},perDay:"Отзывы по дням",perDayLead:"Последние 14 дней. Нажмите на день, чтобы увидеть отзывы.",privacy:"Выбор приватности",fmt:"Формат",survey:"Ответы на 3 вопроса",none:"Пока нет данных",avgDur:"Средняя длина",avgRe:"Пересъёмок на отзыв",editedSubs:"Субтитры поправлены",editedShort:"поправлены",faceL:{show:"Лицо видно",blur:"Лицо размыто",silhouette:"Силуэт",none:"Без лица (задняя камера)"},voiceL:{orig:"Обычный голос",alt:"Изменённый голос"},modeL:{guiado:"С подсказками",livre:"Экспромт"},tabs:{final:"Итоговый ролик",parts:"Части",proof:"Подтверждение",info:"Данные"},act:{analise:"На проверку",aprovar:"Одобрить",recusar:"Отклонить",pago:"Pix оплачен",unpaid:"Снять оплату"},reasonL:"Причина",reasons:{semcomp:"Нет подтверждения",naoreal:"Не похоже на реальный визит",ofensa:"Недопустимое содержание",vazio:"Видео без содержания",dup:"Дубликат",outro:"Другое"},checkT:"Чек-лист",checks:{comp:"Подтверждение сходится",real:"Похоже на реальный визит",rosto:"Лицо соответствует разрешению",dados:"Нет личных данных и оскорблений"},note:"Заметки команды",notePh:"Видно только команде",saved:"Сохранено",pickOne:"Выберите отзыв в списке",finalNone:"Итоговый ролик ещё не собран.",finalSaving:"Сохраняем итоговый ролик на сервере…",finalSaved:"Сохранён на сервере",fields:{service:"Услуга",pro:"Мастер",date:"Визит",mode:"Режим",dur:"Длина",parts:"Части",reshoots:"Пересъёмки",face:"Лицо",voice:"Голос",subs:"Субтитры",stickers:"Стикеры",music:"Музыка",perm:"Разрешение",proofs:"Подтверждение",q1:"В1 · где нашла",q2:"В2 · оставляла отзывы",q3:"В3 · смотрела бы видео",device:"Устройство",lang:"Язык",rules:"Правила"},yes:"да",no:"нет",drop:"Перетащите сюда",boardLead:"Перетаскивайте карточки между колонками. Нажмите на карточку, чтобы открыть.",oldItem:"Отзыв прислан до нового формата: см. сводку ниже."}, reShoot:"Пересъёмка части {n}",
+ panel:{eyebrow:"Команда",title:"Пришедшие отзывы",lead:"Только для команды Пробы. Ключ сохраняется в этом браузере.",key:"Ключ доступа",enter:"Войти",loading:"Загрузка…",empty:"Отзывов пока нет.",fail:"Не удалось загрузить. Попробуйте ещё раз.",bad:"Неверный ключ.",refresh:"Обновить",logout:"Выйти",sum:"Сводка",make:"Собрать ролик",making:"Собираем · {p}% · не закрывайте вкладку",download:"Скачать ролик",del:"Удалить",delConfirm:"Нажмите ещё раз — удалится насовсем",loadingFiles:"Загружаем части…",nav:{overview:"Обзор",queue:"Отзывы",board:"Доска",links:"Ссылки"},st:{novo:"Новые",analise:"На проверке",aprovado:"Одобрены",pago:"Оплачены",recusado:"Отклонены"},st1:{novo:"Новый",analise:"На проверке",aprovado:"Одобрен",pago:"Оплачен",recusado:"Отклонён"},all:"Все",search:"Поиск по коду",kTotal:"Получено",kToday:"Сегодня",kWait:"Ждут проверки",kAppr:"Одобряемость",kPix:"Pix к оплате",funnel:"Воронка по ссылкам",funnelLead:"Сколько людей дошло до каждого шага. Учитываем только код ссылки и шаг, без личных данных.",arm:{a:"Ссылка A · сначала с подсказками",b:"Ссылка B · сначала экспромт"},fs:{open:"Открыли ссылку",start:"Начали",visit:"Заполнили визит",cam:"Открыли камеру",rec:"Сняли",consent:"Дали согласие",sent:"Отправили"},perDay:"Отзывы по дням",perDayLead:"Последние 14 дней. Нажмите на день, чтобы увидеть отзывы.",privacy:"Выбор приватности",fmt:"Формат",survey:"Ответы на 3 вопроса",none:"Пока нет данных",avgDur:"Средняя длина",avgRe:"Пересъёмок на отзыв",editedSubs:"Субтитры поправлены",editedShort:"поправлены",faceL:{show:"Лицо видно",blur:"Лицо размыто",silhouette:"Силуэт",none:"Без лица (задняя камера)"},voiceL:{orig:"Обычный голос",alt:"Изменённый голос"},modeL:{guiado:"С подсказками",livre:"Экспромт"},tabs:{final:"Итоговый ролик",parts:"Части",proof:"Подтверждение",info:"Данные"},act:{analise:"На проверку",aprovar:"Одобрить",recusar:"Отклонить",pago:"Pix оплачен",unpaid:"Снять оплату"},reasonL:"Причина",reasons:{semcomp:"Нет подтверждения",naoreal:"Не похоже на реальный визит",ofensa:"Недопустимое содержание",vazio:"Видео без содержания",dup:"Дубликат",outro:"Другое"},checkT:"Чек-лист",checks:{comp:"Подтверждение сходится",real:"Похоже на реальный визит",rosto:"Лицо соответствует разрешению",dados:"Нет личных данных и оскорблений"},note:"Заметки команды",notePh:"Видно только команде",saved:"Сохранено",pickOne:"Выберите отзыв в списке",finalNone:"Итоговый ролик ещё не собран.",finalSaving:"Сохраняем итоговый ролик на сервере…",finalSaved:"Сохранён на сервере",fields:{service:"Услуга",pro:"Мастер",date:"Визит",mode:"Режим",dur:"Длина",parts:"Части",reshoots:"Пересъёмки",face:"Лицо",voice:"Голос",subs:"Субтитры",stickers:"Стикеры",music:"Музыка",perm:"Разрешение",proofs:"Подтверждение",q1:"В1 · где нашла",q2:"В2 · оставляла отзывы",q3:"В3 · смотрела бы видео",device:"Устройство",lang:"Язык",rules:"Правила"},yes:"да",no:"нет",drop:"Перетащите сюда",thTitle:"Главное",thOk:"Подтверждено клиенткой без правок.",thEdited:"Подтверждено клиенткой с правками.",thNotOk:"Клиентка не подтвердила.",thNeu:"Замечания",thOwn:"добавлено клиенткой",thAi:"ИИ",useful:"Полезность видео (оценка команды)",usefulL:{alta:"Высокая",media:"Средняя",baixa:"Низкая"},usefulLead:"Насколько видео помогает выбирать. Нужна для вознаграждения авторов и порядка видео, на оценку мастера не влияет.",aspT:"Оценки по пунктам (подтверждены клиентками)",aspLead:"Доля положительных оценок по каждому пункту. Это входные данные формулы ранжирования.",logs:"Технические проблемы",logsLead:"Ошибки и зависания, которые прислали телефоны клиенток. Для технической команды.",boardLead:"Перетаскивайте карточки между колонками. Нажмите на карточку, чтобы открыть.",oldItem:"Отзыв прислан до нового формата: см. сводку ниже."}, reShoot:"Пересъёмка части {n}",
  maskNone:"Без", maskBtn:"Маска", maskLoading:"Готовим маски…", faceOut:"Держите лицо в кадре, чтобы маска работала", maskLocked:"Маска остаётся до конца записи",
  permMask:["Можно публиковать со скрытым лицом","Так, как вы выбрали в видео. Чужие лица тоже размыты."],
  labTitle:"Примерочная масок", labLead:"Выберите фото с лицом — на нём появятся все маски. Фото не покидает устройство.", labPick:"Выбрать фото", labLoading:"Загрузка…", labReady:"Готово. Выберите фото.", labFail:"Не удалось загрузить распознавание лица.", labNoFace:"На фото не найдено лицо.", labFound:"Найдено лиц: {n}", labImgFail:"Не удалось открыть изображение.",
@@ -941,7 +968,7 @@ function totalDur(){ return clipList().reduce(function(a,c){ return a+(c.dur||0)
 function maskList(){ var m=[]; clipList().forEach(function(c){ if(c.mask&&c.mask!=="none"&&m.indexOf(c.mask)<0) m.push(c.mask); }); return m; }
 function hasFront(){ return clipList().some(function(c){ return c.facing==="user"; }); }
 function maskSafe(){ return S.face!=="show" && hasFront(); }
-function clearClips(){ pvStop(); S.clips.forEach(function(c){ if(c&&c.url) URL.revokeObjectURL(c.url); }); S.clips=[]; S.reshoots=0; S.cuesEdited=false; S.sent=false; resetProc(); }
+function clearClips(){ pvStop(); S.clips.forEach(function(c){ if(c&&c.url) URL.revokeObjectURL(c.url); }); S.clips=[]; S.reshoots=0; S.cuesEdited=false; S.sent=false; S.th=null; S.thState=""; S.thRunKey=""; S.thOk=false; resetProc(); }
 function resetVideo(){ clearClips(); }
 
 var EMOJI=["😍","🥰","✨","💅","💖","🔥","👍","💯","🌸","💄","💇‍♀️","👏","⭐","😊","🙌","💋"];
@@ -955,13 +982,13 @@ function renderVideoStep(){
   if(recorded()){
     var cs=clipList(), ml=maskList();
     h='<div class="stack lg">'+head(2,t("reviewTitle"),t("reviewLead"))+
-      '<div class="stage pv" id="pvStage">'+cs.map(function(c,i){ return '<video class="pv-v'+(i===0?' on':'')+'" muted playsinline preload="auto" src="'+c.url+'"'+(c.thumb?' poster="'+c.thumb+'"':'')+'></video>'; }).join("")+'<canvas id="pvFx" class="pv-fx" width="720" height="1280" hidden></canvas>'+
+      '<div class="stage pv" id="pvStage">'+cs.map(function(c,i){ return '<video class="pv-v'+(i===0?' on':'')+'" muted playsinline preload="'+(i===0?'auto':'none')+'" data-src="'+c.url+'"'+(i===0?' src="'+c.url+'"':'')+(c.thumb?' poster="'+c.thumb+'"':'')+'></video>'; }).join("")+'<canvas id="pvFx" class="pv-fx" width="720" height="1280" hidden></canvas>'+
       '<button type="button" class="pv-play" id="pvPlay" aria-label="'+esc(t("playAll"))+'"><span>'+ic("play")+'</span></button>'+
       '<div class="stk-layer" id="stkLayer"></div><div class="pv-cue" id="pvCue" hidden></div>'+
       '<div class="pv-bar">'+cs.map(function(c,i){ return '<b style="flex-grow:'+Math.max(1,c.dur||1).toFixed(2)+'"><i id="pvb'+i+'"></i></b>'; }).join("")+'</div></div>'+
       '<div class="vmeta"><span class="pill-ok">'+ic("check","draw")+esc(t("recDone"))+' · '+mmss(totalDur())+'</span>'+
       (ml.length?'<span class="tag">'+ic("mask")+esc(ml.map(function(k){return MASKS[k][L];}).join(", "))+'</span>':'')+'</div>'+
-      facePanel()+partsList()+stickerPanel()+musicPanel()+subsCard()+
+      facePanel()+thPanel()+partsList()+stickerPanel()+musicPanel()+subsCard()+
       '<button type="button" class="btn ghost block" id="again">'+ic("video")+'<span>'+esc(t("againAll"))+'</span></button>';
   } else if(S.native){
     h='<div class="stack lg">'+head(2,t("modeTitle"))+'<p class="note">'+ic("eye")+'<span>'+esc(t("camFail"))+'</span></p>'+nativeCards();
@@ -993,7 +1020,7 @@ function renderVideoStep(){
   if(!recorded() && !S.native && !IN_FRAME) loadFace();
   bindNative();
   if(recorded()||S.native){
-    setBar([backBtn(1),{label:t("next"),on:function(){ if(!hasVideo()){S.err=t("errVideo");render();return;} PROC.editing=false; STK_SEL=-1; go(3); }}]);
+    setBar([backBtn(1),{label:t("next"),on:function(){ if(!hasVideo()){S.err=t("errVideo");render();return;} PROC.editing=false; STK_SEL=-1; if(thNeedsConfirm()){ S.err=t("th").errConfirm; render(); var tp=document.getElementById("thPanel"); if(tp) tp.scrollIntoView({behavior:"smooth",block:"center"}); return; } go(3); }}]);
   } else {
     var ro=document.getElementById("rulesOk"); if(ro) ro.onchange=function(){ S.rules=ro.checked; if(S.rules&&S.err){ S.err=""; var er=app.querySelector(".err"); if(er) er.remove(); } };
     setBar([backBtn(1),{label:t("openCam"),icon:"video",on:function(){ if(!S.rules){ S.err=t("errRules"); render(); var rr=app.querySelector(".rules"); if(rr) rr.scrollIntoView({behavior:"smooth",block:"center"}); return; } openCamera(); }}]);
@@ -1056,7 +1083,7 @@ function bindReview(){
   var vs=pvVids(); if(!vs.length) return;
   vs.forEach(function(v){ v.muted=true; v.onloadeddata=v.onseeked=function(){ if(pvEl()===v) pvFxDraw(true); }; });
   PV.playing=false; PV.pos=0; PV.cur=0; PV.i=0; pvShow(0); pvBarUI(); pvParts();
-  pvPrepare();
+  clearTimeout(PV.prepT); PV.prepT=setTimeout(function(){ if(document.getElementById("pvStage")) pvPrepare(); },1500);
   document.getElementById("pvPlay").onclick=function(){ if(STK_SEL>=0){ STK_SEL=-1; layoutStickers(); refreshStickerPanel(); } if(PV.playing) pvPause(); else pvPlay(); };
   app.querySelectorAll("[data-play]").forEach(function(b){ b.onclick=function(){ var idx=clipList().indexOf(S.clips[+b.dataset.play]); if(idx<0) return; var o=pvOffs(); pvPause(); pvSeekTo(o.offs[idx]); pvPlay(o.offs[idx]); var st=document.getElementById("pvStage"); if(st&&st.scrollIntoView) st.scrollIntoView({behavior:"smooth",block:"center"}); }; });
   app.querySelectorAll("[data-re]").forEach(function(b){ b.onclick=function(){ pvStop(); openCamera(+b.dataset.re); }; });
@@ -1065,6 +1092,7 @@ function bindReview(){
   app.querySelectorAll('input[name=face]').forEach(function(r){ r.onchange=function(){ setFace(r.value); }; });
   app.querySelectorAll('input[name=voice]').forEach(function(r){ r.onchange=function(){ setVoice(r.value); }; });
   if(S.face!=="show") setFace(S.face);
+  bindTh(); thMaybeStart();
   bindStickers(); layoutStickers();
   if(window.ResizeObserver){ try{ new ResizeObserver(function(){ layoutStickers(); }).observe(document.getElementById("pvStage")); }catch(e){} }
 }
@@ -1084,10 +1112,21 @@ function pvPrepare(){
   var cs=clipList(), alt=S.voice==="alt", key=cs.map(function(c){ return c.url; }).join(",")+"|"+S.voice;
   if(PV.readyKey===key && PV.ready) return PV.ready;
   PV.readyKey=key; PV.bufs=null;
-  PV.ready=Promise.all(cs.map(function(c){ return decodeClip(c).then(function(b){ return (b&&alt)?voiceAlt(c,b):b; }); })).then(function(bufs){ if(PV.readyKey===key) PV.bufs=bufs; return bufs; });
+  var out=[], chain=Promise.resolve();
+  cs.forEach(function(c,i){ chain=chain.then(function(){ return decodePreview(c); }).then(function(b){ return (b&&alt)?voiceAlt(c,b):b; }).then(function(b){ out[i]=b; }); });
+  PV.ready=chain.then(function(){ if(PV.readyKey===key) PV.bufs=out; return out; });
   return PV.ready;
 }
-function pvShow(k){ pvVids().forEach(function(v,i){ v.classList.toggle("on",i===k); }); }
+function pvEnsure(k){ var vs=pvVids(); [k,k+1].forEach(function(i){ var v=vs[i]; if(v&&!v.getAttribute("src")&&v.dataset.src){ v.preload="auto"; v.src=v.dataset.src; } }); }
+/* the player only needs the small audio-only recording of each part, not the whole video file */
+function decodePreview(c){
+  if(c.pbufP) return c.pbufP;
+  if(!c.audio) return (c.pbufP=decodeClip(c));
+  c.pbufP=c.audio.arrayBuffer().then(function(ab){ var ac=ensureAC(); return new Promise(function(res,rej){ var p=ac.decodeAudioData(ab,res,rej); if(p&&p.then) p.then(res,rej); }); })
+    .catch(function(){ return decodeClip(c); });
+  return c.pbufP;
+}
+function pvShow(k){ pvEnsure(k); pvVids().forEach(function(v,i){ v.classList.toggle("on",i===k); }); }
 function pvSeekTo(tt){
   var o=pvOffs(), k=pvClipAt(tt,o.offs), vs=pvVids(); PV.i=k; PV.pos=tt;
   if(PV.cur!==k){ if(vs[PV.cur]) try{ vs[PV.cur].pause(); }catch(e){} PV.cur=k; FX.hold=null; pvShow(k); }
@@ -1132,6 +1171,7 @@ function pvTick(){
   if(tt>=o.total-0.03){ pvPause(); pvSeekTo(0); return; }
   if(tt>=0){
     var k=pvClipAt(tt,o.offs), vs=pvVids(), v=vs[k], local=tt-o.offs[k], now=performance.now();
+    if(local>o.durs[k]-2) pvEnsure(k);
     if(k!==PV.cur){ if(vs[PV.cur]) try{ vs[PV.cur].pause(); }catch(e){} PV.cur=k; PV.i=k; FX.hold=null; pvShow(k); if(v){ if(Math.abs((v.currentTime||0)-local)>0.12) try{ v.currentTime=local; }catch(e){} var p=v.play(); if(p&&p.catch) p.catch(function(){}); } pvParts(); }
     else if(v){
       if(!v.seeking && Math.abs(v.currentTime-local)>0.3 && now-(PV.seekAt||0)>400 && local<o.durs[k]-0.2){ PV.seekAt=now; try{ v.currentTime=local+0.05; }catch(e){} }
@@ -1141,7 +1181,7 @@ function pvTick(){
   pvBarUI(); pvCueUI(); pvFxDraw();
   PV.raf=requestAnimationFrame(pvTick);
 }
-function pvCueUI(){ var el=document.getElementById("pvCue"); if(!el) return; var txt=null; if(S.subs){ var tt=pvGlobal(), cs=allCues(PV.bufs?pvDurs():null); for(var i=0;i<cs.length;i++){ if(tt>=cs[i].s&&tt<cs[i].e){ txt=cs[i].text; break; } } } if(txt){ if(el.textContent!==txt) el.textContent=txt; el.hidden=false; } else el.hidden=true; }
+function pvCueUI(){ var el=document.getElementById("pvCue"); if(!el) return; var cue=null; if(S.subs){ var tt=pvGlobal(), cs=allCues(PV.bufs?pvDurs():null); for(var i=0;i<cs.length;i++){ if(tt>=cs[i].s&&tt<cs[i].e){ cue=cs[i]; break; } } } if(cue){ var hh=cueHtml(cue); if(el.innerHTML!==hh) el.innerHTML=hh; el.hidden=false; } else el.hidden=true; }
 function pvBarUI(){ var o=pvOffs(), tt=pvGlobal(); o.durs.forEach(function(d,i){ var el=document.getElementById("pvb"+i); if(!el) return; var f=Math.max(0,Math.min(1,(tt-o.offs[i])/(d||1))); el.style.width=(f*100)+"%"; }); }
 function pvParts(){ var cur=clipList()[PV.i]; app.querySelectorAll(".part").forEach(function(li){ li.classList.toggle("now",!!(PV.playing&&cur&&li.id==="part"+cur.q)); }); }
 function pvFxActive(){ var c=clipList()[PV.cur<0?PV.i:PV.cur]; return S.face!=="show" && !!c && c.facing==="user"; }
@@ -1534,6 +1574,7 @@ function summary(){
   }
   lines.push(
     "Regras: "+(S.rules?"aceitas":"não marcadas"),
+    (S.th?("Pontos: "+S.th.items.filter(function(x){ return x.on&&x.text.trim(); }).map(function(x){ return (x.polarity==="pos"?"+ ":x.polarity==="neg"?"− ":"· ")+x.text; }).join("; ")+" | Notas: "+TH_ASPECTS.map(function(a){ return a+" "+({pos:"👍",mix:"😐",neg:"👎",na:"—"})[S.th.rate[a]]; }).join(", ")+" | Voltaria: "+S.th.voltaria+(S.thOk?" (confirmado"+(S.thEdited?", corrigido":"")+")":" (não confirmado)")):"Pontos: —"),
     "Comprovante: "+(S.proofs.map(function(k){return P.proofs[k];}).join(", ")||"—")+(S.photo?" (foto anexada)":""),
     "P1: "+(P.q1o[S.q1]||"—")+" | P2: "+(P.q2o[S.q2]||"—")+" | P3: "+(P.q3o[S.q3]||"—"),
     "Permissão: "+(S.perm?((S.perm==="semrosto"&&maskSafe())?P.permMask[0]:P.perm[S.perm][0]):"—")+" · autorização: "+(S.consent?"sim":"não")
@@ -1576,7 +1617,7 @@ function upHtml(){
 var procTimer=0;
 function procUI(){
   if(CFG.gen||CFG.lab||CFG.panel) return;
-  if(S.step===2){ var sb=document.getElementById("subsbox"); if(sb && !PROC.editing){ var tmp=document.createElement("div"); tmp.innerHTML=subsCard(); if(tmp.firstChild){ sb.replaceWith(tmp.firstChild); bindSubs(); } } return; }
+  if(S.step===2){ thRefresh(); var sb=document.getElementById("subsbox"); if(sb && !PROC.editing){ var tmp=document.createElement("div"); tmp.innerHTML=subsCard(); if(tmp.firstChild){ sb.replaceWith(tmp.firstChild); bindSubs(); } } return; }
   if(S.step!==6) return;
   if(PROC.justDone){ PROC.justDone=false; render(); return; }
   [["upbox",upHtml()],["procbox",procHtml()]].forEach(function(p){ var el=document.getElementById(p[0]); if(!el||!p[1]) return; var tmp=document.createElement("div"); tmp.innerHTML=p[1]; if(tmp.firstChild) el.replaceWith(tmp.firstChild); });
@@ -1667,14 +1708,23 @@ function upload(file,name,code,sid){
 }
 function recipe(){
   return {v:1,mode:S.mode,W:W,H:H,face:S.face,voice:S.voice,subs:S.subs,edited:S.cuesEdited,music:S.music,stickers:S.stickers,
-    clips:clipList().map(function(c){ return {q:c.q,key:upKey(c.file),dur:+(c.dur||0).toFixed(2),mask:c.mask,facing:c.facing,at:c.at,cues:(c.cues||[]).map(function(q){ return {s:+q.s.toFixed(2),e:+q.e.toFixed(2),text:q.text}; })}; }),
+    clips:clipList().map(function(c){ return {q:c.q,key:upKey(c.file),dur:+(c.dur||0).toFixed(2),mask:c.mask,facing:c.facing,at:c.at,cues:(c.cues||[]).map(function(q){ return {s:+q.s.toFixed(2),e:+q.e.toFixed(2),text:q.text,hl:q.hl}; })}; }),
     parts:S.parts.map(function(p){ return p&&p.file?upKey(p.file):null; }), photo:S.photo?upKey(S.photo):null};
 }
+var DIAG_N=0;
+function diag(msg){
+  if(!API||IN_FRAME||CFG.gen||CFG.panel||DIAG_N>=25) return; DIAG_N++;
+  var ua=navigator.userAgent||"", dev=(/iPhone OS ([0-9_]+)/.exec(ua)||[])[1];
+  try{ fetch(API+"/log",{method:"POST",keepalive:true,headers:{"Content-Type":"text/plain"},body:JSON.stringify({code:upCode(),sid:SID,msg:String(msg).slice(0,600)+" | step "+S.step+" | "+(dev?"iOS "+dev.replace(/_/g,"."):(/Android/.test(ua)?"Android":"desktop"))})}).catch(function(){}); }catch(e){}
+}
+window.addEventListener("error",function(e){ diag("error: "+(e.message||"")+" @"+(e.lineno||"")); });
+window.addEventListener("unhandledrejection",function(e){ var r=e.reason; diag("promise: "+(r&&(r.message||r.name)||String(r))); });
+(function(){ var last=performance.now(); setInterval(function(){ var now=performance.now(), gap=now-last-1000; last=now; if(gap>2500 && !document.hidden) diag("stall "+Math.round(gap)+"ms"+(PV&&PV.playing?" playing":"")+(S.face!=="show"?" face:"+S.face:"")+(S.voice==="alt"?" voice:alt":"")); },1000); })();
 function metaObj(){
   var cs=clipList(), ua=navigator.userAgent||"";
   return {format:CFG.format, mode:S.mode, service:S.service, pro:S.pro, date:S.date, lang:L, device:/iPhone|iPad/.test(ua)?"iOS":(/Android/.test(ua)?"Android":"Outro"),
     dur:+totalDur().toFixed(1), parts:cs.length, reshoots:S.reshoots, face:hasFront()?S.face:"none", voice:S.voice, subs:S.subs, edited:S.cuesEdited,
-    stickers:S.stickers.length, music:S.music, perm:S.perm, proofs:S.proofs, photo:!!S.photo, q1:S.q1, q2:S.q2, q3:S.q3, rules:!!S.rules, native:!!S.native};
+    stickers:S.stickers.length, music:S.music, perm:S.perm, th:S.th?{items:S.th.items.filter(function(x){ return x.on&&x.text.trim(); }).map(function(x){ return {text:x.text,polarity:x.polarity,aspect:x.aspect,own:!!x.own}; }),rate:S.th.rate,voltaria:S.th.voltaria,ok:!!S.thOk,edited:!!S.thEdited,ai:S.th.ai,summary:S.th.summary}:null, proofs:S.proofs, photo:!!S.photo, q1:S.q1, q2:S.q2, q3:S.q3, rules:!!S.rules, native:!!S.native};
 }
 /* funnel marks: only the link code, a random session id and the step name */
 var EV_DONE={};
@@ -1725,7 +1775,7 @@ function panelFiltered(){
 function panelLoad(){
   var P=t("panel"); PANEL.loading=true;
   Promise.all([adminFetch("/admin/list").then(function(r){ return r.json(); }), adminFetch("/admin/events").then(function(r){ return r.json(); }).catch(function(){ return {events:null}; })])
-    .then(function(r){ PANEL.items=r[0].items||[]; PANEL.events=r[1].events; PANEL.err=""; })
+    .then(function(r){ PANEL.items=r[0].items||[]; PANEL.events=r[1].events; PANEL.err=""; adminFetch("/admin/logs").then(function(x){ return x.json(); }).then(function(j){ PANEL.logs=j.logs||[]; if(PANEL.view==="overview"){ var mn=document.getElementById("pnMain"); if(mn){ mn.innerHTML=panelMain(); bindPanelMain(); } } }).catch(function(){}); })
     .catch(function(e){ if(e.status===401){ PANEL.key=""; try{ localStorage.removeItem("proba-admin"); }catch(_){} PANEL.err=P.bad; } else PANEL.err=P.fail; })
     .then(function(){ PANEL.loading=false; render(); });
 }
@@ -1814,6 +1864,16 @@ function panelOverview(){
   var withEd=ms.filter(function(m){ return m.edited!=null; }), pEd=withEd.length?Math.round(withEd.filter(function(m){ return m.edited; }).length/withEd.length*100):null;
   h+='<div class="card"><h3>'+esc(P.fmt)+'</h3>'+hbars(countBy(its,function(it){ var m=itMeta(it).mode; return m?ML[m]||m:null; }))+
     '<div class="minis"><div><span>'+esc(P.avgDur)+'</span><b>'+(ms.length?mmss(avgDur):"—")+'</b></div><div><span>'+esc(P.avgRe)+'</span><b>'+(avgRe!=null?avgRe.toFixed(1):"—")+'</b></div><div><span>'+esc(P.editedSubs)+'</span><b>'+(pEd!=null?pEd+"%":"—")+'</b></div></div></div>';
+  /* aspect ratings confirmed by clients: the per-review input for ranking */
+  var withTh=its.filter(function(it){ return it.meta&&it.meta.th&&it.meta.th.ok; }), TP=t("th");
+  h+='<div class="card wide"><h3>'+esc(P.aspT)+'</h3><p class="small">'+esc(P.aspLead)+'</p>';
+  if(!withTh.length) h+='<p class="small">'+esc(P.none)+'</p>';
+  else { h+='<div class="asp">'+TH_ASPECTS.map(function(k){ var c={pos:0,mix:0,neg:0}; withTh.forEach(function(it){ var v=(it.meta.th.rate||{})[k]; if(c[v]!=null) c[v]++; }); var n=c.pos+c.mix+c.neg, pct=n?Math.round(c.pos/n*100):0;
+      return '<div class="hb-row" data-tip="'+esc(TP.asp[k]+": 👍 "+c.pos+" · 😐 "+c.mix+" · 👎 "+c.neg)+'"><span class="hb-l">'+esc(TP.asp[k])+'</span><span class="hb-bar"><i style="width:'+pct+'%"></i></span><b>'+(n?pct+"%":"—")+'</b><small>👍'+c.pos+' 😐'+c.mix+' 👎'+c.neg+'</small></div>'; }).join("")+'</div>';
+    h+='<p class="label">'+esc(TP.voltTitle)+'</p>'+hbars(["sim","talvez","nao"].map(function(k){ return [TP.volt[k],withTh.filter(function(it){ return it.meta.th.voltaria===k; }).length]; })); }
+  h+='</div>';
+  /* technical problems reported by phones */
+  if(PANEL.logs&&PANEL.logs.length) h+='<div class="card wide"><h3>'+esc(P.logs)+'</h3><p class="small">'+esc(P.logsLead)+'</p><div class="logs">'+PANEL.logs.slice(0,30).map(function(l){ var d=new Date(l.t); return '<div><b>#'+esc(l.code)+'</b><span>'+esc(isNaN(d)?'':d.toLocaleString(L==="ru"?"ru-RU":"pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}))+'</span><code>'+esc(l.msg)+'</code></div>'; }).join("")+'</div></div>';
   /* survey */
   h+='<div class="card"><h3>'+esc(P.survey)+'</h3>'+["q1","q2","q3"].map(function(q){ var o=t(q+"o"); return '<p class="label">'+esc(t(q))+'</p>'+hbars(Object.keys(o).map(function(k){ return [o[k],its.filter(function(it){ return (it.meta||{})[q]===k; }).length]; })); }).join("")+'</div></div></div>';
   return h;
@@ -1870,11 +1930,26 @@ function panelDetail(it){
   var ch=a.checks||{};
   h+='<div class="card"><h3>'+esc(P.checkT)+'</h3>'+Object.keys(P.checks).map(function(k){ return '<label class="check" for="ck-'+k+'"><input type="checkbox" id="ck-'+k+'" data-ck="'+k+'"'+(ch[k]?' checked':'')+'><span class="box">'+ic("check")+'</span><span>'+esc(P.checks[k])+'</span></label>'; }).join("")+
     '<label class="label" for="pnNote">'+esc(P.note)+'</label><textarea id="pnNote" rows="3" placeholder="'+esc(P.notePh)+'">'+esc(a.note||"")+'</textarea></div>';
+  h+=panelTheses(it);
   h+='<button type="button" class="btn ghost small" data-del="1">'+ic("trash")+'<span>'+esc(P.del)+'</span></button></div></div>';
   return h;
 }
 var PANEL_BLOBS={};
 function panelBlob(key){ if(!PANEL_BLOBS[key]) PANEL_BLOBS[key]=adminFetch("/admin/file?key="+encodeURIComponent(key)).then(function(r){ return r.blob(); }).then(function(b){ return {b:b,u:URL.createObjectURL(b)}; }).catch(function(e){ delete PANEL_BLOBS[key]; throw e; }); return PANEL_BLOBS[key]; }
+function panelTheses(it){
+  var P=t("panel"), TP=t("th"), m=it.meta||{}, th=m.th, a=it.admin||{};
+  var h='<div class="card"><h3>'+esc(P.thTitle)+'</h3>';
+  if(!th) h+='<p class="small">'+esc(P.none)+'</p>';
+  else {
+    h+='<p class="small">'+esc(th.ok?(th.edited?P.thEdited:P.thOk):P.thNotOk)+'</p>';
+    [["pos",TP.pros],["neg",TP.cons],["neu",P.thNeu]].forEach(function(g){ var xs=(th.items||[]).filter(function(x){ return x.polarity===g[0]; }); if(!xs.length) return;
+      h+='<p class="label">'+esc(g[1])+'</p><ul class="th-list">'+xs.map(function(x){ return '<li><span class="th-dot th-'+g[0]+'"></span>'+esc(x.text)+(x.own?' <em>'+esc(P.thOwn)+'</em>':'')+'</li>'; }).join("")+'</ul>'; });
+    h+='<dl class="kv">'+TH_ASPECTS.map(function(k){ var v=(th.rate||{})[k]||"na", ai=((th.ai||{}).aspects||{})[k]; return '<dt>'+esc(TP.asp[k])+'</dt><dd>'+({pos:"👍",mix:"😐",neg:"👎",na:"—"})[v]+' '+esc(TP.rate[v])+(ai&&ai!==v&&!(ai==="pos"&&v==="pos")?' <em class="small">('+esc(P.thAi)+': '+({pos:"👍",mix:"😐",neg:"👎"})[ai]+')</em>':'')+'</dd>'; }).join("")+
+      '<dt>'+esc(TP.voltTitle)+'</dt><dd>'+esc((TP.volt||{})[th.voltaria]||"—")+'</dd></dl>';
+  }
+  h+='<p class="label">'+esc(P.useful)+'</p><div class="chips">'+["alta","media","baixa"].map(function(k){ return '<button type="button" class="fchip'+(a.useful===k?' on':'')+'" data-useful="'+k+'">'+esc(P.usefulL[k])+'</button>'; }).join("")+'</div><p class="small">'+esc(P.usefulLead)+'</p>';
+  return h+'</div>';
+}
 function panelTab(it){
   var P=t("panel"), box=document.getElementById("dtMedia"); if(!box) return;
   var a=it.admin||{}, r=it.recipe||{}, files=it.files||[], tab=PANEL.tab, myId=it.id;
@@ -1966,6 +2041,7 @@ function bindPanelMain(){
   app.querySelectorAll("[data-rej]").forEach(function(b){ b.onclick=function(){ PANEL.rej=PANEL.rej===it.id?null:it.id; var dh=document.getElementById("dtHead"); if(dh){ dh.innerHTML=panelHead(it); bindPanelMain(); } }; });
   var ro=document.getElementById("pnRejOk"); if(ro) ro.onclick=function(){ PANEL.rej=null; panelSet(it,{status:"recusado",reason:document.getElementById("pnReason").value}); };
   app.querySelectorAll("[data-tab]").forEach(function(b){ b.onclick=function(){ PANEL.tab=b.dataset.tab; app.querySelectorAll("[data-tab]").forEach(function(x){ x.classList.toggle("on",x===b); }); if(it) panelTab(it); }; });
+  app.querySelectorAll("[data-useful]").forEach(function(b){ b.onclick=function(){ panelSet(it,{useful:b.dataset.useful}); app.querySelectorAll("[data-useful]").forEach(function(o){ o.classList.toggle("on",o===b); }); }; });
   app.querySelectorAll("[data-ck]").forEach(function(c){ c.onchange=function(){ var ch=Object.assign({},(it.admin||{}).checks||{}); ch[c.dataset.ck]=c.checked; panelSet(it,{checks:ch}); }; });
   var nt=document.getElementById("pnNote"); if(nt) nt.onchange=function(){ panelSet(it,{note:nt.value}); panelToast(P.saved); };
   app.querySelectorAll("[data-del]").forEach(function(b){ b.onclick=function(){ if(PANEL.arm!==it.id){ PANEL.arm=it.id; b.querySelector("span").textContent=P.delConfirm; b.classList.add("armed"); return; }
@@ -2026,13 +2102,13 @@ function txClip(c){
   var fd=new FormData(); fd.append("file",c.audio,c.audio.name||"audio.webm"); if(L==="ru") fd.append("language","ru");
   var ctl=window.AbortController?new AbortController():null, timer=setTimeout(function(){ if(ctl) ctl.abort(); },45000);
   c.tx=fetch(STT_URL,{method:"POST",body:fd,signal:ctl?ctl.signal:undefined}).then(function(r){ if(!r.ok) throw new Error("http "+r.status); return r.json(); })
-    .then(function(j){ clearTimeout(timer); var lim=(c.dur||0)+0.4; c.cues=splitCues((j&&j.segments)||[],c.dur).filter(function(q){ return q.s<lim; }).map(function(q){ q.e=Math.min(q.e,lim); return q; }); c.txState="done"; throttleUI(); return c.cues; })
+    .then(function(j){ clearTimeout(timer); var lim=(c.dur||0)+0.4; c.cues=splitCues((j&&j.segments)||[],c.dur).filter(function(q){ return q.s<lim; }).map(function(q){ q.e=Math.min(q.e,lim); return q; }); c.txState="done"; throttleUI(); setTimeout(thMaybeStart,0); return c.cues; })
     .catch(function(){ clearTimeout(timer); c.txState="fail"; throttleUI(); return null; });
   return c.tx;
 }
 function startTranscription(){ var cs=clipList(); cs.forEach(function(c){ if(c.txState==="fail"){ c.tx=null; } }); return Promise.all(cs.map(txClip)); }
 /* subtitles of all parts on one timeline; durs = real part lengths when known */
-function allCues(durs){ var out=[], off=0; clipList().forEach(function(c,i){ (c.cues||[]).forEach(function(q,k){ out.push({s:q.s+off,e:q.e+off,text:q.text,ci:c.q,k:k}); }); off+=durs?durs[i]:(c.dur||0); }); return out; }
+function allCues(durs){ var out=[], off=0; clipList().forEach(function(c,i){ (c.cues||[]).forEach(function(q,k){ out.push({s:q.s+off,e:q.e+off,text:q.text,hl:q.hl,ci:c.q,k:k}); }); off+=durs?durs[i]:(c.dur||0); }); return out; }
 function cuesKey(){ return allCues().map(function(c){return c.text;}).join("|"); }
 function subsCard(){
   var h='<div class="panel" id="subsbox"><label class="toggle" for="subs"><span><strong>'+esc(t("subsToggle"))+'</strong><span class="sub">'+esc(t("subsNote"))+'</span></span><span class="switch"><input type="checkbox" id="subs"'+(S.subs?' checked':'')+'><i></i></span></label>';
@@ -2053,7 +2129,7 @@ function subsCard(){
 function bindSubs(){
   var sb=document.getElementById("subs"); if(sb) sb.onchange=function(){ S.subs=sb.checked; if(S.subs&&recorded()) startTranscription(); procUI(); };
   var ed=document.getElementById("cuesEdit"); if(ed) ed.onclick=function(){ PROC.editing=true; procUI(); };
-  var dn=document.getElementById("cuesDone"); if(dn) dn.onclick=function(){ PROC.editing=false; procUI(); };
+  var dn=document.getElementById("cuesDone"); if(dn) dn.onclick=function(){ PROC.editing=false; recomputeHL(); procUI(); };
   app.querySelectorAll("[data-cue]").forEach(function(ta){ ta.oninput=function(){ var p=ta.dataset.cue.split(":"), c=S.clips[+p[0]]; if(c&&c.cues&&c.cues[+p[1]]){ c.cues[+p[1]].text=ta.value; S.cuesEdited=true; } }; });
 }
 
@@ -2133,7 +2209,7 @@ function renderPass(vids,c,buf,cues,offs,durs,facings){
     PROC.cancel=function(){ if(done) return; done=true; stopAll(); try{ rec.onstop=null; rec.stop(); }catch(e){} reject(new Error("cancel")); };
     function audioPos(){ return started ? off0+(ac.currentTime-startAt) : 0; }
     function clipAt(tt){ for(var i=offs.length-1;i>0;i--){ if(tt>=offs[i]) return i; } return 0; }
-    function cueAt(tt){ for(var i=0;i<cues.length;i++){ if(tt>=cues[i].s&&tt<cues[i].e) return cues[i].text; } return null; }
+    function cueAt(tt){ for(var i=0;i<cues.length;i++){ if(tt>=cues[i].s&&tt<cues[i].e) return cues[i]; } return null; }
     function sync(tt){
       var k=clipAt(tt), v=vids[k], local=tt-offs[k], now=performance.now();
       if(k!==cur){
@@ -2276,7 +2352,92 @@ function makeMusic(key){
   }).catch(function(){ delete MUSIC[id]; return null; });
   return MUSIC[id];
 }
-function drawCue(x,text){
+
+/* ---------- key points: the AI proposes, the client confirms or corrects ----------
+   Theses (pros / cons) + one rating per aspect + "would come back". The client's confirmed answers are what
+   ranking uses later; the AI never sets a rating on its own. Quotes are highlighted in the subtitles. */
+var TH_ASPECTS=["resultado","atendimento","pontualidade","limpeza","preco"];
+function thKey(){ return clipList().map(function(c){ return c.url; }).join(","); }
+function thMaybeStart(){
+  if(!S.subs || txState()!=="done" || !allCues().length) return;
+  var k=thKey(); if(S.th && S.th.key===k) return;
+  if(S.thState==="run" && S.thRunKey===k) return;
+  S.thState="run"; S.thRunKey=k; procUI();
+  var text=clipList().map(function(c){ return (c.cues||[]).map(function(q){ return q.text; }).join(" "); }).filter(Boolean).join("\n");
+  fetch(API+"/theses",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({code:upCode(),sid:SID,lang:L,service:S.service,text:text})})
+    .then(function(r){ if(!r.ok) throw httpErr(r); return r.json(); })
+    .then(function(j){
+      if(S.thRunKey!==k) return;
+      var rate={}; TH_ASPECTS.forEach(function(a){ var v=(j.aspects||{})[a]; rate[a]=v==="pos"?"pos":v==="neg"?"neg":v==="mix"?"mix":"na"; });
+      S.th={key:k, items:(j.theses||[]).map(function(t){ return {text:t.text,polarity:t.polarity,aspect:t.aspect,quote:t.quote,on:true}; }), rate:rate, voltaria:j.voltaria||"na", summary:j.summary||"", ai:{aspects:j.aspects||{},voltaria:j.voltaria||"na"}};
+      S.thOk=false; S.thEdited=false; S.thState="done"; recomputeHL(); thRefresh();
+    })
+    .catch(function(e){ if(S.thRunKey!==k) return; S.thState="fail"; diag("theses: "+(e&&e.message||e)); thRefresh(); });
+}
+function normTok(w){ return String(w).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^\p{L}\p{N}]+/gu,""); }
+/* mark the words of each kept thesis' quote inside the subtitle cues */
+function recomputeHL(){
+  var toks=[];
+  clipList().forEach(function(c){ (c.cues||[]).forEach(function(q){ var ws=String(q.text).split(/\s+/).filter(Boolean); q.hl=ws.map(function(){ return false; }); ws.forEach(function(w,i){ toks.push({q:q,i:i,n:normTok(w)}); }); }); });
+  if(!S.th) return;
+  S.th.items.forEach(function(t){
+    if(!t.on||!t.quote) return;
+    var qt=String(t.quote).split(/\s+/).map(normTok).filter(Boolean); if(!qt.length) return;
+    for(var s0=0;s0+qt.length<=toks.length;s0++){
+      var ok=true; for(var j=0;j<qt.length;j++){ if(toks[s0+j].n!==qt[j]){ ok=false; break; } }
+      if(ok){ for(var j2=0;j2<qt.length;j2++){ var tk=toks[s0+j2]; tk.q.hl[tk.i]=true; } break; }
+    }
+  });
+}
+function thPanel(){
+  if(!S.subs) return "";
+  var P=t("th"), st=S.thState, h='<div class="panel thp" id="thPanel"><div class="ph"><span class="co-ic">'+ic("sparkle")+'</span><span><strong>'+esc(P.title)+'</strong><span class="sub">'+esc(P.lead)+'</span></span></div>';
+  if(txState()==="run"||st==="run"||(!S.th&&txState()==="done"&&allCues().length&&st!=="fail")) return h+'<p class="status"><span class="spin"></span><span>'+esc(P.loading)+'</span></p></div>';
+  if(!S.th||st==="fail"){ return h+'<p class="small">'+esc(st==="fail"?P.fail:P.none)+'</p>'+(st==="fail"?'<button type="button" class="btn ghost small" id="thRetry">'+esc(P.retry)+'</button>':'')+'</div>'; }
+  function list(pol,label){
+    var rows=S.th.items.map(function(x,i){ return [x,i]; }).filter(function(p){ return p[0].polarity===pol; });
+    return '<div class="th-g"><p class="label">'+esc(label)+'</p>'+(rows.length?rows.map(function(p){ var x=p[0], i=p[1];
+      return '<div class="th-row'+(x.on?'':' off')+'"><span class="th-dot th-'+pol+'"></span><input class="th-in" data-thi="'+i+'" value="'+esc(x.text)+'" aria-label="'+esc(label)+'"><button type="button" class="th-x" data-thx="'+i+'" aria-label="'+esc(x.on?P.remove:P.restore)+'">'+ic(x.on?"none":"redo")+'</button></div>'; }).join(""):'<p class="small th-empty">'+esc(P.empty)+'</p>')+
+      '<button type="button" class="th-add" data-tha="'+pol+'">+ '+esc(P.add)+'</button></div>';
+  }
+  h+=list("pos",P.pros)+list("neg",P.cons);
+  var A=P.asp, R=P.rate;
+  h+='<div class="th-g"><p class="label">'+esc(P.aspTitle)+'</p><div class="th-rates">'+TH_ASPECTS.map(function(a){ var v=S.th.rate[a];
+    return '<div class="th-rate"><span>'+esc(A[a])+'</span><div class="seg3">'+["pos","mix","neg","na"].map(function(k){ return '<button type="button" data-rt="'+a+'" data-rv="'+k+'" aria-pressed="'+(v===k)+'" title="'+esc(R[k])+'">'+({pos:"👍",mix:"😐",neg:"👎",na:"—"})[k]+'</button>'; }).join("")+'</div></div>'; }).join("")+'</div></div>';
+  var V=P.volt;
+  h+='<div class="th-g"><p class="label">'+esc(P.voltTitle)+'</p><div class="chips">'+["sim","talvez","nao"].map(function(k){ return '<button type="button" class="fchip'+(S.th.voltaria===k?' on':'')+'" data-vt="'+k+'">'+esc(V[k])+'</button>'; }).join("")+'</div></div>';
+  h+=S.thOk?'<p class="pill-ok">'+ic("check","draw")+esc(P.confirmed)+'</p>':'<button type="button" class="btn primary block" id="thOk">'+ic("check")+'<span>'+esc(P.ok)+'</span></button>';
+  return h+'</div>';
+}
+function thTouch(){ S.thEdited=true; if(S.thOk){ S.thOk=false; thRefresh(); } }
+function thRefresh(){ var el=document.getElementById("thPanel"); if(!el) return; var tmp=document.createElement("div"); tmp.innerHTML=thPanel(); if(tmp.firstChild){ el.replaceWith(tmp.firstChild); bindTh(); } }
+function bindTh(){
+  var rt=document.getElementById("thRetry"); if(rt) rt.onclick=function(){ S.thState=""; S.thRunKey=""; thMaybeStart(); };
+  app.querySelectorAll("[data-thi]").forEach(function(inp){ inp.oninput=function(){ var x=S.th.items[+inp.dataset.thi]; if(x){ x.text=inp.value; thTouch(); } }; });
+  app.querySelectorAll("[data-thx]").forEach(function(b){ b.onclick=function(){ var x=S.th.items[+b.dataset.thx]; if(!x) return; x.on=!x.on; recomputeHL(); S.thEdited=true; S.thOk=false; thRefresh(); pvCueUI(); }; });
+  app.querySelectorAll("[data-tha]").forEach(function(b){ b.onclick=function(){ S.th.items.push({text:"",polarity:b.dataset.tha,aspect:"outro",quote:"",on:true,own:true}); S.thEdited=true; S.thOk=false; thRefresh(); var ins=app.querySelectorAll("[data-thi]"); if(ins.length) ins[ins.length-1].focus(); }; });
+  app.querySelectorAll("[data-rt]").forEach(function(b){ b.onclick=function(){ S.th.rate[b.dataset.rt]=b.dataset.rv; thTouch(); app.querySelectorAll('[data-rt="'+b.dataset.rt+'"]').forEach(function(o){ o.setAttribute("aria-pressed",String(o===b)); }); }; });
+  app.querySelectorAll("[data-vt]").forEach(function(b){ b.onclick=function(){ S.th.voltaria=b.dataset.vt; thTouch(); app.querySelectorAll("[data-vt]").forEach(function(o){ o.classList.toggle("on",o===b); }); }; });
+  var ok=document.getElementById("thOk"); if(ok) ok.onclick=function(){ S.th.items=S.th.items.filter(function(x){ return x.text.trim()||!x.own; }); S.thOk=true; S.err=""; thRefresh(); };
+}
+function thNeedsConfirm(){ return !!(S.subs && S.th && S.thState==="done" && S.th.items.length && !S.thOk); }
+/* subtitle line with highlighted words (preview overlay) */
+function cueHtml(c){ var ws=String(c.text).split(/\s+/).filter(Boolean), hl=c.hl||[]; return ws.map(function(w,i){ return hl[i]?'<mark>'+esc(w)+'</mark>':esc(w); }).join(" "); }
+
+function drawCue(x,cue){
+  var text=typeof cue==="string"?cue:cue.text, hl=(cue&&cue.hl)||[];
+  x.save(); x.font='600 42px "Golos Text", Arial, sans-serif';
+  var words=String(text).split(/\s+/).filter(Boolean), sp=x.measureText(" ").width, lines=[], cur=[], curW=0, maxW=W-140;
+  words.forEach(function(w,i){ var ww=x.measureText(w).width; if(cur.length && curW+sp+ww>maxW){ lines.push({ws:cur,w:curW}); cur=[]; curW=0; } curW+=(cur.length?sp:0)+ww; cur.push({w:w,ww:ww,hl:!!hl[i]}); });
+  if(cur.length) lines.push({ws:cur,w:curW}); lines=lines.slice(0,3);
+  var lh=54, ph=lines.length*lh+28, y=H-150-ph, maxw=0; lines.forEach(function(l){ maxw=Math.max(maxw,l.w); });
+  var pw=maxw+48, px=(W-pw)/2;
+  x.fillStyle="rgba(23,24,28,.74)"; rr2(x,px,y,pw,ph,22); x.fill();
+  x.textBaseline="top"; x.textAlign="left";
+  lines.forEach(function(l,li){ var cx=(W-l.w)/2, yy=y+14+li*lh; l.ws.forEach(function(o){ x.fillStyle=o.hl?"#FFD84D":"#FFFFFF"; x.fillText(o.w,cx,yy); cx+=o.ww+sp; }); });
+  x.restore();
+}
+function drawCueOld(x,text){
   x.save(); x.font='600 42px "Golos Text", Arial, sans-serif';
   var words=String(text).split(/\s+/), lines=[], cur="";
   words.forEach(function(w){ var tt=cur?cur+" "+w:w; if(x.measureText(tt).width>W-140&&cur){ lines.push(cur); cur=w; } else cur=tt; });
