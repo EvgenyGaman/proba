@@ -85,7 +85,7 @@ h3{font:600 18px/1.3 var(--f);letter-spacing:-.01em}
 .ctx{display:flex;flex-wrap:wrap;gap:8px}
 .tag{display:inline-flex;align-items:center;gap:6px;font:500 13px/1 var(--f);background:var(--sub);border-radius:999px;padding:8px 12px;color:var(--ink2)}
 .tag svg{width:14px;height:14px}
-.how{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.how{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 .how li{list-style:none;background:var(--sub);border-radius:var(--r);padding:14px 12px;display:flex;flex-direction:column;gap:10px;min-width:0}
 .how .n{width:28px;height:28px;border-radius:999px;background:var(--paper);display:grid;place-items:center;color:var(--ink)}
 .how .n svg{width:16px;height:16px}
@@ -195,6 +195,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offs
 
 /* status & notes */
 .err{color:var(--bad);font-weight:500;margin:0;display:flex;gap:8px;align-items:center;animation:shake .35s var(--ease)}
+.err svg{width:18px;height:18px;flex:0 0 auto}
 @keyframes shake{20%{transform:translateX(-4px)}40%{transform:translateX(4px)}60%{transform:translateX(-2px)}80%{transform:translateX(2px)}}
 .note{background:var(--warn-soft);color:var(--ink);border-radius:var(--r);padding:12px 14px;font-size:14px;margin:0;display:flex;gap:10px;align-items:flex-start}
 .note svg{width:18px;height:18px;flex:0 0 auto;color:var(--warn);margin-top:1px}
@@ -413,7 +414,7 @@ details[open] summary svg{transform:rotate(90deg)}
   <header class="top">
     <div class="hrow">
       <button type="button" class="iconbtn" id="backBtn" hidden aria-label="Voltar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
-      <div class="brand">proba<svg class="stamp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5L19.5 7"/></svg><small id="t-test">teste</small></div>
+      <div class="brand">proba<svg class="stamp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5L19.5 7"/></svg></div>
       <div class="hgrow"></div>
       <div class="seg" role="group" aria-label="Idioma"><button type="button" id="lang-pt" aria-pressed="true">PT</button><button type="button" id="lang-ru" aria-pressed="false">RU</button></div>
       <button type="button" class="iconbtn" id="themeBtn" aria-label="Tema"></button>
@@ -468,8 +469,8 @@ var T = {
 pt:{
  test:"teste", step:["Visita","Vídeo","Permissão","Comprovante","3 perguntas","Enviar"],
  introTitle:"Conte como foi a sua visita",
- introEyebrow:"Teste de avaliações em vídeo", introTime:"Leva uns 3 minutos",
- how:["Grave um vídeo curto","Confirme a visita","Envie com um toque"],
+ introEyebrow:"Avaliação em vídeo", introTime:"Leva uns 3 minutos",
+ how:["Grave um vídeo curto","Confirme a visita"],
  trust:[["Você decide o que é publicado","Nada vai ao ar sem a sua permissão."],["Pode usar uma máscara","Ela acompanha o seu rosto e esconde quem você é."],["R$ 20 pela participação","Pagamento via Pix depois do envio."]],
  visitLead:"Isso liga o vídeo à visita certa.", recommended:"Recomendado", modeLead:"Escolha o formato. Dá para trocar antes de gravar.",
  modeInfo:{guiado:{pitch:"A gente guia: uma pergunta de cada vez aparece na tela.",steps:["Uma pergunta curta aparece na tela","Você grava a resposta, de 10 a 30 segundos","Entre as perguntas a gravação pausa para você pensar"],meta:[["chatq","3 perguntas"],["clock","cerca de 1 min"]]},
@@ -478,7 +479,7 @@ pt:{
  qLead:"Respostas rápidas, sem certo ou errado.", permLead:"Dá para mudar de ideia depois: é só pedir pelo WhatsApp.", consentAudio:"Autorizo também o envio do áudio para gerar as legendas.",
  themeDay:"Tema claro", themeNight:"Tema escuro",
  introLead:"Um vídeo curto, gravado aqui no navegador. Sem baixar aplicativo.",
- pts:["Nada é publicado sem a sua permissão. Você escolhe no final.","Não precisa mostrar o rosto. Pode filmar só o resultado.","R$ 20 pela participação no teste, via Pix.","Leva uns 3 minutos."],
+ pts:["Nada é publicado sem a sua permissão. Você escolhe no final.","Não precisa mostrar o rosto. Pode filmar só o resultado.","R$ 20 pela participação, via Pix.","Leva uns 3 minutos."],
  start:"Começar", next:"Continuar", back:"Voltar",
  visitTitle:"Sobre a visita", service:"Qual serviço?", pro:"Nome ou @ da profissional", proPh:"@studio.unhas", date:"Data da visita",
  services:{manicure:"Manicure",pedicure:"Pedicure",sobrancelha:"Sobrancelha",cilios:"Cílios",cabelo:"Cabelo",outro:"Outro"},
@@ -507,7 +508,7 @@ pt:{
  q3:"Antes de marcar, você assistiria vídeos de clientes reais?", q3o:{sempre:"Sim, sempre",asvezes:"Às vezes",indiferente:"Não faria diferença"},
  errQ:"Responda as 3 perguntas.",
  permTitle:"Quem pode ver o vídeo?",
- perm:{privado:["Só a equipe do teste","Não publicamos. Usamos só para melhorar o serviço."],semrosto:["Pode publicar, sem meu rosto","Cortamos ou desfocamos o rosto antes de publicar."],comrosto:["Pode publicar como está","O vídeo aparece com rosto e voz."]},
+ perm:{privado:["Só a equipe da Proba","Não publicamos. Usamos só para melhorar o serviço."],semrosto:["Pode publicar, sem meu rosto","Cortamos ou desfocamos o rosto antes de publicar."],comrosto:["Pode publicar como está","O vídeo aparece com rosto e voz."]},
  consent:"Autorizo a Proba a receber e guardar este vídeo e a usar minha imagem e voz apenas na forma que escolhi acima. Posso pedir a remoção a qualquer momento pelo WhatsApp.",
  errPerm:"Escolha uma opção e confirme a autorização.",
  sendTitle:"Tudo pronto", sendLead:"Toque em Enviar. Seu vídeo já começou a subir enquanto você respondia.",
@@ -515,7 +516,7 @@ pt:{
  shareFallback:"Seu celular não abriu o compartilhamento. Salve o vídeo e anexe no WhatsApp.",
  sumHead:"O resumo que vai junto", thanks:"Recebemos! Vamos falar com você no WhatsApp para combinar o Pix de R$ 20.",
  demo:"Versão de demonstração: câmera e envio só funcionam na versão publicada no site.",
- foot:"Teste de avaliações em vídeo · Florianópolis",
+ foot:"Avaliações em vídeo · Florianópolis",
  subsToggle:"Legendas automáticas", subsNote:"Só o áudio é enviado para transcrição automática. Não guardamos o áudio depois.",
  sGen:"Gerando legendas…", sReady:"Legendas prontas", sNone:"Não encontramos fala no vídeo", sFail:"Não deu para gerar legendas agora", cuesEdit:"Corrigir texto", cuesDone:"Pronto",
  reviewTitle:"Seu vídeo", reviewLead:"Assista, refaça qualquer parte e deixe com a sua cara.", partsTitle:"Partes", partRe:"Regravar", partRec:"Gravar", partPlay:"Assistir", partSkipped:"Pulada · dá para gravar agora", playAll:"Assistir tudo",
@@ -523,7 +524,7 @@ pt:{
  musicTitle:"Música de fundo", musicLead:"Fica baixinha enquanto você fala.", music:{none:"Sem música",suave:"Suave",bossa:"Bossa",animada:"Animada"},
  againAll:"Apagar e gravar tudo de novo", againConfirm:"Toque de novo para apagar tudo", pPrep:"Preparando o vídeo…",
  send:"Enviar", sending:"Enviando…", retry:"Tentar de novo", sentTitle:"Avaliação enviada", upRun:"Seu vídeo está subindo · {p}%", upDone:"Vídeo carregado", upFail:"A conexão falhou. Toque em Tentar de novo.", sendFail:"Não deu para enviar agora. Verifique a internet e tente de novo, ou envie pelo WhatsApp.", sendNoServer:"O envio direto não está disponível agora. Envie pelo WhatsApp.", viaWa:"Enviar vídeo pelo WhatsApp", saveCopy:"Salvar uma cópia no celular", saveReady:"Baixar o vídeo pronto", talkWa:"Falar com a gente no WhatsApp",
- panel:{eyebrow:"Equipe",title:"Avaliações recebidas",lead:"Só para a equipe do teste. A chave fica salva neste navegador.",key:"Chave de acesso",enter:"Entrar",loading:"Carregando…",empty:"Ainda não chegou nenhuma avaliação.",fail:"Não deu para carregar. Tente de novo.",bad:"Chave incorreta.",refresh:"Atualizar",logout:"Sair",sum:"Resumo",make:"Montar vídeo",making:"Montando · {p}% · mantenha esta aba aberta",download:"Baixar vídeo",del:"Apagar",delConfirm:"Toque de novo para apagar de vez",loadingFiles:"Baixando as partes…"}, reShoot:"Regravando a parte {n}",
+ panel:{eyebrow:"Equipe",title:"Avaliações recebidas",lead:"Só para a equipe da Proba. A chave fica salva neste navegador.",key:"Chave de acesso",enter:"Entrar",loading:"Carregando…",empty:"Ainda não chegou nenhuma avaliação.",fail:"Não deu para carregar. Tente de novo.",bad:"Chave incorreta.",refresh:"Atualizar",logout:"Sair",sum:"Resumo",make:"Montar vídeo",making:"Montando · {p}% · mantenha esta aba aberta",download:"Baixar vídeo",del:"Apagar",delConfirm:"Toque de novo para apagar de vez",loadingFiles:"Baixando as partes…"}, reShoot:"Regravando a parte {n}",
  maskNone:"Sem", maskBtn:"Máscara", maskLoading:"Preparando máscaras…", faceOut:"Mantenha o rosto na tela para a máscara funcionar", maskLocked:"A máscara fica até o fim da gravação",
  permMask:["Pode publicar, com a máscara","Seu rosto já está escondido pela máscara. Rostos de outras pessoas ficam desfocados."],
  labTitle:"Provador de máscaras", labLead:"Escolha uma foto com rosto: todas as máscaras aparecem nela. A foto não sai do aparelho.", labPick:"Escolher foto", labLoading:"Carregando…", labReady:"Pronto. Escolha uma foto.", labFail:"Não deu para carregar o reconhecimento de rosto.", labNoFace:"Nenhum rosto encontrado nessa foto.", labFound:"Rostos encontrados: {n}", labImgFail:"Não deu para abrir a imagem.",
@@ -535,8 +536,8 @@ pt:{
 ru:{
  test:"тест", step:["Визит","Видео","Разрешение","Подтверждение","3 вопроса","Отправка"],
  introTitle:"Расскажите, как прошёл визит",
- introEyebrow:"Тест видео-отзывов", introTime:"Займёт около 3 минут",
- how:["Снимите короткое видео","Подтвердите визит","Отправьте одной кнопкой"],
+ introEyebrow:"Видео-отзыв", introTime:"Займёт около 3 минут",
+ how:["Снимите короткое видео","Подтвердите визит"],
  trust:[["Вы решаете, что публикуется","Без вашего разрешения ничего не выйдет."],["Можно снять в маске","Маска повторяет мимику и скрывает, кто вы."],["R$ 20 за участие","Оплата через Pix после отправки."]],
  visitLead:"Это свяжет видео с нужным визитом.", recommended:"Рекомендуем", modeLead:"Выберите формат. Сменить можно до начала записи.",
  modeInfo:{guiado:{pitch:"Мы ведём: на экране по одному появляются вопросы.",steps:["На экране появляется короткий вопрос","Вы записываете ответ, 10–30 секунд","Между вопросами запись на паузе — можно подумать"],meta:[["chatq","3 вопроса"],["clock","около 1 мин"]]},
@@ -545,7 +546,7 @@ ru:{
  qLead:"Быстрые ответы, правильных и неправильных нет.", permLead:"Передумать можно потом — просто напишите в WhatsApp.", consentAudio:"Также разрешаю отправить звук для создания субтитров.",
  themeDay:"Светлая тема", themeNight:"Тёмная тема",
  introLead:"Короткое видео прямо в браузере. Ничего не нужно скачивать.",
- pts:["Ничего не публикуется без вашего разрешения. Выбираете в конце.","Лицо показывать не обязательно. Можно снять только результат.","R$ 20 за участие в тесте, через Pix.","Займёт около 3 минут."],
+ pts:["Ничего не публикуется без вашего разрешения. Выбираете в конце.","Лицо показывать не обязательно. Можно снять только результат.","R$ 20 за участие, через Pix.","Займёт около 3 минут."],
  start:"Начать", next:"Дальше", back:"Назад",
  visitTitle:"О визите", service:"Какая услуга?", pro:"Имя или @ мастера", proPh:"@studio.unhas", date:"Дата визита",
  services:{manicure:"Маникюр",pedicure:"Педикюр",sobrancelha:"Брови",cilios:"Ресницы",cabelo:"Волосы",outro:"Другое"},
@@ -574,7 +575,7 @@ ru:{
  q3:"Перед записью вы бы смотрели видео реальных клиенток?", q3o:{sempre:"Да, всегда",asvezes:"Иногда",indiferente:"Без разницы"},
  errQ:"Ответьте на 3 вопроса.",
  permTitle:"Кто может увидеть видео?",
- perm:{privado:["Только команда теста","Не публикуем. Только для улучшения сервиса."],semrosto:["Можно публиковать, без лица","Перед публикацией обрежем или размоем лицо."],comrosto:["Можно публиковать как есть","Видео с лицом и голосом."]},
+ perm:{privado:["Только команда Пробы","Не публикуем. Только для улучшения сервиса."],semrosto:["Можно публиковать, без лица","Перед публикацией обрежем или размоем лицо."],comrosto:["Можно публиковать как есть","Видео с лицом и голосом."]},
  consent:"Разрешаю Пробе получить и хранить это видео и использовать моё изображение и голос только в выбранном выше виде. Могу попросить удалить в любой момент через WhatsApp.",
  errPerm:"Выберите вариант и подтвердите согласие.",
  sendTitle:"Всё готово", sendLead:"Нажмите «Отправить». Видео начало загружаться, пока вы отвечали.",
@@ -582,7 +583,7 @@ ru:{
  shareFallback:"Телефон не открыл меню «Поделиться». Сохраните видео и приложите в WhatsApp.",
  sumHead:"Сводка, которая уйдёт вместе с видео", thanks:"Получили! Напишем вам в WhatsApp, чтобы договориться о Pix R$ 20.",
  demo:"Демо-версия: камера и отправка работают только в версии на сайте.",
- foot:"Тест видео-отзывов · Флорианополис",
+ foot:"Видео-отзывы · Флорианополис",
  subsToggle:"Автосубтитры", subsNote:"На расшифровку отправляется только звук. После этого мы его не храним.",
  sGen:"Делаем субтитры…", sReady:"Субтитры готовы", sNone:"Речи в видео не нашли", sFail:"Сейчас субтитры сделать не получилось", cuesEdit:"Поправить текст", cuesDone:"Готово",
  reviewTitle:"Ваше видео", reviewLead:"Посмотрите, переснимите любую часть и оформите по-своему.", partsTitle:"Части", partRe:"Переснять", partRec:"Снять", partPlay:"Смотреть", partSkipped:"Пропущена · можно снять сейчас", playAll:"Смотреть всё",
@@ -590,7 +591,7 @@ ru:{
  musicTitle:"Фоновая музыка", musicLead:"Становится тише, когда вы говорите.", music:{none:"Без музыки",suave:"Спокойная",bossa:"Босса",animada:"Бодрая"},
  againAll:"Удалить и снять всё заново", againConfirm:"Нажмите ещё раз — всё удалится", pPrep:"Готовим видео…",
  send:"Отправить", sending:"Отправляем…", retry:"Попробовать ещё раз", sentTitle:"Отзыв отправлен", upRun:"Видео загружается · {p}%", upDone:"Видео загружено", upFail:"Связь прервалась. Нажмите «Попробовать ещё раз».", sendFail:"Сейчас отправить не получилось. Проверьте интернет и попробуйте ещё раз или отправьте через WhatsApp.", sendNoServer:"Прямая отправка сейчас недоступна. Отправьте через WhatsApp.", viaWa:"Отправить видео через WhatsApp", saveCopy:"Сохранить копию в телефон", saveReady:"Скачать готовое видео", talkWa:"Написать нам в WhatsApp",
- panel:{eyebrow:"Команда",title:"Пришедшие отзывы",lead:"Только для команды теста. Ключ сохраняется в этом браузере.",key:"Ключ доступа",enter:"Войти",loading:"Загрузка…",empty:"Отзывов пока нет.",fail:"Не удалось загрузить. Попробуйте ещё раз.",bad:"Неверный ключ.",refresh:"Обновить",logout:"Выйти",sum:"Сводка",make:"Собрать ролик",making:"Собираем · {p}% · не закрывайте вкладку",download:"Скачать ролик",del:"Удалить",delConfirm:"Нажмите ещё раз — удалится насовсем",loadingFiles:"Загружаем части…"}, reShoot:"Пересъёмка части {n}",
+ panel:{eyebrow:"Команда",title:"Пришедшие отзывы",lead:"Только для команды Пробы. Ключ сохраняется в этом браузере.",key:"Ключ доступа",enter:"Войти",loading:"Загрузка…",empty:"Отзывов пока нет.",fail:"Не удалось загрузить. Попробуйте ещё раз.",bad:"Неверный ключ.",refresh:"Обновить",logout:"Выйти",sum:"Сводка",make:"Собрать ролик",making:"Собираем · {p}% · не закрывайте вкладку",download:"Скачать ролик",del:"Удалить",delConfirm:"Нажмите ещё раз — удалится насовсем",loadingFiles:"Загружаем части…"}, reShoot:"Пересъёмка части {n}",
  maskNone:"Без", maskBtn:"Маска", maskLoading:"Готовим маски…", faceOut:"Держите лицо в кадре, чтобы маска работала", maskLocked:"Маска остаётся до конца записи",
  permMask:["Можно публиковать, с маской","Ваше лицо уже скрыто маской. Чужие лица размыты."],
  labTitle:"Примерочная масок", labLead:"Выберите фото с лицом — на нём появятся все маски. Фото не покидает устройство.", labPick:"Выбрать фото", labLoading:"Загрузка…", labReady:"Готово. Выберите фото.", labFail:"Не удалось загрузить распознавание лица.", labNoFace:"На фото не найдено лицо.", labFound:"Найдено лиц: {n}", labImgFail:"Не удалось открыть изображение.",
@@ -668,7 +669,7 @@ function setLang(l){
   L=l; document.documentElement.lang = l==="ru"?"ru":"pt-BR";
   document.getElementById("lang-pt").setAttribute("aria-pressed", l==="pt");
   document.getElementById("lang-ru").setAttribute("aria-pressed", l==="ru");
-  document.getElementById("t-test").textContent=t("test");
+  
   document.getElementById("foot").innerHTML=STAMP.replace('class="stamp"','')+'<span>'+esc(t("foot"))+'</span>';
   applyTheme();
   render();
@@ -723,9 +724,9 @@ function render(){
     h='<div class="stack lg"><div class="hero"><p class="eyebrow">'+esc(t("introEyebrow"))+'</p><h1>'+esc(t("introTitle"))+'</h1><p class="lead">'+esc(t("introLead"))+'</p>'+
       (ctx.length?'<div class="ctx">'+ctx.map(function(c){return '<span class="tag">'+ic(c[0])+esc(c[1])+'</span>';}).join("")+'</div>':'')+
       '<span class="meta">'+ic("clock")+esc(t("introTime"))+'</span></div>'+
-      '<ul class="how">'+[["video",how[0]],["receipt",how[1]],["send",how[2]]].map(function(x,i){ return '<li><span class="n">'+ic(x[0])+'</span><span>'+esc(x[1])+'</span></li>'; }).join("")+'</ul>'+
+      '<ul class="how">'+[["video",how[0]],["receipt",how[1]]].map(function(x,i){ return '<li><span class="n">'+ic(x[0])+'</span><span>'+esc(x[1])+'</span></li>'; }).join("")+'</ul>'+
       '<ul class="trust">'+[["shield",tr[0]],["mask",tr[1]],["gift",tr[2]]].map(function(x){ return '<li><span class="ic">'+ic(x[0])+'</span><span><b>'+esc(x[1][0])+'</b><span>'+esc(x[1][1])+'</span></span></li>'; }).join("")+'</ul>'+
-      (IN_FRAME?'<p class="note">'+ic("eye")+'<span>'+esc(t("demo"))+'</span></p>':'')+'</div>';
+      '</div>';
     paint(h); setBar([{label:t("start"),on:function(){go(1);}}]); return;
   }
   if(st===1){
@@ -822,7 +823,6 @@ function renderVideoStep(){
       '<a class="link" href="#mascaras">'+esc(t("faceLink"))+ic("chev")+'</a></div>'+
       '<p class="small" style="display:flex;gap:8px;align-items:flex-start">'+ic("lock").replace('<svg ','<svg style="width:16px;height:16px;flex:0 0 auto;margin-top:2px" ')+'<span>'+esc(t("camNote"))+'</span></p>';
     if(S.camErr) h+='<p class="err">'+esc(S.camErr)+'</p>';
-    if(IN_FRAME) h+='<p class="note">'+ic("eye")+'<span>'+esc(t("demo"))+'</span></p>';
   }
   h+=errHtml()+'</div>';
   paint(h);
@@ -1233,7 +1233,7 @@ function summary(){
   function hm(d){ return String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0")+" "+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); }
   var modeName=P.modes[S.mode][0];
   var lines=[
-    "PROBA teste"+(CFG.code?" #"+CFG.code:""),
+    "PROBA avaliação"+(CFG.code?" #"+CFG.code:""),
     "Link: "+CFG.format.toUpperCase()+" · Modo escolhido: "+modeName+(S.native?" (câmera do celular)":""),
     "Serviço: "+(P.services[S.service]||"—"),
     "Profissional: "+(S.pro||"—"),
@@ -1307,7 +1307,6 @@ function renderSend(){
   h+=procHtml();
   h+='<div class="actions" id="actions"></div>';
   h+='<details><summary>'+ic("chev")+esc(t("sumHead"))+'</summary><pre class="sum" id="sumtxt">'+esc(summary())+'</pre></details>';
-  if(IN_FRAME) h+='<p class="note">'+ic("eye")+'<span>'+esc(t("demo"))+'</span></p>';
   h+='</div>';
   paint(h);
   if(PROC.state==="render" && PROC.stageEls){ var stg=document.getElementById("stage"); PROC.stageEls.forEach(function(el){ stg.appendChild(el); }); }
