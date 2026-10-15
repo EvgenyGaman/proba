@@ -150,6 +150,7 @@ export default {
           ["status", "note", "reason", "final", "useful"].forEach((k) => { if (typeof b[k] === "string") a[k] = b[k].slice(0, 2000); });
           if (typeof b.paid === "boolean") a.paid = b.paid;
           if (b.checks && typeof b.checks === "object") a.checks = b.checks;
+          if (b.faces && typeof b.faces === "object") { const fz = JSON.stringify(b.faces); if (fz.length > 400000) return json({ error: "faces too large" }, 413); a.faces = b.faces; }
           a.updated = new Date().toISOString();
           r.admin = a;
           await env.BUCKET.put(b.id, JSON.stringify(r), { httpMetadata: { contentType: "application/json" } });
