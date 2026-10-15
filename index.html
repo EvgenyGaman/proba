@@ -238,6 +238,61 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offs
 .pv-bar{position:absolute;left:12px;right:12px;bottom:12px;z-index:3;display:flex;gap:4px;pointer-events:none}
 .pv-bar b{flex:1 1 0;height:4px;border-radius:2px;background:rgba(255,255,255,.35);overflow:hidden}
 .pv-bar b i{display:block;height:100%;width:0;background:#fff}
+/* ---- full-screen editor ---- */
+body.ed-on{overflow:hidden}
+body.ed-on header.top{visibility:hidden}
+.ed{position:fixed;inset:0;z-index:40;background:#0B0C0E;color:#fff;display:flex;flex-direction:column;height:100vh;height:100dvh;padding-top:env(safe-area-inset-top,0px);box-sizing:border-box}
+.ed-top{display:flex;align-items:center;gap:10px;padding:8px 12px;min-height:48px;box-sizing:border-box}
+.ed-top b{flex:1;font:600 16px/1.2 var(--f)}
+.ed-dur{font:500 13px/1 var(--f);color:rgba(255,255,255,.7)}
+.ed-ic{all:unset;cursor:pointer;width:36px;height:36px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.12)}
+.ed-ic svg{width:20px;height:20px}
+.ed-main{position:relative;flex:1 1 auto;min-height:0;display:flex;justify-content:center;align-items:center;padding:0 10px}
+.ed .stage.pv{height:100%;width:auto;max-width:100%;max-height:100%;aspect-ratio:9/16;border-radius:16px;box-shadow:none;margin:0}
+.ed-rail{position:absolute;right:14px;bottom:44px;z-index:5;display:flex;flex-direction:column;gap:12px;align-items:center}
+.ed-rb{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font:600 11px/1.1 var(--f);color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.7);-webkit-tap-highlight-color:transparent}
+.ed-rb i{width:44px;height:44px;border-radius:50%;background:rgba(20,21,24,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);display:grid;place-items:center;transition:transform .15s var(--ease),background-color .2s var(--ease)}
+.ed-rb:active i{transform:scale(.9)}
+.ed-rb.on i{background:#fff;color:#111}
+.ed-rb svg{width:21px;height:21px}
+.ed-low{flex:0 0 auto;padding:10px 12px calc(12px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:10px}
+.ed-strip{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:3px}
+.ed-strip::-webkit-scrollbar{display:none}
+.ed-tile{all:unset;cursor:pointer;flex:0 0 auto;width:52px;height:72px;border-radius:10px;background:#26272b center/cover no-repeat;position:relative;outline:2px solid transparent;outline-offset:2px;color:#fff;font:600 18px/1 var(--f);display:grid;place-items:center}
+.ed-tile.sel{outline-color:#fff}
+.ed-tile.now::after{content:"";position:absolute;left:6px;right:6px;bottom:-6px;height:3px;border-radius:2px;background:#FFD84D}
+.ed-tile small{position:absolute;left:5px;top:4px;font:700 11px/1 var(--f);text-shadow:0 1px 2px rgba(0,0,0,.8)}
+.ed-tile em{position:absolute;left:5px;bottom:4px;font:600 10px/1 var(--f);font-style:normal;text-shadow:0 1px 2px rgba(0,0,0,.8)}
+.ed-tile.cut em::before{content:"✂ "}
+.ed-tile.skip{background:transparent;border:1.5px dashed rgba(255,255,255,.45);box-sizing:border-box;color:rgba(255,255,255,.8)}
+.ed-tile.skip svg{width:20px;height:20px}
+.ed-cap{margin:0;font:500 13px/1.3 var(--f);color:rgba(255,255,255,.75);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ed-acts{display:flex;gap:8px}
+.ed-acts .btn{flex:1}
+.ed-acts .btn.icon-s{flex:0 0 auto}
+.ed-low>.ed-acts .btn.ghost{background:rgba(255,255,255,.12);color:#fff;border-color:transparent}
+.ed-low>#edNext{background:#fff;color:#111}
+.ed-sheet{background:var(--bg);color:var(--ink);border-radius:18px 18px 0 0;margin:-10px -12px calc(-12px - env(safe-area-inset-bottom,0px));padding:14px 16px calc(16px + env(safe-area-inset-bottom,0px));max-height:min(52vh,52dvh);overflow:auto;animation:fadeup .22s var(--ease);box-sizing:border-box}
+.ed-sh{display:flex;align-items:center;gap:8px;margin-bottom:12px;position:sticky;top:-14px;background:var(--bg);padding-top:2px;z-index:1}
+.ed-sh b{flex:1;font:600 17px/1.2 var(--f)}
+.ed-sb .panel{background:none;border:0;padding:0;box-shadow:none;margin:0}
+.ed-sb .ph{display:none}
+/* ---- trim ---- */
+.tr-strip{position:relative;height:60px;border-radius:10px;overflow:hidden;background:#222;touch-action:none;user-select:none;-webkit-user-select:none}
+.tr-strip canvas{position:absolute;inset:0;width:100%;height:100%}
+.tr-dim{position:absolute;top:0;bottom:0;background:rgba(0,0,0,.62)}
+.tr-dim.l{left:0}.tr-dim.r{right:0}
+.tr-win{position:absolute;top:0;bottom:0;border-top:3px solid #FFD84D;border-bottom:3px solid #FFD84D;box-sizing:border-box}
+.tr-h{position:absolute;top:-3px;bottom:-3px;width:20px;background:#FFD84D;display:grid;place-items:center;cursor:ew-resize;touch-action:none}
+.tr-h::before{content:"";position:absolute;inset:0 -14px}
+.tr-h::after{content:"";width:3px;height:20px;border-radius:2px;background:rgba(60,48,0,.75)}
+.tr-h.l{left:-1px;border-radius:9px 0 0 9px}
+.tr-h.r{right:-1px;border-radius:0 9px 9px 0}
+.tr-info{display:flex;align-items:center;gap:10px;margin-top:12px;font:600 15px/1 var(--f)}
+.tr-info span{flex:1;white-space:nowrap;font-size:15px}.tr-info small{font:500 13px var(--f);color:var(--ink2);margin-left:4px}
+.th-page #thPanel>.ph{display:none}
+.ed .pv-cue{left:calc(50% - 26px);max-width:calc(100% - 96px)}
+.tr p.small{margin:10px 0 0}
 .parts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
 .part{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;background:var(--paper);border:1.5px solid var(--line);border-radius:var(--r);padding:8px 10px 8px 8px;transition:border-color .2s var(--ease)}
 .part.now{border-color:var(--sel)}
@@ -727,7 +782,7 @@ pt:{
  rules:["Fale só da sua própria visita, que aconteceu de verdade.","Seja sincera: conte o que gostou e o que poderia ser melhor.","Os R$ 20 que pagamos a você são pela participação e não dependem da sua opinião.","Não mostre documentos, telas com dados pessoais nem outras pessoas. Antes de publicar, desfocamos o rosto de outras pessoas.","Sem ofensas, preconceito ou acusações: fale da sua experiência.","Sem propaganda, links ou contatos."], piece:"Trecho {n}", recMore:"Gravar próximo trecho", freeMore:"Pausa. Pense com calma e grave o próximo trecho, ou toque em Concluir.", addPiece:"Adicionar trecho", delPiece:"Apagar",
  prvTitle:"Privacidade", prvLead:"O original fica só com a equipe da Proba. Publicamos só a versão que você escolher.", fxTitle:"Rosto", fxLead:"Vale para as partes gravadas com a câmera da frente.", voiceTitle:"Voz", voice:{orig:"Original",alt:"Alterada"}, voiceLoading:"Preparando a voz…", face:{show:"Mostrar",blur:"Desfocar",silhouette:"Silhueta"}, fxLoading:"Preparando o efeito…",
  send:"Enviar", sending:"Enviando…", retry:"Tentar de novo", sentTitle:"Avaliação enviada", upRun:"Seu vídeo está subindo · {p}%", upDone:"Vídeo carregado", upFail:"A conexão falhou. Toque em Tentar de novo.", sendFail:"Não deu para enviar agora. Verifique a internet e tente de novo, ou envie pelo WhatsApp.", sendNoServer:"O envio direto não está disponível agora. Envie pelo WhatsApp.", viaWa:"Enviar vídeo pelo WhatsApp", saveCopy:"Salvar uma cópia no celular", saveReady:"Baixar o vídeo pronto", talkWa:"Falar com a gente no WhatsApp",
- panel:{eyebrow:"Equipe",title:"Avaliações recebidas",lead:"Só para a equipe da Proba. A chave fica salva neste navegador.",key:"Chave de acesso",enter:"Entrar",loading:"Carregando…",empty:"Ainda não chegou nenhuma avaliação.",fail:"Não deu para carregar. Tente de novo.",bad:"Chave incorreta.",refresh:"Atualizar",logout:"Sair",sum:"Resumo",make:"Montar vídeo final",making:"Montando · {p}% · não troque de aba nem minimize a janela",paused:"Montagem pausada: a aba ficou escondida. Recomeça sozinha quando você voltar.",remake:"Montar de novo",download:"Baixar vídeo",del:"Apagar",delConfirm:"Toque de novo para apagar de vez",loadingFiles:"Baixando as partes…",nav:{overview:"Visão geral",queue:"Avaliações",board:"Quadro",links:"Gerar links"},st:{novo:"Novas",analise:"Em análise",aprovado:"Aprovadas",pago:"Pagas",recusado:"Recusadas"},st1:{novo:"Nova",analise:"Em análise",aprovado:"Aprovada",pago:"Paga",recusado:"Recusada"},all:"Todas",search:"Buscar por código",kTotal:"Recebidas",kToday:"Hoje",kWait:"Aguardando análise",kAppr:"Aprovação",kPix:"Pix a pagar",funnel:"Funil por link",funnelLead:"Quantas pessoas chegaram a cada etapa. Contamos só o código do link e a etapa, sem dados pessoais.",arm:{a:"Link A · começa com perguntas",b:"Link B · começa do seu jeito"},fs:{open:"Abriram o link",start:"Começaram",visit:"Visita preenchida",cam:"Abriram a câmera",rec:"Gravaram",consent:"Autorizaram",sent:"Enviaram"},perDay:"Avaliações por dia",perDayLead:"Últimos 14 dias. Toque num dia para ver as avaliações.",privacy:"Privacidade escolhida",fmt:"Formato",survey:"Respostas às 3 perguntas",none:"Sem dados ainda",avgDur:"Duração média",avgRe:"Regravações por avaliação",editedSubs:"Legendas corrigidas",editedShort:"corrigidas",faceL:{show:"Rosto visível",blur:"Rosto desfocado",silhouette:"Silhueta",none:"Sem rosto (câmera de trás)"},voiceL:{orig:"Voz original",alt:"Voz alterada"},modeL:{guiado:"Com perguntas",livre:"Do seu jeito"},tabs:{final:"Vídeo final",faces:"Rostos",parts:"Partes",proof:"Comprovante",info:"Dados"},act:{analise:"Em análise",aprovar:"Aprovar",recusar:"Recusar",pago:"Pix pago",unpaid:"Desmarcar Pix"},reasonL:"Motivo",reasons:{semcomp:"Sem comprovante",naoreal:"Não parece visita real",ofensa:"Conteúdo impróprio",vazio:"Vídeo sem conteúdo",dup:"Duplicada",outro:"Outro"},checkT:"Checklist",checks:{comp:"Comprovante confere",real:"Parece visita real",rosto:"Rosto conforme a permissão",dados:"Sem dados pessoais nem ofensas"},note:"Notas internas",notePh:"Visível só para a equipe",saved:"Salvo",pickOne:"Escolha uma avaliação na lista",finalNone:"O vídeo final ainda não foi montado.",finalSaving:"Salvando o vídeo final no servidor…",finalSaved:"Salvo no servidor",fields:{service:"Serviço",salon:"Salão",pro:"Profissional",date:"Visita",mode:"Modo",dur:"Duração",parts:"Partes",reshoots:"Regravações",face:"Rosto",voice:"Voz",subs:"Legendas",stickers:"Figurinhas",music:"Música",perm:"Permissão",proofs:"Comprovante",q1:"P1 · onde encontrou",q2:"P2 · já avaliou",q3:"P3 · assistiria vídeos",device:"Aparelho",lang:"Idioma",rules:"Regras"},yes:"sim",no:"não",drop:"Arraste para cá",thTitle:"Pontos principais",thOk:"Confirmado pela cliente, sem mudanças.",thEdited:"Confirmado pela cliente, com correções.",thNotOk:"A cliente não confirmou.",thNeu:"Observações",thOwn:"adicionado pela cliente",thAi:"IA",useful:"Utilidade do vídeo (nota da equipe)",usefulL:{alta:"Alta",media:"Média",baixa:"Baixa"},usefulLead:"Quanto o vídeo ajuda quem vai escolher. Serve para recompensar autores e ordenar vídeos, não muda a nota da profissional.",aspT:"Notas por item (confirmadas pelas clientes)",aspLead:"Parte de avaliações positivas em cada item. É o dado de entrada da fórmula de ranking.",logs:"Problemas técnicos",logsLead:"Erros e travamentos enviados pelos celulares das clientes, para a equipe técnica.",boardLead:"Arraste os cartões entre as colunas. Toque num cartão para abrir.",oldItem:"Avaliação enviada antes do novo formato: veja o resumo abaixo.",fNone:"Os rostos de outras pessoas ainda não foram verificados. A busca roda neste computador e leva cerca de meio minuto.",fScan:"Procurar rostos",fScanning:"Procurando rostos · {p}%",fPart:"Parte {n}",fAdd:"Marcar um rosto",fAddHint:"Arraste um retângulo sobre o rosto.",fHint:"Toque numa moldura para ligar ou desligar o desfoque.",fOn:"Desfocado",fOff:"Sem desfoque",fGo:"Ver",fFace:"Rosto {n}",fAuthor:"Autora",fManual:"Marcado à mão",fStart:"Começa aqui",fEnd:"Termina aqui",fDel:"Remover",fSave:"Salvar e confirmar",fRescan:"Procurar de novo",fRescanSure:"As alterações serão perdidas. Toque de novo para procurar.",fUnsaved:"Alterações não salvas",fSaved:"Verificado",fNotSaved:"Ainda não confirmado",fSavedToast:"Salvo. Monte o vídeo final de novo.",fWarn:"Os rostos de outras pessoas ainda não foram verificados (aba «Rostos»).",fEmpty:"Nenhum rosto encontrado nesta parte. Se houver algum, marque à mão.",fFail:"Não deu para rodar a busca de rostos.",fNoParts:"Sem partes para verificar.",fStTitle:"Figurinhas sobre rostos",fStLead:"O rosto embaixo continua desfocado. Remova só se a figurinha zomba de alguém.",fStRemove:"Remover",fStBack:"Devolver",fStRemoved:"removida"}, reShoot:"Regravando a parte {n}",
+ panel:{eyebrow:"Equipe",title:"Avaliações recebidas",lead:"Só para a equipe da Proba. A chave fica salva neste navegador.",key:"Chave de acesso",enter:"Entrar",loading:"Carregando…",empty:"Ainda não chegou nenhuma avaliação.",fail:"Não deu para carregar. Tente de novo.",bad:"Chave incorreta.",refresh:"Atualizar",logout:"Sair",sum:"Resumo",make:"Montar vídeo final",making:"Montando · {p}% · não troque de aba nem minimize a janela",paused:"Montagem pausada: a aba ficou escondida. Recomeça sozinha quando você voltar.",remake:"Montar de novo",download:"Baixar vídeo",del:"Apagar",delConfirm:"Toque de novo para apagar de vez",loadingFiles:"Baixando as partes…",nav:{overview:"Visão geral",queue:"Avaliações",board:"Quadro",links:"Gerar links"},st:{novo:"Novas",analise:"Em análise",aprovado:"Aprovadas",pago:"Pagas",recusado:"Recusadas"},st1:{novo:"Nova",analise:"Em análise",aprovado:"Aprovada",pago:"Paga",recusado:"Recusada"},all:"Todas",search:"Buscar por código",kTotal:"Recebidas",kToday:"Hoje",kWait:"Aguardando análise",kAppr:"Aprovação",kPix:"Pix a pagar",funnel:"Funil por link",funnelLead:"Quantas pessoas chegaram a cada etapa. Contamos só o código do link e a etapa, sem dados pessoais.",arm:{a:"Link A · começa com perguntas",b:"Link B · começa do seu jeito"},fs:{open:"Abriram o link",start:"Começaram",visit:"Visita preenchida",cam:"Abriram a câmera",rec:"Gravaram",consent:"Autorizaram",sent:"Enviaram"},perDay:"Avaliações por dia",perDayLead:"Últimos 14 dias. Toque num dia para ver as avaliações.",privacy:"Privacidade escolhida",fmt:"Formato",survey:"Respostas às 3 perguntas",none:"Sem dados ainda",avgDur:"Duração média",avgRe:"Regravações por avaliação",editedSubs:"Legendas corrigidas",editedShort:"corrigidas",faceL:{show:"Rosto visível",blur:"Rosto desfocado",silhouette:"Silhueta",none:"Sem rosto (câmera de trás)"},voiceL:{orig:"Voz original",alt:"Voz alterada"},modeL:{guiado:"Com perguntas",livre:"Do seu jeito"},tabs:{final:"Vídeo final",faces:"Rostos",parts:"Partes",proof:"Comprovante",info:"Dados"},act:{analise:"Em análise",aprovar:"Aprovar",recusar:"Recusar",pago:"Pix pago",unpaid:"Desmarcar Pix"},reasonL:"Motivo",reasons:{semcomp:"Sem comprovante",naoreal:"Não parece visita real",ofensa:"Conteúdo impróprio",vazio:"Vídeo sem conteúdo",dup:"Duplicada",outro:"Outro"},checkT:"Checklist",checks:{comp:"Comprovante confere",real:"Parece visita real",rosto:"Rosto conforme a permissão",dados:"Sem dados pessoais nem ofensas"},note:"Notas internas",notePh:"Visível só para a equipe",saved:"Salvo",pickOne:"Escolha uma avaliação na lista",finalNone:"O vídeo final ainda não foi montado.",finalSaving:"Salvando o vídeo final no servidor…",finalSaved:"Salvo no servidor",fields:{service:"Serviço",salon:"Salão",pro:"Profissional",date:"Visita",mode:"Modo",dur:"Duração",parts:"Partes",reshoots:"Regravações",face:"Rosto",voice:"Voz",subs:"Legendas",stickers:"Figurinhas",music:"Música",perm:"Permissão",proofs:"Comprovante",q1:"P1 · onde encontrou",q2:"P2 · já avaliou",q3:"P3 · assistiria vídeos",device:"Aparelho",lang:"Idioma",rules:"Regras"},yes:"sim",no:"não",drop:"Arraste para cá",thTitle:"Pontos principais",thOk:"Confirmado pela cliente, sem mudanças.",thEdited:"Confirmado pela cliente, com correções.",thNotOk:"A cliente não confirmou.",thNeu:"Observações",thOwn:"adicionado pela cliente",thAi:"IA",useful:"Utilidade do vídeo (nota da equipe)",usefulL:{alta:"Alta",media:"Média",baixa:"Baixa"},usefulLead:"Quanto o vídeo ajuda quem vai escolher. Serve para recompensar autores e ordenar vídeos, não muda a nota da profissional.",aspT:"Notas por item (confirmadas pelas clientes)",aspLead:"Parte de avaliações positivas em cada item. É o dado de entrada da fórmula de ranking.",logs:"Problemas técnicos",logsLead:"Erros e travamentos enviados pelos celulares das clientes, para a equipe técnica.",boardLead:"Arraste os cartões entre as colunas. Toque num cartão para abrir.",oldItem:"Avaliação enviada antes do novo formato: veja o resumo abaixo.",fNone:"Os rostos de outras pessoas ainda não foram verificados. A busca roda neste computador e leva cerca de meio minuto.",fScan:"Procurar rostos",fScanning:"Procurando rostos · {p}%",fPart:"Parte {n}",fAdd:"Marcar um rosto",fAddHint:"Arraste um retângulo sobre o rosto.",fHint:"Toque numa moldura para ligar ou desligar o desfoque.",fOn:"Desfocado",fOff:"Sem desfoque",fGo:"Ver",fFace:"Rosto {n}",fAuthor:"Autora",fManual:"Marcado à mão",fStart:"Começa aqui",fEnd:"Termina aqui",fDel:"Remover",fSave:"Salvar e confirmar",fRescan:"Procurar de novo",fRescanSure:"As alterações serão perdidas. Toque de novo para procurar.",fUnsaved:"Alterações não salvas",fSaved:"Verificado",fNotSaved:"Ainda não confirmado",fSavedToast:"Salvo. Monte o vídeo final de novo.",fWarn:"Os rostos de outras pessoas ainda não foram verificados (aba «Rostos»).",fEmpty:"Nenhum rosto encontrado nesta parte. Se houver algum, marque à mão.",fFail:"Não deu para rodar a busca de rostos.",fNoParts:"Sem partes para verificar.",fStTitle:"Figurinhas sobre rostos",fStLead:"O rosto embaixo continua desfocado. Remova só se a figurinha zomba de alguém.",fStRemove:"Remover",fStBack:"Devolver",fStRemoved:"removida"}, reShoot:"Regravando a parte {n}",edBack:"Voltar",edPrivacy:"Privacidade",edSubs:"Legendas",edMusic:"Música",edStickers:"Figurinhas",edMore:"Mais",edTrim:"Cortar",edTrimmed:"cortada",edSec:"{n} s",edTrimTitle:"Cortar a parte {n}",edCancel:"Cancelar",edDone:"Pronto",edReset:"Desfazer corte",edTrimLead:"Arraste as bordas amarelas. O vídeo original fica guardado.",edThTitle:"O principal do seu vídeo",edThLead:"Confira o que a gente entendeu e corrija se precisar.",edBackVideo:"Voltar ao vídeo",
  maskNone:"Sem", maskBtn:"Máscara", maskLoading:"Preparando máscaras…", faceOut:"Mantenha o rosto na tela para a máscara funcionar", maskLocked:"A máscara fica até o fim da gravação",
  permMask:["Pode publicar, com o rosto escondido","Do jeito que você escolheu no vídeo. Antes de publicar, desfocamos também o rosto de outras pessoas."],
  labTitle:"Provador de máscaras", labLead:"Escolha uma foto com rosto: todas as máscaras aparecem nela. A foto não sai do aparelho.", labPick:"Escolher foto", labLoading:"Carregando…", labReady:"Pronto. Escolha uma foto.", labFail:"Não deu para carregar o reconhecimento de rosto.", labNoFace:"Nenhum rosto encontrado nessa foto.", labFound:"Rostos encontrados: {n}", labImgFail:"Não deu para abrir a imagem.",
@@ -796,7 +851,7 @@ ru:{
  rules:["Рассказывайте только о своём визите, который действительно был.","Будьте честны: что понравилось и что можно улучшить.","R$ 20, которые мы вам платим, — за участие. Они не зависят от вашего мнения.","Не показывайте документы, экраны с личными данными и других людей. Перед публикацией мы размываем лица других людей.","Без оскорблений, дискриминации и обвинений — говорите о своём опыте.","Без рекламы, ссылок и контактов."], piece:"Фрагмент {n}", recMore:"Записать следующий фрагмент", freeMore:"Пауза. Подумайте спокойно и запишите следующий фрагмент или нажмите «Завершить».", addPiece:"Добавить фрагмент", delPiece:"Удалить",
  prvTitle:"Приватность", prvLead:"Оригинал хранится только у команды Пробы. Публикуется только выбранный вами вариант.", fxTitle:"Лицо", fxLead:"Действует на части, снятые фронтальной камерой.", voiceTitle:"Голос", voice:{orig:"Обычный",alt:"Изменённый"}, voiceLoading:"Готовим голос…", face:{show:"Показать",blur:"Размыть",silhouette:"Силуэт"}, fxLoading:"Готовим эффект…",
  send:"Отправить", sending:"Отправляем…", retry:"Попробовать ещё раз", sentTitle:"Отзыв отправлен", upRun:"Видео загружается · {p}%", upDone:"Видео загружено", upFail:"Связь прервалась. Нажмите «Попробовать ещё раз».", sendFail:"Сейчас отправить не получилось. Проверьте интернет и попробуйте ещё раз или отправьте через WhatsApp.", sendNoServer:"Прямая отправка сейчас недоступна. Отправьте через WhatsApp.", viaWa:"Отправить видео через WhatsApp", saveCopy:"Сохранить копию в телефон", saveReady:"Скачать готовое видео", talkWa:"Написать нам в WhatsApp",
- panel:{eyebrow:"Команда",title:"Пришедшие отзывы",lead:"Только для команды Пробы. Ключ сохраняется в этом браузере.",key:"Ключ доступа",enter:"Войти",loading:"Загрузка…",empty:"Отзывов пока нет.",fail:"Не удалось загрузить. Попробуйте ещё раз.",bad:"Неверный ключ.",refresh:"Обновить",logout:"Выйти",sum:"Сводка",make:"Собрать ролик",making:"Собираем · {p}% · не переключайте вкладку и не сворачивайте окно",paused:"Сборка на паузе: вкладка была скрыта. Начнётся заново, когда вернётесь.",remake:"Собрать заново",download:"Скачать ролик",del:"Удалить",delConfirm:"Нажмите ещё раз — удалится насовсем",loadingFiles:"Загружаем части…",nav:{overview:"Обзор",queue:"Отзывы",board:"Доска",links:"Ссылки"},st:{novo:"Новые",analise:"На проверке",aprovado:"Одобрены",pago:"Оплачены",recusado:"Отклонены"},st1:{novo:"Новый",analise:"На проверке",aprovado:"Одобрен",pago:"Оплачен",recusado:"Отклонён"},all:"Все",search:"Поиск по коду",kTotal:"Получено",kToday:"Сегодня",kWait:"Ждут проверки",kAppr:"Одобряемость",kPix:"Pix к оплате",funnel:"Воронка по ссылкам",funnelLead:"Сколько людей дошло до каждого шага. Учитываем только код ссылки и шаг, без личных данных.",arm:{a:"Ссылка A · сначала с подсказками",b:"Ссылка B · сначала экспромт"},fs:{open:"Открыли ссылку",start:"Начали",visit:"Заполнили визит",cam:"Открыли камеру",rec:"Сняли",consent:"Дали согласие",sent:"Отправили"},perDay:"Отзывы по дням",perDayLead:"Последние 14 дней. Нажмите на день, чтобы увидеть отзывы.",privacy:"Выбор приватности",fmt:"Формат",survey:"Ответы на 3 вопроса",none:"Пока нет данных",avgDur:"Средняя длина",avgRe:"Пересъёмок на отзыв",editedSubs:"Субтитры поправлены",editedShort:"поправлены",faceL:{show:"Лицо видно",blur:"Лицо размыто",silhouette:"Силуэт",none:"Без лица (задняя камера)"},voiceL:{orig:"Обычный голос",alt:"Изменённый голос"},modeL:{guiado:"С подсказками",livre:"Экспромт"},tabs:{final:"Итоговый ролик",faces:"Лица",parts:"Части",proof:"Подтверждение",info:"Данные"},act:{analise:"На проверку",aprovar:"Одобрить",recusar:"Отклонить",pago:"Pix оплачен",unpaid:"Снять оплату"},reasonL:"Причина",reasons:{semcomp:"Нет подтверждения",naoreal:"Не похоже на реальный визит",ofensa:"Недопустимое содержание",vazio:"Видео без содержания",dup:"Дубликат",outro:"Другое"},checkT:"Чек-лист",checks:{comp:"Подтверждение сходится",real:"Похоже на реальный визит",rosto:"Лицо соответствует разрешению",dados:"Нет личных данных и оскорблений"},note:"Заметки команды",notePh:"Видно только команде",saved:"Сохранено",pickOne:"Выберите отзыв в списке",finalNone:"Итоговый ролик ещё не собран.",finalSaving:"Сохраняем итоговый ролик на сервере…",finalSaved:"Сохранён на сервере",fields:{service:"Услуга",salon:"Салон",pro:"Мастер",date:"Визит",mode:"Режим",dur:"Длина",parts:"Части",reshoots:"Пересъёмки",face:"Лицо",voice:"Голос",subs:"Субтитры",stickers:"Стикеры",music:"Музыка",perm:"Разрешение",proofs:"Подтверждение",q1:"В1 · где нашла",q2:"В2 · оставляла отзывы",q3:"В3 · смотрела бы видео",device:"Устройство",lang:"Язык",rules:"Правила"},yes:"да",no:"нет",drop:"Перетащите сюда",thTitle:"Главное",thOk:"Подтверждено клиенткой без правок.",thEdited:"Подтверждено клиенткой с правками.",thNotOk:"Клиентка не подтвердила.",thNeu:"Замечания",thOwn:"добавлено клиенткой",thAi:"ИИ",useful:"Полезность видео (оценка команды)",usefulL:{alta:"Высокая",media:"Средняя",baixa:"Низкая"},usefulLead:"Насколько видео помогает выбирать. Нужна для вознаграждения авторов и порядка видео, на оценку мастера не влияет.",aspT:"Оценки по пунктам (подтверждены клиентками)",aspLead:"Доля положительных оценок по каждому пункту. Это входные данные формулы ранжирования.",logs:"Технические проблемы",logsLead:"Ошибки и зависания, которые прислали телефоны клиенток. Для технической команды.",boardLead:"Перетаскивайте карточки между колонками. Нажмите на карточку, чтобы открыть.",oldItem:"Отзыв прислан до нового формата: см. сводку ниже.",fNone:"Лица посторонних ещё не проверены. Поиск идёт на этом компьютере, около полуминуты.",fScan:"Найти лица",fScanning:"Ищем лица · {p}%",fPart:"Часть {n}",fAdd:"Обвести лицо",fAddHint:"Обведите лицо рамкой.",fHint:"Нажмите на рамку, чтобы включить или выключить размытие.",fOn:"Размывается",fOff:"Не размывается",fGo:"Показать",fFace:"Лицо {n}",fAuthor:"Автор",fManual:"Обведено вручную",fStart:"Начало здесь",fEnd:"Конец здесь",fDel:"Удалить",fSave:"Сохранить и подтвердить",fRescan:"Искать заново",fRescanSure:"Правки пропадут. Нажмите ещё раз, чтобы искать заново.",fUnsaved:"Есть несохранённые правки",fSaved:"Проверено",fNotSaved:"Ещё не подтверждено",fSavedToast:"Сохранено. Соберите итоговый ролик заново.",fWarn:"Лица посторонних ещё не проверены (вкладка «Лица»).",fEmpty:"В этой части лиц не найдено. Если есть — обведите вручную.",fFail:"Не удалось запустить поиск лиц.",fNoParts:"Нет частей для проверки.",fStTitle:"Стикеры на лицах",fStLead:"Лицо под стикером всё равно размывается. Убирайте, только если стикер издевается над человеком.",fStRemove:"Убрать",fStBack:"Вернуть",fStRemoved:"убран"}, reShoot:"Пересъёмка части {n}",
+ panel:{eyebrow:"Команда",title:"Пришедшие отзывы",lead:"Только для команды Пробы. Ключ сохраняется в этом браузере.",key:"Ключ доступа",enter:"Войти",loading:"Загрузка…",empty:"Отзывов пока нет.",fail:"Не удалось загрузить. Попробуйте ещё раз.",bad:"Неверный ключ.",refresh:"Обновить",logout:"Выйти",sum:"Сводка",make:"Собрать ролик",making:"Собираем · {p}% · не переключайте вкладку и не сворачивайте окно",paused:"Сборка на паузе: вкладка была скрыта. Начнётся заново, когда вернётесь.",remake:"Собрать заново",download:"Скачать ролик",del:"Удалить",delConfirm:"Нажмите ещё раз — удалится насовсем",loadingFiles:"Загружаем части…",nav:{overview:"Обзор",queue:"Отзывы",board:"Доска",links:"Ссылки"},st:{novo:"Новые",analise:"На проверке",aprovado:"Одобрены",pago:"Оплачены",recusado:"Отклонены"},st1:{novo:"Новый",analise:"На проверке",aprovado:"Одобрен",pago:"Оплачен",recusado:"Отклонён"},all:"Все",search:"Поиск по коду",kTotal:"Получено",kToday:"Сегодня",kWait:"Ждут проверки",kAppr:"Одобряемость",kPix:"Pix к оплате",funnel:"Воронка по ссылкам",funnelLead:"Сколько людей дошло до каждого шага. Учитываем только код ссылки и шаг, без личных данных.",arm:{a:"Ссылка A · сначала с подсказками",b:"Ссылка B · сначала экспромт"},fs:{open:"Открыли ссылку",start:"Начали",visit:"Заполнили визит",cam:"Открыли камеру",rec:"Сняли",consent:"Дали согласие",sent:"Отправили"},perDay:"Отзывы по дням",perDayLead:"Последние 14 дней. Нажмите на день, чтобы увидеть отзывы.",privacy:"Выбор приватности",fmt:"Формат",survey:"Ответы на 3 вопроса",none:"Пока нет данных",avgDur:"Средняя длина",avgRe:"Пересъёмок на отзыв",editedSubs:"Субтитры поправлены",editedShort:"поправлены",faceL:{show:"Лицо видно",blur:"Лицо размыто",silhouette:"Силуэт",none:"Без лица (задняя камера)"},voiceL:{orig:"Обычный голос",alt:"Изменённый голос"},modeL:{guiado:"С подсказками",livre:"Экспромт"},tabs:{final:"Итоговый ролик",faces:"Лица",parts:"Части",proof:"Подтверждение",info:"Данные"},act:{analise:"На проверку",aprovar:"Одобрить",recusar:"Отклонить",pago:"Pix оплачен",unpaid:"Снять оплату"},reasonL:"Причина",reasons:{semcomp:"Нет подтверждения",naoreal:"Не похоже на реальный визит",ofensa:"Недопустимое содержание",vazio:"Видео без содержания",dup:"Дубликат",outro:"Другое"},checkT:"Чек-лист",checks:{comp:"Подтверждение сходится",real:"Похоже на реальный визит",rosto:"Лицо соответствует разрешению",dados:"Нет личных данных и оскорблений"},note:"Заметки команды",notePh:"Видно только команде",saved:"Сохранено",pickOne:"Выберите отзыв в списке",finalNone:"Итоговый ролик ещё не собран.",finalSaving:"Сохраняем итоговый ролик на сервере…",finalSaved:"Сохранён на сервере",fields:{service:"Услуга",salon:"Салон",pro:"Мастер",date:"Визит",mode:"Режим",dur:"Длина",parts:"Части",reshoots:"Пересъёмки",face:"Лицо",voice:"Голос",subs:"Субтитры",stickers:"Стикеры",music:"Музыка",perm:"Разрешение",proofs:"Подтверждение",q1:"В1 · где нашла",q2:"В2 · оставляла отзывы",q3:"В3 · смотрела бы видео",device:"Устройство",lang:"Язык",rules:"Правила"},yes:"да",no:"нет",drop:"Перетащите сюда",thTitle:"Главное",thOk:"Подтверждено клиенткой без правок.",thEdited:"Подтверждено клиенткой с правками.",thNotOk:"Клиентка не подтвердила.",thNeu:"Замечания",thOwn:"добавлено клиенткой",thAi:"ИИ",useful:"Полезность видео (оценка команды)",usefulL:{alta:"Высокая",media:"Средняя",baixa:"Низкая"},usefulLead:"Насколько видео помогает выбирать. Нужна для вознаграждения авторов и порядка видео, на оценку мастера не влияет.",aspT:"Оценки по пунктам (подтверждены клиентками)",aspLead:"Доля положительных оценок по каждому пункту. Это входные данные формулы ранжирования.",logs:"Технические проблемы",logsLead:"Ошибки и зависания, которые прислали телефоны клиенток. Для технической команды.",boardLead:"Перетаскивайте карточки между колонками. Нажмите на карточку, чтобы открыть.",oldItem:"Отзыв прислан до нового формата: см. сводку ниже.",fNone:"Лица посторонних ещё не проверены. Поиск идёт на этом компьютере, около полуминуты.",fScan:"Найти лица",fScanning:"Ищем лица · {p}%",fPart:"Часть {n}",fAdd:"Обвести лицо",fAddHint:"Обведите лицо рамкой.",fHint:"Нажмите на рамку, чтобы включить или выключить размытие.",fOn:"Размывается",fOff:"Не размывается",fGo:"Показать",fFace:"Лицо {n}",fAuthor:"Автор",fManual:"Обведено вручную",fStart:"Начало здесь",fEnd:"Конец здесь",fDel:"Удалить",fSave:"Сохранить и подтвердить",fRescan:"Искать заново",fRescanSure:"Правки пропадут. Нажмите ещё раз, чтобы искать заново.",fUnsaved:"Есть несохранённые правки",fSaved:"Проверено",fNotSaved:"Ещё не подтверждено",fSavedToast:"Сохранено. Соберите итоговый ролик заново.",fWarn:"Лица посторонних ещё не проверены (вкладка «Лица»).",fEmpty:"В этой части лиц не найдено. Если есть — обведите вручную.",fFail:"Не удалось запустить поиск лиц.",fNoParts:"Нет частей для проверки.",fStTitle:"Стикеры на лицах",fStLead:"Лицо под стикером всё равно размывается. Убирайте, только если стикер издевается над человеком.",fStRemove:"Убрать",fStBack:"Вернуть",fStRemoved:"убран"}, reShoot:"Пересъёмка части {n}",edBack:"Назад",edPrivacy:"Приватность",edSubs:"Субтитры",edMusic:"Музыка",edStickers:"Стикеры",edMore:"Ещё",edTrim:"Обрезать",edTrimmed:"обрезана",edSec:"{n} с",edTrimTitle:"Обрезать часть {n}",edCancel:"Отмена",edDone:"Готово",edReset:"Вернуть как было",edTrimLead:"Двигайте жёлтые края. Исходное видео сохраняется.",edThTitle:"Главное из вашего видео",edThLead:"Проверьте, что мы поняли, и поправьте при необходимости.",edBackVideo:"Назад к видео",
  maskNone:"Без", maskBtn:"Маска", maskLoading:"Готовим маски…", faceOut:"Держите лицо в кадре, чтобы маска работала", maskLocked:"Маска остаётся до конца записи",
  permMask:["Можно публиковать со скрытым лицом","Так, как вы выбрали в видео. Перед публикацией размываем и лица других людей."],
  labTitle:"Примерочная масок", labLead:"Выберите фото с лицом — на нём появятся все маски. Фото не покидает устройство.", labPick:"Выбрать фото", labLoading:"Загрузка…", labReady:"Готово. Выберите фото.", labFail:"Не удалось загрузить распознавание лица.", labNoFace:"На фото не найдено лицо.", labFound:"Найдено лиц: {n}", labImgFail:"Не удалось открыть изображение.",
@@ -920,7 +975,7 @@ function radioCard(name,k,checked,icon,title,sub,extra,badge){
 }
 var ANIM=true;
 function go(n){ pvStop(); if(n===1) ev("start"); if(n===2) ev("visit"); S.err=""; S.step=n; ANIM=true; render(); window.scrollTo(0,0); }
-function paint(h){ app.innerHTML=h; var first=app.firstElementChild; if(first&&ANIM) first.classList.add("enter"); ANIM=false; }
+function paint(h){ app.innerHTML=h; var first=app.firstElementChild; if(first&&ANIM) first.classList.add("enter"); ANIM=false; document.body.classList.toggle("ed-on",!!document.getElementById("ed")); }
 
 /* ---------- screens ---------- */
 function render(){
@@ -999,7 +1054,13 @@ function render(){
 function recorded(){ return S.clips.some(Boolean); }
 function clipList(){ return S.clips.filter(Boolean); }
 function hasVideo(){ return recorded() || S.parts.some(function(p){return p&&p.file;}); }
-function totalDur(){ return clipList().reduce(function(a,c){ return a+(c.dur||0); },0); }
+function totalDur(){ return clipList().reduce(function(a,c){ return a+clipLen(c); },0); }
+/* trim = start/end inside the original part; the file itself is never cut */
+function clipIn(c){ return Math.max(0,c.tin||0); }
+function clipOut(c){ var d=c.dur||0; return (c.tout!=null&&c.tout>0)?Math.min(d,c.tout):d; }
+function clipLen(c){ return Math.max(0.1,clipOut(c)-clipIn(c)); }
+function clipTrimmed(c){ return clipIn(c)>0.05 || clipOut(c)<(c.dur||0)-0.05; }
+function clipCues(c){ var a=clipIn(c), b=clipOut(c); return (c.cues||[]).map(function(q,k){ return {q:q,k:k}; }).filter(function(x){ return x.q.e>a+0.05 && x.q.s<b-0.05; }).map(function(x){ return {s:Math.max(0,x.q.s-a),e:Math.min(x.q.e,b)-a,text:x.q.text,hl:x.q.hl,k:x.k}; }); }
 function maskList(){ var m=[]; clipList().forEach(function(c){ if(c.mask&&c.mask!=="none"&&m.indexOf(c.mask)<0) m.push(c.mask); }); return m; }
 function hasFront(){ return clipList().some(function(c){ return c.facing==="user"; }); }
 function maskSafe(){ return S.face!=="show" && hasFront(); }
@@ -1014,17 +1075,10 @@ var MUSIC_ORDER=["none","suave","bossa","animada"];
 function renderVideoStep(){
   pvStop();
   var h;
-  if(recorded()){
-    var cs=clipList(), ml=maskList();
-    h='<div class="stack lg">'+head(2,t("reviewTitle"),t("reviewLead"))+
-      '<div class="stage pv" id="pvStage"><video id="pv" playsinline preload="metadata"></video>'+'<canvas id="pvFx" class="pv-fx" width="720" height="1280" hidden></canvas>'+
-      '<button type="button" class="pv-play" id="pvPlay" aria-label="'+esc(t("playAll"))+'"><span>'+ic("play")+'</span></button>'+
-      '<div class="stk-layer" id="stkLayer"></div><div class="pv-cue" id="pvCue" hidden></div>'+
-      '<div class="pv-bar">'+cs.map(function(c,i){ return '<b style="flex-grow:'+Math.max(1,c.dur||1).toFixed(2)+'"><i id="pvb'+i+'"></i></b>'; }).join("")+'</div></div>'+
-      '<div class="vmeta"><span class="pill-ok">'+ic("check","draw")+esc(t("recDone"))+' · '+mmss(totalDur())+'</span>'+
-      (ml.length?'<span class="tag">'+ic("mask")+esc(ml.map(function(k){return MASKS[k][L];}).join(", "))+'</span>':'')+'</div>'+
-      facePanel()+thPanel()+partsList()+stickerPanel()+musicPanel()+subsCard()+
-      '<button type="button" class="btn ghost block" id="again">'+ic("video")+'<span>'+esc(t("againAll"))+'</span></button>';
+  if(recorded() && S.edPhase==="th"){
+    h='<div class="stack lg th-page">'+head(2,t("edThTitle"),t("edThLead"))+thPanel();
+  } else if(recorded()){
+    h='<div class="stack lg">'+edHtml();
   } else if(S.native){
     h='<div class="stack lg">'+head(2,t("modeTitle"))+'<p class="note">'+ic("eye")+'<span>'+esc(t("camFail"))+'</span></p>'+nativeCards();
   } else {
@@ -1051,10 +1105,15 @@ function renderVideoStep(){
     clearClips(); S.stickers=[]; S.music="none"; STK_SEL=-1; render(); window.scrollTo(0,0);
   };
   bindSubs();
-  if(recorded()) bindReview();
+  if(recorded() && S.edPhase==="th"){ bindTh(); thMaybeStart(); }
+  else if(recorded()) bindReview();
   bindNative();
-  if(recorded()||S.native){
-    setBar([backBtn(1),{label:t("next"),on:function(){ if(!hasVideo()){S.err=t("errVideo");render();return;} PROC.editing=false; STK_SEL=-1; if(thNeedsConfirm()){ S.err=t("th").errConfirm; render(); var tp=document.getElementById("thPanel"); if(tp) tp.scrollIntoView({behavior:"smooth",block:"center"}); return; } go(3); }}]);
+  if(recorded() && S.edPhase==="th"){
+    setBar([{label:t("edBackVideo"),cls:"ghost",on:function(){ S.edPhase=""; S.err=""; ANIM=true; render(); window.scrollTo(0,0); }},{label:t("next"),on:function(){ if(thNeedsConfirm()){ S.err=t("th").errConfirm; render(); var tp=document.getElementById("thPanel"); if(tp) tp.scrollIntoView({behavior:"smooth",block:"center"}); return; } go(3); }}]);
+  } else if(recorded()){
+    setBar([]);
+  } else if(S.native){
+    setBar([backBtn(1),{label:t("next"),on:function(){ if(!hasVideo()){S.err=t("errVideo");render();return;} go(3); }}]);
   } else {
     var ro=document.getElementById("rulesOk"); if(ro) ro.onchange=function(){ S.rules=ro.checked; if(S.rules&&S.err){ S.err=""; var er=app.querySelector(".err"); if(er) er.remove(); } };
     setBar([backBtn(1),{label:t("openCam"),icon:"video",on:function(){ if(!S.rules){ S.err=t("errRules"); render(); var rr=app.querySelector(".rules"); if(rr) rr.scrollIntoView({behavior:"smooth",block:"center"}); return; } openCamera(); }}]);
@@ -1122,9 +1181,12 @@ function bindReview(){
   ev("rvopen");
   PV.playing=false; pvLoad(0);
   document.getElementById("pvPlay").onclick=function(){ if(STK_SEL>=0){ STK_SEL=-1; layoutStickers(); refreshStickerPanel(); } if(PV.playing) pvPause(); else pvPlay(); };
-  v.onended=function(){ var cs=clipList(); pvAltStop(); if(PV.playing && PV.i<cs.length-1){ pvLoad(PV.i+1); pvPlay(); } else { pvPause(); pvLoad(0); } };
+  v.onended=pvPartEnd;
+  var bk=document.getElementById("edBack"); if(bk) bk.onclick=function(){ pvStop(); S.edSheet=null; S.trim=null; go(1); };
+  document.querySelectorAll("#edRail [data-sheet]").forEach(function(b){ b.onclick=function(){ edOpen(b.dataset.sheet); }; });
+  edBindLow();
   v.ontimeupdate=function(){ pvBarUI(); pvCueUI(); };
-  v.onloadeddata=v.onseeked=function(){ pvFxDraw(true); };
+  v.onloadeddata=v.onseeked=function(){ pvFxDraw(true); pvCueUI(); };
   app.querySelectorAll("[data-play]").forEach(function(b){ b.onclick=function(){ var idx=clipList().indexOf(S.clips[+b.dataset.play]); if(idx<0) return; pvPause(); pvLoad(idx); pvPlay(); var st=document.getElementById("pvStage"); if(st&&st.scrollIntoView) st.scrollIntoView({behavior:"smooth",block:"center"}); }; });
   app.querySelectorAll("[data-re]").forEach(function(b){ b.onclick=function(){ pvStop(); openCamera(+b.dataset.re); }; });
   app.querySelectorAll("[data-delclip]").forEach(function(b){ b.onclick=function(){ var i=+b.dataset.delclip, c=S.clips[i]; if(!c) return; pvStop(); if(c.url) URL.revokeObjectURL(c.url); S.clips[i]=null; resetProc(); render(); }; });
@@ -1138,6 +1200,155 @@ function bindReview(){
   ev("rvbound");
 }
 
+/* ---------- editor after filming: full-screen video like TikTok / Reels ----------
+   Video fills the screen, the parts play one after another. Right rail: privacy, subtitles, music, stickers, more.
+   Bottom: the strip of parts; the chosen part can be trimmed or re-shot. Tools open as a sheet under the video.
+   Trimming never touches the file: each part keeps a start and an end (tin / tout), the original is uploaded whole. */
+IC.cut='<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.6 7.6L20 18M8.6 16.4L20 6"/>';
+IC.more='<circle cx="5" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="19" cy="12" r="1.6" fill="currentColor"/>';
+var ED_RAIL=[["privacy","eye","edPrivacy"],["subs","captions","edSubs"],["music","music","edMusic"],["stickers","smile","edStickers"],["more","more","edMore"]];
+function edRows(){
+  var defs=qdefs(), guided=S.mode==="guiado", cs=clipList();
+  if(guided) return defs.map(function(d,i){ var c=S.clips[i]; return {q:i,label:d.label,c:c||null,ci:c?cs.indexOf(c):-1}; });
+  var n=0; return S.clips.map(function(c,i){ return c?{q:i,label:fmt(t("piece"),{n:++n}),c:c,ci:cs.indexOf(c)}:null; }).filter(Boolean);
+}
+function edHtml(){
+  var cs=clipList();
+  if(S.edSel==null||S.edSel>=cs.length) S.edSel=0;
+  var h='<div class="ed" id="ed"><div class="ed-top"><button type="button" class="ed-ic" id="edBack" aria-label="'+esc(t("edBack"))+'">'+ic("back")+'</button><b>'+esc(t("reviewTitle"))+'</b><span class="ed-dur" id="edDur">'+mmss(totalDur())+'</span></div>';
+  h+='<div class="ed-main"><div class="stage pv" id="pvStage"><video id="pv" playsinline preload="metadata"></video><canvas id="pvFx" class="pv-fx" width="720" height="1280" hidden></canvas>'+
+    '<button type="button" class="pv-play" id="pvPlay" aria-label="'+esc(t("playAll"))+'"><span>'+ic("play")+'</span></button>'+
+    '<div class="stk-layer" id="stkLayer"></div><div class="pv-cue" id="pvCue" hidden></div>'+
+    '<div class="pv-bar">'+cs.map(function(c,i){ return '<b style="flex-grow:'+Math.max(0.5,clipLen(c)).toFixed(2)+'"><i id="pvb'+i+'"></i></b>'; }).join("")+'</div></div>';
+  h+='<div class="ed-rail" id="edRail">'+ED_RAIL.map(function(r){ return '<button type="button" class="ed-rb'+(S.edSheet===r[0]?' on':'')+'" data-sheet="'+r[0]+'"><i>'+ic(r[1])+'</i><span>'+esc(t(r[2]))+'</span></button>'; }).join("")+'</div></div>';
+  h+='<div class="ed-low" id="edLow">'+edLow()+'</div></div>';
+  return h;
+}
+function edLow(){ return S.edSheet?edSheet(S.edSheet):edParts(); }
+function edParts(){
+  var rows=edRows(), cs=clipList(), guided=S.mode==="guiado", cur=cs[S.edSel], row=rows.filter(function(r){ return r.c===cur; })[0];
+  var h='<div class="ed-strip" id="edStrip">'+rows.map(function(r,k){
+    if(!r.c) return '<button type="button" class="ed-tile skip" data-re="'+r.q+'" aria-label="'+esc(t("partRec"))+'">'+ic("video")+'<small>'+(k+1)+'</small></button>';
+    return '<button type="button" class="ed-tile'+(r.ci===S.edSel?' sel':'')+(clipTrimmed(r.c)?' cut':'')+'" data-tile="'+r.ci+'"'+(r.c.thumb?' style="background-image:url('+r.c.thumb+')"':'')+'><small>'+(k+1)+'</small><em>'+mmss(clipLen(r.c))+'</em></button>';
+  }).join("");
+  if(!guided && rows.length<FREE_PIECES && totalDur()<FREE_TOTAL) h+='<button type="button" class="ed-tile skip" data-re="'+S.clips.length+'" aria-label="'+esc(t("addPiece"))+'">+</button>';
+  h+='</div>';
+  if(row) h+='<p class="ed-cap">'+esc((rows.indexOf(row)+1)+' · '+row.label)+' · '+mmss(clipLen(row.c))+(clipTrimmed(row.c)?' · '+esc(t("edTrimmed")):'')+'</p>';
+  h+='<div class="ed-acts">'+(row?'<button type="button" class="btn ghost small" id="edTrim">'+ic("cut")+'<span>'+esc(t("edTrim"))+'</span></button><button type="button" class="btn ghost small" data-re="'+row.q+'">'+ic("redo")+'<span>'+esc(t("partRe"))+'</span></button>'+
+    (!guided&&rows.length>1?'<button type="button" class="btn ghost small icon-s" data-delclip="'+row.q+'" aria-label="'+esc(t("delPiece"))+'">'+ic("trash")+'</button>':''):'')+'</div>';
+  h+='<button type="button" class="btn primary block" id="edNext"><span>'+esc(t("next"))+'</span></button>';
+  return h;
+}
+function edSheet(name){
+  var title={privacy:t("edPrivacy"),subs:t("edSubs"),music:t("edMusic"),stickers:t("edStickers"),more:t("edMore"),trim:fmt(t("edTrimTitle"),{n:(S.edSel||0)+1})}[name], body="";
+  if(name==="privacy") body=facePanel();
+  else if(name==="subs") body=subsCard();
+  else if(name==="music") body=musicPanel();
+  else if(name==="stickers") body=stickerPanel();
+  else if(name==="more") body='<button type="button" class="btn ghost block" id="again">'+ic("video")+'<span>'+esc(t("againAll"))+'</span></button>';
+  else if(name==="trim") body=trimHtml();
+  var right=name==="trim"?'<button type="button" class="btn ghost small" id="edCancel">'+esc(t("edCancel"))+'</button><button type="button" class="btn primary small" id="edDone">'+ic("check")+'<span>'+esc(t("edDone"))+'</span></button>'
+    :'<button type="button" class="btn primary small" id="edDone">'+esc(t("edDone"))+'</button>';
+  return '<div class="ed-sheet" data-sh="'+name+'"><div class="ed-sh"><b>'+esc(title)+'</b>'+right+'</div><div class="ed-sb">'+body+'</div></div>';
+}
+function edOpen(name){
+  if(name==="trim"){ var c=clipList()[S.edSel]; if(!c) return; S.trim={i:S.edSel,a:clipIn(c),b:clipOut(c)}; pvPause(); pvLoad(S.edSel); }
+  if(S.edSheet==="trim"&&name!=="trim") S.trim=null;
+  S.edSheet=(S.edSheet===name&&name!=="trim")?null:name;
+  STK_SEL=-1; layoutStickers(); edLowSwap();
+}
+function edLowSwap(){
+  var low=document.getElementById("edLow"); if(!low) return; low.innerHTML=edLow(); edBindLow();
+  document.querySelectorAll("#edRail [data-sheet]").forEach(function(b){ b.classList.toggle("on",b.dataset.sheet===S.edSheet); });
+  var d=document.getElementById("edDur"); if(d) d.textContent=mmss(totalDur());
+  requestAnimationFrame(function(){ layoutStickers(); });
+}
+function edTilesUI(){
+  document.querySelectorAll("[data-tile]").forEach(function(el){ var i=+el.dataset.tile; el.classList.toggle("sel",i===S.edSel); el.classList.toggle("now",!!(PV.playing&&i===PV.i)); });
+  if(!S.edSheet){ var low=document.getElementById("edLow"), cap=low&&low.querySelector(".ed-cap"); if(cap&&cap.dataset.sel!==String(S.edSel)){ edLowSwap(); } }
+}
+function edBindLow(){
+  app.querySelectorAll("[data-tile]").forEach(function(b){ b.onclick=function(){ var i=+b.dataset.tile; S.edSel=i; pvPause(); pvLoad(i); pvPlay(); edLowSwap(); }; });
+  var cap=document.querySelector("#edLow .ed-cap"); if(cap) cap.dataset.sel=String(S.edSel);
+  app.querySelectorAll("#edLow [data-re]").forEach(function(b){ b.onclick=function(){ pvStop(); openCamera(+b.dataset.re); }; });
+  app.querySelectorAll("#edLow [data-delclip]").forEach(function(b){ b.onclick=function(){ var i=+b.dataset.delclip, c=S.clips[i]; if(!c) return; pvStop(); if(c.url) URL.revokeObjectURL(c.url); S.clips[i]=null; S.edSel=0; resetProc(); render(); }; });
+  var tr=document.getElementById("edTrim"); if(tr) tr.onclick=function(){ edOpen("trim"); };
+  var nx=document.getElementById("edNext"); if(nx) nx.onclick=edNext;
+  var dn=document.getElementById("edDone"); if(dn) dn.onclick=function(){ if(S.edSheet==="trim") trimApply(); S.edSheet=null; S.trim=null; STK_SEL=-1; edLowSwap(); };
+  var cc=document.getElementById("edCancel"); if(cc) cc.onclick=function(){ S.edSheet=null; S.trim=null; pvPause(); pvLoad(S.edSel); edLowSwap(); };
+  app.querySelectorAll('#edLow input[name=mus]').forEach(function(r){ r.onchange=function(){ S.music=r.value; if(PV.playing) musicStart(); else musicTaste(); }; });
+  app.querySelectorAll('#edLow input[name=face]').forEach(function(r){ r.onchange=function(){ setFace(r.value); }; });
+  app.querySelectorAll('#edLow input[name=voice]').forEach(function(r){ r.onchange=function(){ setVoice(r.value); }; });
+  bindSubs(); bindStickers();
+  if(S.edSheet==="trim") trimBind();
+  AGAIN_ARM=false;
+  var ag=document.getElementById("again"); if(ag) ag.onclick=function(){
+    if(!AGAIN_ARM){ AGAIN_ARM=true; ag.querySelector("span").textContent=t("againConfirm"); ag.classList.add("armed"); setTimeout(function(){ if(AGAIN_ARM&&ag.isConnected){ AGAIN_ARM=false; ag.querySelector("span").textContent=t("againAll"); ag.classList.remove("armed"); } },4000); return; }
+    clearClips(); S.stickers=[]; S.music="none"; STK_SEL=-1; S.edSheet=null; S.edSel=0; S.edPhase=""; render(); window.scrollTo(0,0);
+  };
+}
+function edNext(){
+  if(!hasVideo()){ S.err=t("errVideo"); render(); return; }
+  pvStop(); PROC.editing=false; STK_SEL=-1; S.edSheet=null; S.trim=null;
+  if(S.subs && (S.th || S.thState==="run" || S.thState==="fail")){ S.edPhase="th"; S.err=""; ANIM=true; render(); window.scrollTo(0,0); return; }
+  go(3);
+}
+/* ---- trim: a filmstrip with two handles; the video shows the frame under the handle ---- */
+function trimHtml(){
+  var tr=S.trim; if(!tr) return "";
+  return '<div class="tr"><div class="tr-strip" id="trStrip"><canvas id="trCv"></canvas><div class="tr-dim l" id="trDl"></div><div class="tr-dim r" id="trDr"></div>'+
+    '<div class="tr-win" id="trWin"><i class="tr-h l" id="trHl" aria-label="start"></i><i class="tr-h r" id="trHr" aria-label="end"></i></div></div>'+
+    '<div class="tr-info"><button type="button" class="btn ghost small icon-s" id="trPlay" aria-label="'+esc(t("playAll"))+'">'+ic("play")+'</button><span id="trTime"></span><button type="button" class="btn ghost small" id="trReset">'+esc(t("edReset"))+'</button></div>'+
+    '<p class="small">'+esc(t("edTrimLead"))+'</p></div>';
+}
+function trimUI(){
+  var tr=S.trim, c=clipList()[tr.i]; if(!c) return; var d=c.dur||1, a=tr.a/d*100, b=tr.b/d*100;
+  var w=document.getElementById("trWin"); if(!w) return;
+  w.style.left=a+"%"; w.style.width=(b-a)+"%"; document.getElementById("trDl").style.width=a+"%"; document.getElementById("trDr").style.width=(100-b)+"%";
+  document.getElementById("trTime").innerHTML=esc(secs(tr.a)+"–"+secs(tr.b))+" <small>"+esc(fmt(t("edSec"),{n:(tr.b-tr.a).toFixed(1).replace(".",L==="ru"?",":".")}))+"</small>";
+}
+function secs(x){ var m=Math.floor(x/60), s=x-m*60; return m+":"+(s<10?"0":"")+s.toFixed(1).replace(".",L==="ru"?",":"."); }
+function trimBind(){
+  var tr=S.trim, c=clipList()[tr.i], strip=document.getElementById("trStrip"); if(!c||!strip) return;
+  trimUI(); trimStrip(c);
+  var v=pvEl(), lastSeek=0;
+  function drag(which,ev){
+    ev.preventDefault(); pvPause(); var r=strip.getBoundingClientRect(), d=c.dur||1;
+    var el=ev.currentTarget; try{ el.setPointerCapture(ev.pointerId); }catch(e){}
+    el.onpointermove=function(e2){ var x=Math.max(0,Math.min(1,(e2.clientX-r.left)/r.width))*d;
+      if(which==="a") tr.a=Math.max(0,Math.min(x,tr.b-1)); else tr.b=Math.min(d,Math.max(x,tr.a+1));
+      trimUI(); var now=performance.now(); if(v&&now-lastSeek>60){ lastSeek=now; try{ v.currentTime=which==="a"?tr.a:Math.max(tr.a,tr.b-0.05); }catch(e){} } };
+    el.onpointerup=el.onpointercancel=function(){ el.onpointermove=null; if(v) try{ v.currentTime=which==="a"?tr.a:Math.max(tr.a,tr.b-0.05); }catch(e){} };
+  }
+  document.getElementById("trHl").onpointerdown=function(e){ drag("a",e); };
+  document.getElementById("trHr").onpointerdown=function(e){ drag("b",e); };
+  document.getElementById("trPlay").onclick=function(){ if(PV.playing){ pvPause(); return; } pvLoad(tr.i); try{ v.currentTime=tr.a; }catch(e){} pvPlay(); };
+  document.getElementById("trReset").onclick=function(){ tr.a=0; tr.b=c.dur||0; trimUI(); };
+}
+/* a few frames of the part for the strip (cached on the part) */
+function trimStrip(c){
+  var cv=document.getElementById("trCv"); if(!cv) return; var r=cv.getBoundingClientRect(), dpr=window.devicePixelRatio||1;
+  cv.width=Math.max(1,Math.round(r.width*dpr)); cv.height=Math.max(1,Math.round(r.height*dpr));
+  var fw=Math.max(1,Math.round(cv.height*9/16)), n=Math.max(1,Math.ceil(cv.width/fw)), x=cv.getContext("2d");
+  function paintStrip(){ (c.strip||[]).forEach(function(im,i){ if(im) x.drawImage(im,i*fw,0,fw,cv.height); }); }
+  if(c.strip&&c.strip.length===n){ paintStrip(); return; }
+  if(c.stripBusy) return; c.stripBusy=true; c.strip=new Array(n);
+  var v=document.createElement("video"); v.muted=true; v.playsInline=true; v.preload="auto"; v.src=c.url;
+  var k=0, d=c.dur||1;
+  function next(){ if(k>=n){ c.stripBusy=false; v.removeAttribute("src"); try{ v.load(); }catch(e){} return; } var tt=Math.min(d-0.05,(k+0.5)*d/n); var done=false; var ok=function(){ if(done) return; done=true;
+      try{ var f=document.createElement("canvas"); f.width=fw; f.height=cv.height; f.getContext("2d").drawImage(v,0,0,fw,cv.height); c.strip[k]=f; var cv2=document.getElementById("trCv"); if(cv2) cv2.getContext("2d").drawImage(f,k*fw,0,fw,cv.height); }catch(e){}
+      k++; next(); };
+    v.onseeked=ok; setTimeout(ok,1500); try{ v.currentTime=tt; }catch(e){ ok(); } }
+  v.onloadeddata=function(){ v.onloadeddata=null; next(); }; v.onerror=function(){ c.stripBusy=false; };
+}
+function trimApply(){
+  var tr=S.trim, c=tr&&clipList()[tr.i]; if(!c) return;
+  var d=c.dur||0, a=Math.max(0,Math.round(tr.a*100)/100), b=Math.min(d,Math.round(tr.b*100)/100);
+  c.tin=a>0.05?a:0; c.tout=b<d-0.05?b:null; resetProc(); pvPause(); pvLoad(tr.i);
+  var bar=document.querySelectorAll(".pv-bar b"); clipList().forEach(function(x,i){ if(bar[i]) bar[i].style.flexGrow=Math.max(0.5,clipLen(x)).toFixed(2); });
+  setTimeout(thMaybeStart,0);
+}
+
 /* ---------- review player (iPhone-safe) ----------
    One <video> element that plays the parts one after another with their own sound (the design proven on iPhone).
    Nothing heavy runs when the screen opens. Only the "altered voice" option decodes audio, one part at a time,
@@ -1145,16 +1356,24 @@ function bindReview(){
 var PV={i:0,playing:false,cur:0,raf:0,mlAt:0,mlCost:20,alt:null,altGen:0};
 function pvEl(){ return document.getElementById("pv"); }
 function pvVids(){ var v=pvEl(); return v?[v]:[]; }
-function pvDurs(){ return clipList().map(function(c){ return c.dur||0; }); }
+function pvDurs(){ return clipList().map(clipLen); }
 function pvOffs(){ var d=pvDurs(), o=[], s=0; d.forEach(function(x){ o.push(s); s+=x; }); return {offs:o,durs:d,total:s}; }
-function pvGlobal(){ var cs=clipList(), v=pvEl(), off=0; for(var i=0;i<PV.i&&i<cs.length;i++) off+=cs[i].dur||0; return off+((v&&v.currentTime)||0); }
+function pvGlobal(){ var cs=clipList(), v=pvEl(), off=0; for(var i=0;i<PV.i&&i<cs.length;i++) off+=clipLen(cs[i]); return off+Math.max(0,((v&&v.currentTime)||0)-(cs[PV.i]?clipIn(cs[PV.i]):0)); }
 function pvLoad(i){
   var cs=clipList(), v=pvEl(); if(!v||!cs[i]) return;
   pvAltStop(); PV.i=i; PV.cur=i; FX.hold=null;
   var fc=document.getElementById("pvFx"); if(fc) fc.hidden=true;
   if(cs[i].thumb) v.poster=cs[i].thumb;
-  if(v.getAttribute("src")!==cs[i].url) v.src=cs[i].url;
-  v.muted=(S.voice==="alt"); pvBarUI(); pvParts();
+  var t0=clipIn(cs[i]);
+  if(v.getAttribute("src")!==cs[i].url){ v.src=cs[i].url; if(t0>0){ var once=function(){ v.removeEventListener("loadedmetadata",once); try{ v.currentTime=t0; }catch(e){} }; v.addEventListener("loadedmetadata",once); } }
+  else { try{ v.currentTime=t0; }catch(e){} }
+  v.muted=(S.voice==="alt"); if(S.edSheet!=="trim") S.edSel=i; pvBarUI(); pvParts();
+}
+/* end of a part (its own end, or the trim end): next part, or back to the start */
+function pvPartEnd(){
+  var cs=clipList(); pvAltStop();
+  if(S.edSheet==="trim"&&S.trim){ pvPause(); var v=pvEl(); if(v) try{ v.currentTime=S.trim.a; }catch(e){} return; }
+  if(PV.playing && PV.i<cs.length-1){ pvLoad(PV.i+1); pvPlay(); } else { pvPause(); pvLoad(0); }
 }
 function pvPlay(){
   var v=pvEl(); if(!v) return;
@@ -1174,7 +1393,12 @@ function pvPause(){
 }
 function pvStop(){ pvPause(); }
 function pvSeekTo(tt){ var o=pvOffs(); for(var i=o.offs.length-1;i>=0;i--){ if(tt>=o.offs[i]){ pvLoad(i); return; } } pvLoad(0); }
-function pvTick(){ if(!PV.playing) return; pvBarUI(); pvCueUI(); pvFxDraw(); PV.raf=requestAnimationFrame(pvTick); }
+function pvTick(){
+  if(!PV.playing) return;
+  var c=clipList()[PV.i], v=pvEl(), end=(S.edSheet==="trim"&&S.trim&&S.trim.i===PV.i)?S.trim.b:(c?clipOut(c):0);
+  if(c&&v&&end<(c.dur||0)-0.05&&v.currentTime>=end-0.03){ pvPartEnd(); if(!PV.playing) return; }
+  pvBarUI(); pvCueUI(); pvFxDraw(); PV.raf=requestAnimationFrame(pvTick);
+}
 /* altered voice for the current part: decoded on demand, cached, started at the video's position */
 function pvAltStop(){ PV.altGen++; if(PV.alt){ try{ PV.alt.stop(); }catch(e){} PV.alt=null; } var st=document.getElementById("pvStage"); if(st) st.classList.remove("loading"); }
 function pvAltStart(){
@@ -1196,8 +1420,8 @@ function decodePreview(c){
   return c.pbufP;
 }
 function pvCueUI(){ var el=document.getElementById("pvCue"); if(!el) return; var cue=null; if(S.subs){ var tt=pvGlobal(), cs=allCues(); for(var i=0;i<cs.length;i++){ if(tt>=cs[i].s&&tt<cs[i].e){ cue=cs[i]; break; } } } if(cue){ var hh=cueHtml(cue); if(el.innerHTML!==hh) el.innerHTML=hh; el.hidden=false; } else el.hidden=true; }
-function pvBarUI(){ var cs=clipList(), v=pvEl(); cs.forEach(function(c,i){ var el=document.getElementById("pvb"+i); if(!el) return; var f=i<PV.i?1:i>PV.i?0:(v&&c.dur?Math.min(1,(v.currentTime||0)/c.dur):0); el.style.width=(f*100)+"%"; }); }
-function pvParts(){ var cur=clipList()[PV.i]; app.querySelectorAll(".part").forEach(function(li){ li.classList.toggle("now",!!(PV.playing&&cur&&li.id==="part"+cur.q)); }); }
+function pvBarUI(){ var cs=clipList(), v=pvEl(); cs.forEach(function(c,i){ var el=document.getElementById("pvb"+i); if(!el) return; var f=i<PV.i?1:i>PV.i?0:(v?Math.max(0,Math.min(1,((v.currentTime||0)-clipIn(c))/clipLen(c))):0); el.style.width=(f*100)+"%"; }); }
+function pvParts(){ var cur=clipList()[PV.i]; app.querySelectorAll(".part").forEach(function(li){ li.classList.toggle("now",!!(PV.playing&&cur&&li.id==="part"+cur.q)); }); edTilesUI(); }
 function pvFxActive(){ var c=clipList()[PV.i]; return S.face!=="show" && !!c && c.facing==="user"; }
 /* the picture is redrawn every frame; the face/figure model runs at most ~10 times a second on the phone */
 function pvFxDraw(force){
@@ -1835,7 +2059,7 @@ function upload(file,name,code,sid){
 }
 function recipe(){
   return {v:1,mode:S.mode,W:W,H:H,face:S.face,voice:S.voice,subs:S.subs,edited:S.cuesEdited,music:S.music,stickers:S.stickers,
-    clips:clipList().map(function(c){ return {q:c.q,key:upKey(c.file),dur:+(c.dur||0).toFixed(2),mask:c.mask,facing:c.facing,at:c.at,cues:(c.cues||[]).map(function(q){ return {s:+q.s.toFixed(2),e:+q.e.toFixed(2),text:q.text,hl:q.hl}; })}; }),
+    clips:clipList().map(function(c){ return {q:c.q,key:upKey(c.file),dur:+(c.dur||0).toFixed(2),tin:+clipIn(c).toFixed(2),tout:+clipOut(c).toFixed(2),mask:c.mask,facing:c.facing,at:c.at,cues:(c.cues||[]).map(function(q){ return {s:+q.s.toFixed(2),e:+q.e.toFixed(2),text:q.text,hl:q.hl}; })}; }),
     parts:S.parts.map(function(p){ return p&&p.file?upKey(p.file):null; }), photo:S.photo?upKey(S.photo):null};
 }
 var DIAG_N=0;
@@ -2115,7 +2339,7 @@ function panelMake(it,force){
   Promise.all(list.map(function(c){ return panelBlob(c.key); })).then(function(xs){
     clearClips();
     list.forEach(function(c,k){ var b=xs[k].b, f; try{ f=new File([b],c.key.split("/").pop(),{type:b.type}); }catch(e){ f=b; }
-      S.clips[c.q]={q:c.q,file:f,url:URL.createObjectURL(f),dur:c.dur||1,mask:c.mask,facing:c.facing,cues:c.cues||[],txState:"done",tx:Promise.resolve(c.cues||[])}; });
+      S.clips[c.q]={q:c.q,file:f,url:URL.createObjectURL(f),dur:c.dur||1,tin:c.tin||0,tout:(c.tout!=null&&c.tout<(c.dur||1)-0.05)?c.tout:null,mask:c.mask,facing:c.facing,cues:c.cues||[],txState:"done",tx:Promise.resolve(c.cues||[])}; });
     S.faceTracks=(it.admin&&it.admin.faces&&it.admin.faces.parts)||null;
     var stOff=(it.admin&&it.admin.faces&&it.admin.faces.stickersOff)||[];
     S.stickers=(r.stickers||[]).filter(function(x,i){ return stOff.indexOf(i)<0; }); S.music=r.music||"none"; S.subs=!!r.subs; S.mode=r.mode||S.mode; S.face=r.face||"show"; S.voice=r.voice||"orig";
@@ -2361,7 +2585,7 @@ function txClip(c){
 }
 function startTranscription(){ var cs=clipList(); cs.forEach(function(c){ if(c.txState==="fail"){ c.tx=null; } }); return Promise.all(cs.map(txClip)); }
 /* subtitles of all parts on one timeline; durs = real part lengths when known */
-function allCues(durs){ var out=[], off=0; clipList().forEach(function(c,i){ (c.cues||[]).forEach(function(q,k){ out.push({s:q.s+off,e:q.e+off,text:q.text,hl:q.hl,ci:c.q,k:k}); }); off+=durs?durs[i]:(c.dur||0); }); return out; }
+function allCues(durs){ var out=[], off=0; clipList().forEach(function(c,i){ clipCues(c).forEach(function(q){ out.push({s:q.s+off,e:q.e+off,text:q.text,hl:q.hl,ci:c.q,k:q.k}); }); off+=durs?durs[i]:clipLen(c); }); return out; }
 function cuesKey(){ return allCues().map(function(c){return c.text;}).join("|"); }
 function subsCard(){
   var h='<div class="panel" id="subsbox"><label class="toggle" for="subs"><span><strong>'+esc(t("subsToggle"))+'</strong><span class="sub">'+esc(t("subsNote"))+'</span></span><span class="switch"><input type="checkbox" id="subs"'+(S.subs?' checked':'')+'><i></i></span></label>';
@@ -2447,7 +2671,7 @@ function fdApply(x,tracks,t,w,h){
 function fdSig(){ var p=S.faceTracks; if(!p) return "-"; return Object.keys(p).map(function(q){ return q+":"+(p[q]||[]).filter(function(t){ return t.on; }).map(function(t){ return t.id+"/"+t.b.length+"/"+t.b[0][0]+"/"+t.b[t.b.length-1][0]; }).join(","); }).join(";"); }
 
 /* ---------- final video = parts in order + stickers + subtitles + voice mixed with music ---------- */
-function finalKey(){ return fdSig()+"|"+clipList().map(function(c){return c.url;}).join(",")+"|"+(S.subs?cuesKey():"-")+"|"+S.music+"|"+S.face+"|"+S.voice+"|"+S.stickers.map(function(s){ return [s.e,s.x.toFixed(3),s.y.toFixed(3),s.s].join(":"); }).join(","); }
+function finalKey(){ return fdSig()+"|"+clipList().map(function(c){return c.url+"@"+clipIn(c).toFixed(2)+"-"+clipOut(c).toFixed(2);}).join(",")+"|"+(S.subs?cuesKey():"-")+"|"+S.music+"|"+S.face+"|"+S.voice+"|"+S.stickers.map(function(s){ return [s.e,s.x.toFixed(3),s.y.toFixed(3),s.s].join(":"); }).join(","); }
 function prepareFinal(){
   var cs=clipList(); if(!cs.length) return;
   var key=finalKey();
@@ -2466,18 +2690,19 @@ function prepareFinal(){
   Promise.all([S.subs?startTranscription():null, S.face!=="show"?fxLoad(S.face):null]).then(function(){
     if(PROC.key!==myKey) return;
     var ftr=cs.map(function(c){ return (S.faceTracks&&S.faceTracks[c.q])||null; }), anyFace=ftr.some(function(a){ return a&&a.some(function(x){ return x.on; }); });
-    var plain = !anyFace && cs.length===1 && !S.stickers.length && S.music==="none" && !(S.subs&&allCues().length) && (S.face==="show"||!hasFront()) && S.voice==="orig";
+    var plain = !anyFace && !cs.some(clipTrimmed) && cs.length===1 && !S.stickers.length && S.music==="none" && !(S.subs&&allCues().length) && (S.face==="show"||!hasFront()) && S.voice==="orig";
     if(plain){ PROC.state="skip"; PROC.justDone=true; procUI(); return; }
     return Promise.all(cs.map(decodeClip)).then(function(bufs){ return S.voice==="alt" ? Promise.all(bufs.map(function(b,i){ return b?voiceAlt(cs[i],b):null; })) : bufs; }).then(function(bufs){
       if(PROC.key!==myKey) return;
-      var durs=bufs.map(function(b,i){ return b?b.duration:cs[i].dur; }), offs=[], o=0; durs.forEach(function(d){ offs.push(o); o+=d; });
+      bufs=bufs.map(function(b,i){ return (b&&clipTrimmed(cs[i]))?sliceBuf(b,clipIn(cs[i]),clipOut(cs[i])):b; });
+      var durs=bufs.map(function(b,i){ return clipTrimmed(cs[i])?clipLen(cs[i]):(b?b.duration:cs[i].dur); }), offs=[], o=0; durs.forEach(function(d){ offs.push(o); o+=d; });
       return musP.then(function(mb){
         if(PROC.key!==myKey) return;
         var mix=mixAudio(bufs,offs,durs,mb), cues=S.subs?allCues(durs):[];
         PROC.state="render"; PROC.justDone=true;
         var c=document.createElement("canvas"); c.width=W; c.height=H; c.className="stage-canvas";
         PROC.stageEls=vids.concat([c]); procUI();
-        return renderPass(vids,c,mix,cues,offs,durs,cs.map(function(c){ return c.facing; }),ftr).then(function(file){
+        return renderPass(vids,c,mix,cues,offs,durs,cs.map(function(c){ return c.facing; }),ftr,cs.map(clipIn)).then(function(file){
           if(PROC.key!==myKey) return;
           PROC.final=file; PROC.finalUrl=URL.createObjectURL(file); PROC.state="done"; PROC.stageEls=null; PROC.justDone=true; procUI();
         });
@@ -2513,7 +2738,8 @@ function mixAudio(bufs,offs,durs,mbuf){
 }
 function softLim(x){ var a=x<0?-x:x; if(a<=0.85) return x; var y=0.85+0.15*Math.tanh((a-0.85)/0.15); return x<0?-y:y; }
 
-function renderPass(vids,c,buf,cues,offs,durs,facings,ftr){
+function sliceBuf(b,a,z){ var ac=ensureAC(), sr=b.sampleRate, s0=Math.max(0,Math.floor(a*sr)), s1=Math.min(b.length,Math.ceil(z*sr)), n=Math.max(1,s1-s0), o=ac.createBuffer(b.numberOfChannels,n,sr); for(var ch=0;ch<b.numberOfChannels;ch++) o.getChannelData(ch).set(b.getChannelData(ch).subarray(s0,s0+n)); return o; }
+function renderPass(vids,c,buf,cues,offs,durs,facings,ftr,tins){ tins=tins||vids.map(function(){ return 0; });
   return new Promise(function(resolve,reject){
     var x=c.getContext("2d"), base=document.createElement("canvas"); base.width=W; base.height=H;
     var bx=base.getContext("2d"); bx.fillStyle="#000"; bx.fillRect(0,0,W,H);
@@ -2543,14 +2769,14 @@ function renderPass(vids,c,buf,cues,offs,durs,facings,ftr){
     function clipAt(tt){ for(var i=offs.length-1;i>0;i--){ if(tt>=offs[i]) return i; } return 0; }
     function cueAt(tt){ for(var i=0;i<cues.length;i++){ if(tt>=cues[i].s&&tt<cues[i].e) return cues[i]; } return null; }
     function sync(tt){
-      var k=clipAt(tt), v=vids[k], local=tt-offs[k], now=performance.now();
+      var k=clipAt(tt), v=vids[k], local=tt-offs[k], vt=local+tins[k], now=performance.now();
       if(k!==cur){
         if(cur>=0) try{ vids[cur].pause(); }catch(e){}
-        cur=k; FX.hold=null; if(Math.abs((v.currentTime||0)-local)>0.12){ try{ v.currentTime=Math.max(0,local); }catch(e){} lastSeek=now; }
+        cur=k; FX.hold=null; if(Math.abs((v.currentTime||0)-vt)>0.12){ try{ v.currentTime=Math.max(0,vt); }catch(e){} lastSeek=now; }
         var p0=v.play(); if(p0&&p0.catch) p0.catch(function(){});
         return;
       }
-      if(!v.seeking && !v.ended && Math.abs(v.currentTime-local)>0.3 && now-lastSeek>250 && local<durs[k]-0.15){ lastSeek=now; try{ v.currentTime=Math.min(local+0.05,durs[k]-0.05); }catch(e){} }
+      if(!v.seeking && !v.ended && Math.abs(v.currentTime-vt)>0.3 && now-lastSeek>250 && local<durs[k]-0.15){ lastSeek=now; try{ v.currentTime=tins[k]+Math.min(local+0.05,durs[k]-0.05); }catch(e){} }
       if(v.paused && !v.ended && local<durs[k]-0.1){ var p1=v.play(); if(p1&&p1.catch) p1.catch(function(){}); }
     }
     function paint(tt){
@@ -2570,7 +2796,7 @@ function renderPass(vids,c,buf,cues,offs,durs,facings,ftr){
     function begin(){
       if(started||done) return;
       if(document.hidden){ interrupt("hidden before start"); return; }
-      cur=0; off0=Math.max(0,Math.min(vids[0].currentTime||0,durs[0]-0.1));
+      cur=0; off0=Math.max(0,Math.min((vids[0].currentTime||0)-tins[0],durs[0]-0.1));
       paint(off0);                               /* first real frame is on the canvas before recording starts */
       rec.start(1000);
       try{ node.start(0,off0); }catch(e){}
@@ -2590,7 +2816,7 @@ function renderPass(vids,c,buf,cues,offs,durs,facings,ftr){
       try{ rec.stop(); }catch(e){ reject(e); }
     }
     setTimeout(function(){ if(!done) end(); },(dur+15)*1000);
-    var v0=vids[0]; try{ v0.currentTime=0; }catch(e){}
+    var v0=vids[0]; try{ v0.currentTime=tins[0]||0; }catch(e){}
     var p=v0.play();
     (p&&p.then?p:Promise.resolve()).then(function(){
       if(v0.requestVideoFrameCallback) v0.requestVideoFrameCallback(function(){ begin(); });
@@ -2694,13 +2920,13 @@ function makeMusic(key){
    Theses (pros / cons) + one rating per aspect + "would come back". The client's confirmed answers are what
    ranking uses later; the AI never sets a rating on its own. Quotes are highlighted in the subtitles. */
 var TH_ASPECTS=["resultado","atendimento","pontualidade","limpeza","preco"];
-function thKey(){ return clipList().map(function(c){ return c.url; }).join(","); }
+function thKey(){ return clipList().map(function(c){ return c.url+"@"+clipIn(c).toFixed(1)+"-"+clipOut(c).toFixed(1); }).join(","); }
 function thMaybeStart(){
   if(!S.subs || txState()!=="done" || !allCues().length) return;
   var k=thKey(); if(S.th && S.th.key===k) return;
   if(S.thState==="run" && S.thRunKey===k) return;
   S.thState="run"; S.thRunKey=k; procUI();
-  var text=clipList().map(function(c){ return (c.cues||[]).map(function(q){ return q.text; }).join(" "); }).filter(Boolean).join("\n");
+  var text=clipList().map(function(c){ return clipCues(c).map(function(q){ return q.text; }).join(" "); }).filter(Boolean).join("\n");
   fetch(API+"/theses",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({code:upCode(),sid:SID,lang:L,service:S.service,text:text})})
     .then(function(r){ if(!r.ok) throw httpErr(r); return r.json(); })
     .then(function(j){
