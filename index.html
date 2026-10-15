@@ -721,7 +721,7 @@ var qs = {};
 try { new URLSearchParams(location.search).forEach(function(v,k){ qs[k]=v; }); } catch(e){}
 var hash = (location.hash||"").replace("#","").toLowerCase();
 var CFG = {
-  format: (qs.f||(hash==="b"?"b":"a")).toLowerCase()==="b" ? "b" : "a",
+  format: (qs.f||(hash==="a"?"a":"b")).toLowerCase()==="a" ? "a" : "b",
   service: qs.s||"", pro: qs.p||"", code: qs.r||"",
   wa: (qs.w||"").replace(/\D/g,""),
   lang: (qs.lang==="ru"||hash==="ru") ? "ru" : "pt",
@@ -1097,7 +1097,7 @@ function renderVideoStep(){
   } else {
     var M=t("modes"), MI=t("modeInfo");
     h='<div class="stack lg">'+head(2,t("modeTitle"),t("modeLead"))+'<div class="stack">'+
-      ["guiado","livre"].map(function(k){
+      (CFG.format==="a"?["guiado","livre"]:["livre","guiado"]).map(function(k){
         var inf=MI[k];
         /* guided mode: the questions themselves are shown before the camera opens (no extra step), however many there are */
         var extra, qs=t("questions");
@@ -1105,7 +1105,7 @@ function renderVideoStep(){
           '<div class="co-meta"><span class="meta">'+ic("chatq")+esc(qCount(qs.length))+'</span><span class="meta">'+ic("clock")+esc(fmt(t("qMins"),{m:Math.max(1,Math.round(qs.length*25/60))}))+'</span></div>';
         else extra='<ol class="steps-mini">'+inf.steps.map(function(s2,i){ return '<li><i>'+(i+1)+'</i><span>'+esc(s2)+'</span></li>'; }).join("")+'</ol>'+
           '<div class="co-meta">'+inf.meta.map(function(m){ return '<span class="meta">'+ic(m[0])+esc(m[1])+'</span>'; }).join("")+'</div>';
-        return radioCard("mode",k,S.mode===k,k==="guiado"?"chatq":"mic",M[k][0],inf.pitch,extra,k==="guiado"?t("recommended"):"");
+        return radioCard("mode",k,S.mode===k,k==="guiado"?"chatq":"mic",M[k][0],inf.pitch,extra,k===(CFG.format==="a"?"guiado":"livre")?t("recommended"):"");
       }).join("")+'</div>'+
       '<div class="facecard"><div class="row"><span class="co-ic">'+ic("mask")+'</span><div><h3>'+esc(t("faceTitle"))+'</h3><p class="small">'+esc(t("faceText"))+'</p></div></div>'+
       '</div>'+
