@@ -681,8 +681,8 @@ details[open] summary svg{transform:rotate(90deg)}
 .mchip[aria-pressed="true"] .sw{border:3px solid #fff;transform:scale(1.08)}
 .mchip[aria-pressed="true"] b{color:#fff}
 .mchip[disabled]{opacity:.35;pointer-events:none}
-.cam-pr{position:absolute;z-index:3;left:12px;right:12px;top:calc(60px + env(safe-area-inset-top,0px));height:32vh;border-radius:18px;background:rgba(10,11,13,.58);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);overflow:hidden;touch-action:none;border:1px solid rgba(255,255,255,.12)}
-.cam-pr-in{padding:14px 18px calc(30vh + 46px);font:600 23px/1.42 var(--f);color:#fff;white-space:pre-wrap;overflow-wrap:anywhere;will-change:transform;-webkit-mask-image:linear-gradient(transparent 0,#000 10%,#000 85%,transparent 100%);mask-image:linear-gradient(transparent 0,#000 10%,#000 85%,transparent 100%)}
+.cam-pr{position:absolute;z-index:3;left:12px;right:12px;top:calc(60px + env(safe-area-inset-top,0px));height:22vh;min-height:150px;border-radius:18px;background:rgba(10,11,13,.58);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);overflow:hidden;touch-action:none;border:1px solid rgba(255,255,255,.12)}
+.cam-pr-in{padding:12px 18px calc(20vh + 46px);font:600 23px/1.42 var(--f);color:#fff;white-space:pre-wrap;overflow-wrap:anywhere;will-change:transform;-webkit-mask-image:linear-gradient(transparent 0,#000 10%,#000 85%,transparent 100%);mask-image:linear-gradient(transparent 0,#000 10%,#000 85%,transparent 100%)}
 .cam-pr.hold{border-color:#FFD84D}
 .cam-pr-ctl{position:absolute;left:0;right:0;bottom:0;height:46px;padding:0 8px 0 16px;display:flex;gap:8px;align-items:center;justify-content:flex-end;font:600 13px/1 var(--f);color:rgba(255,255,255,.85);background:rgb(16,17,20);border-top:1px solid rgba(255,255,255,.1)}
 .cam-pr-ctl span{margin-right:auto}
@@ -809,7 +809,7 @@ pt:{
  q3:"Antes de marcar, você assistiria vídeos de clientes reais?", q3o:{sempre:"Sim, sempre",asvezes:"Às vezes",indiferente:"Não faria diferença"},
  errQ:"Responda as 3 perguntas.",
  permTitle:"Quem pode ver o vídeo?",
- perm:{privado:["Só a equipe da Proba","Não publicamos. Usamos só para melhorar o serviço."],semrosto:["Pode publicar, sem meu rosto","Cortamos ou desfocamos o rosto antes de publicar."],comrosto:["Pode publicar como está","O vídeo aparece com rosto e voz."]},
+ perm:{privado:["Não publicar, guardar para mim","Outros usuários da plataforma não vão ver o vídeo."],semrosto:["Pode publicar, sem meu rosto","Cortamos ou desfocamos o rosto antes de publicar."],comrosto:["Pode publicar como está","O vídeo aparece com rosto e voz."]},
  consent:"Autorizo a Proba a receber e guardar este vídeo e a usar minha imagem e voz apenas na forma que escolhi acima. O original fica só com a equipe da Proba. Posso pedir a remoção a qualquer momento pelo WhatsApp.",
  errPerm:"Escolha uma opção e confirme a autorização.",
  sendTitle:"Tudo pronto", sendLead:"Estamos enviando sua avaliação. Não feche esta página até aparecer “Avaliação enviada”.",
@@ -878,7 +878,7 @@ ru:{
  q3:"Перед записью вы бы смотрели видео реальных клиенток?", q3o:{sempre:"Да, всегда",asvezes:"Иногда",indiferente:"Без разницы"},
  errQ:"Ответьте на 3 вопроса.",
  permTitle:"Кто может увидеть видео?",
- perm:{privado:["Только команда Пробы","Не публикуем. Только для улучшения сервиса."],semrosto:["Можно публиковать, без лица","Перед публикацией обрежем или размоем лицо."],comrosto:["Можно публиковать как есть","Видео с лицом и голосом."]},
+ perm:{privado:["Не публиковать, оставить для себя","Видео не увидят другие пользователи платформы."],semrosto:["Можно публиковать, без лица","Перед публикацией обрежем или размоем лицо."],comrosto:["Можно публиковать как есть","Видео с лицом и голосом."]},
  consent:"Разрешаю Пробе получить и хранить это видео и использовать моё изображение и голос только в выбранном выше виде. Оригинал хранится только у команды Пробы. Могу попросить удалить в любой момент через WhatsApp.",
  errPerm:"Выберите вариант и подтвердите согласие.",
  sendTitle:"Всё готово", sendLead:"Отправляем ваш отзыв. Не закрывайте страницу, пока не появится «Отзыв отправлен».",
@@ -1937,18 +1937,19 @@ function prPaint(){ var inn=document.getElementById("camPrIn"), box=document.get
 function prTick(now){
   if(!CAM.open||!S.prompt) return;
   var dt=Math.min(0.1,(now-PR.last)/1000); PR.last=now;
-  if(CAM.state==="rec"&&!PR.hold){ PR.y+=(S.prSpeed||34)*dt; prPaint(); }
+  if(CAM.state==="rec"&&!PR.hold){ PR.y+=(S.prSpeed||PR_BASE*0.4)*dt; prPaint(); }
   PR.raf=requestAnimationFrame(prTick);
 }
-function prSpeedUI(){ var sp=document.getElementById("camPrSp"); if(sp) sp.textContent=fmt(t("prSpeed"),{n:Math.round((S.prSpeed||34)/34*10)/10}); }
+var PR_BASE=34;   /* px per second at 1x */
+function prSpeedUI(){ var sp=document.getElementById("camPrSp"); if(sp) sp.textContent=fmt(t("prSpeed"),{n:String(Math.round((S.prSpeed||PR_BASE*0.4)/PR_BASE*10)/10).replace(".",L==="ru"?",":".")}); }
 (function(){
   var box=document.getElementById("camPr"); if(!box) return; var d=null;
   box.addEventListener("pointerdown",function(e){ if(e.target.closest("button")) return; e.stopPropagation(); d={y0:e.clientY,py:PR.y,moved:false}; try{ box.setPointerCapture(e.pointerId); }catch(x){} });
   box.addEventListener("pointermove",function(e){ if(!d) return; var dy=e.clientY-d.y0; if(Math.abs(dy)>6) d.moved=true; if(d.moved){ PR.y=d.py-dy; prPaint(); } });
   box.addEventListener("pointerup",function(){ if(d&&!d.moved){ PR.hold=!PR.hold; prPaint(); } d=null; });
   box.addEventListener("pointercancel",function(){ d=null; });
-  document.getElementById("camPrSlow").onclick=function(e){ e.stopPropagation(); S.prSpeed=Math.max(14,(S.prSpeed||34)-6); prSpeedUI(); };
-  document.getElementById("camPrFast").onclick=function(e){ e.stopPropagation(); S.prSpeed=Math.min(110,(S.prSpeed||34)+6); prSpeedUI(); };
+  document.getElementById("camPrSlow").onclick=function(e){ e.stopPropagation(); S.prSpeed=Math.max(PR_BASE*0.1,(S.prSpeed||PR_BASE*0.4)-PR_BASE*0.1); prSpeedUI(); };
+  document.getElementById("camPrFast").onclick=function(e){ e.stopPropagation(); S.prSpeed=Math.min(PR_BASE*2,(S.prSpeed||PR_BASE*0.4)+PR_BASE*0.1); prSpeedUI(); };
 })();
 function camWatch(){
   var me=CAM; me.revives=0; frameWatch(me);
