@@ -697,6 +697,8 @@ details[open] summary svg{transform:rotate(90deg)}
 .fb{background:var(--sub);border-radius:var(--r-lg);padding:16px;display:flex;flex-direction:column;gap:8px}.fb-h{margin:0;font:600 17px/1.3 var(--f)}.fb .small{margin:0}
 .fb textarea{font-size:16px;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line2);background:var(--paper);color:var(--ink);resize:vertical;width:100%;box-sizing:border-box;font-family:var(--f)}
 .fb .btn{align-self:flex-start}.fb-ok{margin:0;display:flex;gap:8px;align-items:center;font:600 16px/1.3 var(--f)}.fb-ok svg{width:20px;height:20px}
+.err-toast{position:fixed;left:16px;right:16px;z-index:30;display:flex;gap:10px;align-items:center;padding:14px 16px;border-radius:16px;background:var(--bad);color:#fff;font:600 16px/1.35 var(--f);box-shadow:0 10px 30px rgba(0,0,0,.25);opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .25s var(--ease),transform .25s var(--ease)}
+.err-toast.on{opacity:1;transform:none;pointer-events:auto;animation:shake .35s var(--ease)}.err-toast svg{width:20px;height:20px;flex:0 0 auto}
 .cam-x2{position:absolute;z-index:4;left:16px;right:16px;bottom:24px;background:rgba(18,19,22,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.14);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:8px;color:#fff;animation:rise .35s var(--ease)}
 .cam-x2 p{margin:0;font:600 14px/1.3 var(--f);color:rgba(255,255,255,.75)}.cam-x2 strong{font:600 19px/1.3 var(--f)}
 .cam-x2b{display:grid;grid-template-columns:1fr 1.4fr;gap:10px;margin-top:6px}.cam-x2b button{all:unset;cursor:pointer;text-align:center;border-radius:999px;padding:14px 10px;font:600 16px/1 var(--f);background:#fff;color:#111}.cam-x2b button.ghost{background:rgba(255,255,255,.14);color:#fff}
@@ -804,8 +806,8 @@ pt:{
  visitTitle:"Sobre a visita", service:"Qual serviço?", placeQ:"Onde você foi atendida?", place:{pro:"Com uma profissional",salon:"Num salão ou estúdio"}, pro:"Nome ou @ da profissional", proPh:"@ana.unhas", salon:"Nome ou @ do salão", salonPh:"@studio.unhas", proIn:"Nome da profissional, se lembrar", proInPh:"Ana", optional:"opcional", date:"Data da visita",
  services:{unhas:"Unhas",olhar:"Sobrancelhas e cílios",cabelo:"Cabelo e barba",depilacao:"Depilação",maquiagem:"Maquiagem",estetica:"Rosto e corpo",outro:"Outro"},
  servicesOld:{manicure:"Manicure",pedicure:"Pedicure",sobrancelha:"Sobrancelha",cilios:"Cílios",barba:"Barbearia"},
- errService:"Escolha a área e o serviço.", areaQ:"Em que área foi o atendimento?",
- procQ:"Qual serviço?", procHint:"Pode marcar vários.", procOtherL:"Qual serviço?", procOtherPh:"Ex.: massagem relaxante",
+ errService:"Escolha sobre o que foi a visita.", areaQ:"Sobre o que foi a visita?",
+ procQ:"Qual serviço?", procHint:"Pode marcar vários. Opcional.", procOtherL:"Qual serviço?", procOtherPh:"Ex.: massagem relaxante",
  svTitle:"O que foi feito", svLead:"Marcamos pelo que você contou. Corrija se precisar.", svSub:"Técnica", svFind:"Procurar outro serviço", svOther:"Outro, com suas palavras", svEdit:"Alterar", svNone:"Nada encontrado.",
  xqOpt:"opcional", xqTip:"Opcional · até 30 segundos.", x2Title:"Mais uma pergunta? Uns 20 segundos.", x2Yes:"Responder", x2No:"Pronto",
  modeTitle:"Como prefere gravar?",
@@ -877,8 +879,8 @@ ru:{
  visitTitle:"О визите", service:"Какая услуга?", placeQ:"Где вас обслуживали?", place:{pro:"У частного мастера",salon:"В салоне или студии"}, pro:"Имя или @ мастера", proPh:"@ana.unhas", salon:"Название или @ салона", salonPh:"@studio.unhas", proIn:"Имя мастера, если помните", proInPh:"Ана", optional:"необязательно", date:"Дата визита",
  services:{unhas:"Ногти",olhar:"Брови и ресницы",cabelo:"Волосы и борода",depilacao:"Депиляция",maquiagem:"Макияж",estetica:"Лицо и тело",outro:"Другое"},
  servicesOld:{manicure:"Маникюр",pedicure:"Педикюр",sobrancelha:"Брови",cilios:"Ресницы",barba:"Барбер"},
- errService:"Выберите направление и услугу.", areaQ:"С чем был визит?",
- procQ:"Какая услуга?", procHint:"Можно несколько.", procOtherL:"Что за услуга?", procOtherPh:"Например: массаж спины",
+ errService:"Выберите, с чем был связан визит.", areaQ:"С чем был связан визит?",
+ procQ:"Какая услуга?", procHint:"Можно несколько. Необязательно.", procOtherL:"Что за услуга?", procOtherPh:"Например: массаж спины",
  svTitle:"Что делали", svLead:"Отметили по вашему рассказу. Поправьте, если не так.", svSub:"Техника", svFind:"Найти другую услугу", svOther:"Другое, своими словами", svEdit:"Изменить", svNone:"Ничего не нашлось.",
  xqOpt:"по желанию", xqTip:"По желанию · до 30 секунд.", x2Title:"Ещё один вопрос? Секунд 20.", x2Yes:"Ответить", x2No:"Готово",
  modeTitle:"Как удобнее снимать?",
@@ -1186,7 +1188,19 @@ function radioCard(name,k,checked,icon,title,sub,extra,badge){
 }
 var ANIM=true;
 function go(n){ pvStop(); if(n===1) ev("start"); if(n===2) ev("visit"); S.err=""; S.step=n; ANIM=true; render(); window.scrollTo(0,0); }
-function paint(h){ app.innerHTML=h; var first=app.firstElementChild; if(first&&ANIM) first.classList.add("enter"); ANIM=false; document.body.classList.toggle("ed-on",!!document.getElementById("ed")); }
+function paint(h){ app.innerHTML=h; var first=app.firstElementChild; if(first&&ANIM) first.classList.add("enter"); ANIM=false; document.body.classList.toggle("ed-on",!!document.getElementById("ed")); errToast(); }
+/* a hint like "choose the service" must be seen even when it sits at the bottom of a long screen: a banner right above the buttons + the line itself scrolled into view */
+var ERRT=0;
+function errToast(){
+  var el=document.getElementById("errToast"); clearTimeout(ERRT);
+  if(!S.err||CFG.panel||CFG.gen){ if(el) el.classList.remove("on"); return; }
+  if(!el){ el=document.createElement("div"); el.id="errToast"; el.className="err-toast"; el.setAttribute("role","alert"); document.body.appendChild(el); el.onclick=function(){ el.classList.remove("on"); }; }
+  el.innerHTML=ic("none")+'<span>'+esc(S.err)+'</span>';
+  el.style.bottom=((bar&&!bar.hidden?bar.offsetHeight:0)+12)+"px";
+  void el.offsetWidth; el.classList.add("on");
+  ERRT=setTimeout(function(){ el.classList.remove("on"); },4500);
+  var line=app.querySelector(".err"); if(line){ var r=line.getBoundingClientRect(), barH=bar&&!bar.hidden?bar.offsetHeight:0; if(r.bottom>window.innerHeight-barH-8||r.top<0) line.scrollIntoView({behavior:"smooth",block:"center"}); }
+}
 
 /* ---------- screens ---------- */
 function render(){
@@ -1216,14 +1230,14 @@ function render(){
         : '<div class="field"><label class="label" for="pro">'+esc(t("pro"))+'</label><input type="text" id="pro" autocomplete="off" placeholder="'+esc(t("proPh"))+'" value="'+esc(S.pro)+'"></div>')+
       '<div class="field"><label class="label" for="vdate">'+esc(t("date"))+'</label><input type="date" id="vdate" value="'+esc(S.date)+'" max="'+iso+'"></div>'+errHtml()+'</div>';
     paint(h);
-    app.querySelectorAll('input[name=svc]').forEach(function(r){ r.onchange=function(){ var was=S.service; S.service=r.value; if(was!==S.service){ S.procs=(S.procs||[]).filter(function(c){ return c.split(".")[0]===S.service; }); var y=window.scrollY; render(); window.scrollTo(0,y); } }; });
+    app.querySelectorAll('input[name=svc]').forEach(function(r){ r.onchange=function(){ var was=S.service; S.service=r.value; S.err=""; var tt=document.getElementById("errToast"); if(tt) tt.classList.remove("on"); if(was!==S.service){ S.procs=(S.procs||[]).filter(function(c){ return c.split(".")[0]===S.service; }); var y=window.scrollY; render(); window.scrollTo(0,y); } }; });
     app.querySelectorAll('input[name=proc]').forEach(function(r){ r.onchange=function(){ svToggle(r.value); }; });
     var pro0=document.getElementById("procOther"); if(pro0) pro0.oninput=function(e){ S.procOther=e.target.value; };
     document.getElementById("pro").oninput=function(e){ S.pro=e.target.value.trim(); };
     var sal=document.getElementById("salon"); if(sal) sal.oninput=function(e){ S.salon=e.target.value.trim(); };
     app.querySelectorAll('input[name=place]').forEach(function(r){ r.onchange=function(){ S.place=r.value; var y=window.scrollY; render(); window.scrollTo(0,y); }; });
     document.getElementById("vdate").onchange=function(e){ S.date=e.target.value||iso; };
-    setBar([backBtn(0),{label:t("next"),on:function(){ if(!S.service||(S.service==="outro"?!(S.procOther||"").trim():!(S.procs||[]).some(function(c){ return c.split(".")[0]===S.service; }))){S.err=t("errService");render();return;} go(2); }}]); return;
+    setBar([backBtn(0),{label:t("next"),on:function(){ if(!S.service){S.err=t("errService");render(); var sc=app.querySelector(".section"); if(sc) sc.scrollIntoView({behavior:"smooth",block:"center"}); return;} go(2); }}]); return;
   }
   if(st===2){ renderVideoStep(); return; }
   if(st===4){
@@ -3258,7 +3272,7 @@ function recomputeHL(){
 function svVisitHtml(){
   if(!S.service) return "";
   if(S.service==="outro"||!(SVC_TREE[S.service]||[]).length)
-    return '<div class="field"><label class="label" for="procOther">'+esc(t("procOtherL"))+'</label><input type="text" id="procOther" autocomplete="off" placeholder="'+esc(t("procOtherPh"))+'" value="'+esc(S.procOther||"")+'"></div>';
+    return '<div class="field"><label class="label" for="procOther">'+esc(t("procOtherL"))+' <span class="small">· '+esc(t("optional"))+'</span></label><input type="text" id="procOther" autocomplete="off" placeholder="'+esc(t("procOtherPh"))+'" value="'+esc(S.procOther||"")+'"></div>';
   var opts={}, sel=[]; svList(S.service).filter(function(x){ return x.lvl===2; }).forEach(function(x){ opts[x.c]=x[L]; if(svOn(x.c)) sel.push(x.c); });
   return '<div class="section sv-sec"><p class="label">'+esc(t("procQ"))+' <span class="small">· '+esc(t("procHint"))+'</span></p>'+chipGroup("proc",opts,sel,true)+'</div>';
 }
