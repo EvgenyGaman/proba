@@ -84,6 +84,17 @@ export default {
         return json({ ok: true });
       }
 
+      // ---------- suggestions from the person after sending (what was convenient, what was not) ----------
+      if (path === "/feedback" && request.method === "POST") {
+        const t = await request.text();
+        if (t.length > 5000) return json({ error: "too large" }, 413);
+        const e = JSON.parse(t);
+        const txt = String(e.text || "").trim().slice(0, 2000);
+        if (!CODE_RE.test(e.code || "") || !SID_RE.test(e.sid || "") || !txt) return json({ error: "bad request" }, 400);
+        await env.BUCKET.put(`fb/${e.code}/${e.sid}/${Date.now()}`, txt);
+        return json({ ok: true });
+      }
+
       // ---------- funnel: anonymous step marks (link code + step only, no personal data) ----------
       if (path === "/ev" && request.method === "POST") {
         const t = await request.text();
@@ -113,11 +124,14 @@ export default {
         if (path === "/admin/list" && request.method === "GET") {
           const listed = await env.BUCKET.list({ prefix: "subs/", limit: 1000 });
           const keys = listed.objects.map((o) => o.key).sort().reverse().slice(0, 200);
+          const fbl = await env.BUCKET.list({ prefix: "fb/", limit: 1000 }), fb = {};
+          await Promise.all(fbl.objects.slice(-300).map(async (o) => { const sid = o.key.split("/")[2]; const v = await env.BUCKET.get(o.key); if (v) (fb[sid] = fb[sid] || []).push(await v.text()); }));
           const items = await Promise.all(keys.map(async (key) => {
             const o = await env.BUCKET.get(key);
             if (!o) return null;
             const r = await o.json();
             r.id = key;
+            if (fb[r.sid]) r.feedback = fb[r.sid];
             return r;
           }));
           return json({ items: items.filter(Boolean) });
@@ -241,7 +255,7 @@ async function stt(request, env, json) {
   });
 }
 
-const ASPECTS = ["resultado", "atendimento", "pontualidade", "limpeza", "preco", "ambiente", "durabilidade", "outro"];
+const ASPECTS = ["resultado", "atendimento", "pontualidade", "limpeza", "preco", "valor", "ambiente", "durabilidade", "outro"];
 async function theses(request, env, json) {
   if (!env.GROQ_API_KEY) return json({ error: "server not configured" }, 500);
   const b = await request.json().catch(() => null);
@@ -254,7 +268,10 @@ async function theses(request, env, json) {
     '"aspects":{"<aspect>":"pos"|"neg"|"mix"},"voltaria":"sim"|"nao"|"talvez"|"na","summary":string}. ' +
     "Rules: at most 6 theses, the most important first; text = a short claim (max 90 characters) in the same language as the review, written as the customer's own statement; " +
     "quote = 2 to 10 consecutive words copied EXACTLY from the transcript that best express the thesis; " +
-    "aspects only for aspects the customer talked about; voltaria = whether the customer said they would come back; summary = one neutral sentence in the review's language. " +
+    "aspects only for aspects the customer talked about; " +
+    "preco = ONLY whether the final price matched what was agreed or announced (no surprise charges); saying it was expensive or cheap is NOT preco. " +
+    "valor = whether it was worth the money: pos = worth it / fair, neg = not worth it / overpriced, mix = expensive but worth it, or she only says it was expensive without judging; " +
+    "voltaria = whether the customer said they would come back; summary = one neutral sentence in the review's language. " +
     "If the transcript has no real content, return empty theses." +
     (procs.length ? ' Also return "procs": the codes from the PROCEDURES list that the customer explicitly said were done in this visit (a technique code when she named the technique), [] if not said.' : "");
   const user = "Service: " + String(b.service || "").slice(0, 40) +

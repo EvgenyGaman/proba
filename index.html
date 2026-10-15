@@ -689,6 +689,14 @@ details[open] summary svg{transform:rotate(90deg)}
 .cam-pr-ctl button{all:unset;cursor:pointer;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;font:600 20px/1 var(--f);color:#fff}
 #prText{font-size:16px;min-height:120px;resize:vertical}
 .pr-acts{display:flex;gap:8px;margin-top:8px}
+.mode-page .co-title{font-size:19px}.mode-page .co-sub{font-size:16px;line-height:1.45}
+.mode-page .steps-mini li{font-size:16px;line-height:1.45}.mode-page .steps-mini li i{width:26px;height:26px;font-size:13px}
+.mode-page .qprev{padding:14px 16px;gap:10px}.mode-page .qprev-h{font-size:16px}.mode-page .qprev li{font-size:16px;grid-template-columns:26px 1fr;gap:10px}.mode-page .qprev li i{width:26px;height:26px;font-size:13px}
+.mode-page .meta{font-size:15px}.mode-page .small{font-size:15px;line-height:1.45}.mode-page .rules h3{font-size:18px}.mode-page .rules ol{font-size:16px;line-height:1.45}
+.mode-page .facecard h3{font-size:18px}.mode-page .check span:last-child{font-size:16px}.mode-page textarea{font-size:16px}.mode-page .xq-b{font-size:13px}
+.fb{background:var(--sub);border-radius:var(--r-lg);padding:16px;display:flex;flex-direction:column;gap:8px}.fb-h{margin:0;font:600 17px/1.3 var(--f)}.fb .small{margin:0}
+.fb textarea{font-size:16px;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line2);background:var(--paper);color:var(--ink);resize:vertical;width:100%;box-sizing:border-box;font-family:var(--f)}
+.fb .btn{align-self:flex-start}.fb-ok{margin:0;display:flex;gap:8px;align-items:center;font:600 16px/1.3 var(--f)}.fb-ok svg{width:20px;height:20px}
 .cam-x2{position:absolute;z-index:4;left:16px;right:16px;bottom:24px;background:rgba(18,19,22,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.14);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:8px;color:#fff;animation:rise .35s var(--ease)}
 .cam-x2 p{margin:0;font:600 14px/1.3 var(--f);color:rgba(255,255,255,.75)}.cam-x2 strong{font:600 19px/1.3 var(--f)}
 .cam-x2b{display:grid;grid-template-columns:1fr 1.4fr;gap:10px;margin-top:6px}.cam-x2b button{all:unset;cursor:pointer;text-align:center;border-radius:999px;padding:14px 10px;font:600 16px/1 var(--f);background:#fff;color:#111}.cam-x2b button.ghost{background:rgba(255,255,255,.14);color:#fff}
@@ -725,7 +733,7 @@ details[open] summary svg{transform:rotate(90deg)}
       <div class="seg" role="group" aria-label="Idioma"><button type="button" id="lang-pt" aria-pressed="true">PT</button><button type="button" id="lang-ru" aria-pressed="false">RU</button></div>
       <button type="button" class="iconbtn" id="themeBtn" aria-label="Tema"></button>
     </div>
-    <div class="progress" id="progress" hidden><div class="steps" id="steps" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="stepcount" id="stepcount"></span></div>
+    <div class="progress" id="progress" hidden><div class="steps" id="steps" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><span class="stepcount" id="stepcount"></span></div>
   </header>
   <main id="app"></main>
   <p class="foot" id="foot"></p>
@@ -758,9 +766,15 @@ details[open] summary svg{transform:rotate(90deg)}
 var qs = {};
 try { new URLSearchParams(location.search).forEach(function(v,k){ qs[k]=v; }); } catch(e){}
 var hash = (location.hash||"").replace("#","").toLowerCase();
+function svLegacy(v){
+  v=String(v||""); var M={manicure:"unhas.manicure",pedicure:"unhas.pedicure",sobrancelha:"olhar.sobrancelha",cilios:"olhar.cilios",barba:"cabelo.barba"};
+  if(M[v]) return [M[v].split(".")[0],[M[v]]];
+  if(v.indexOf(".")>0) return [v.split(".")[0],[v]];
+  return [v,[]];
+}
 var CFG = {
   format: (qs.f||(hash==="a"?"a":"b")).toLowerCase()==="a" ? "a" : "b",
-  service: qs.s||"", procs: (qs.sv||"").split(",").filter(Boolean), pro: qs.p||"", code: qs.r||"",
+  service: svLegacy(qs.s)[0], procs: svLegacy(qs.s)[1].concat((qs.sv||"").split(",").filter(Boolean)), pro: qs.p||"", code: qs.r||"",
   wa: (qs.w||"").replace(/\D/g,""),
   lang: (qs.lang==="ru"||hash==="ru") ? "ru" : "pt",
   gen: hash==="gerar",
@@ -788,9 +802,10 @@ pt:{
  pts:["Nada é publicado sem a sua permissão. Você escolhe no final.","Não precisa mostrar o rosto. Pode filmar só o resultado.","Nós pagamos R$ 20 a você pela participação, via Pix.","Leva uns 3 minutos."],
  start:"Começar", next:"Continuar", back:"Voltar",
  visitTitle:"Sobre a visita", service:"Qual serviço?", placeQ:"Onde você foi atendida?", place:{pro:"Com uma profissional",salon:"Num salão ou estúdio"}, pro:"Nome ou @ da profissional", proPh:"@ana.unhas", salon:"Nome ou @ do salão", salonPh:"@studio.unhas", proIn:"Nome da profissional, se lembrar", proInPh:"Ana", optional:"opcional", date:"Data da visita",
- services:{manicure:"Manicure",pedicure:"Pedicure",sobrancelha:"Sobrancelha",cilios:"Cílios",cabelo:"Cabelo",barba:"Barbearia",depilacao:"Depilação",maquiagem:"Maquiagem",estetica:"Estética e massagem",outro:"Outro"},
- errService:"Escolha o serviço.",
- procQ:"O que foi feito?", procHint:"Pode marcar vários. Opcional.", procOtherL:"Qual serviço?", procOtherPh:"Ex.: massagem relaxante",
+ services:{unhas:"Unhas",olhar:"Sobrancelhas e cílios",cabelo:"Cabelo e barba",depilacao:"Depilação",maquiagem:"Maquiagem",estetica:"Rosto e corpo",outro:"Outro"},
+ servicesOld:{manicure:"Manicure",pedicure:"Pedicure",sobrancelha:"Sobrancelha",cilios:"Cílios",barba:"Barbearia"},
+ errService:"Escolha a área e o serviço.", areaQ:"Em que área foi o atendimento?",
+ procQ:"Qual serviço?", procHint:"Pode marcar vários.", procOtherL:"Qual serviço?", procOtherPh:"Ex.: massagem relaxante",
  svTitle:"O que foi feito", svLead:"Marcamos pelo que você contou. Corrija se precisar.", svSub:"Técnica", svFind:"Procurar outro serviço", svOther:"Outro, com suas palavras", svEdit:"Alterar", svNone:"Nada encontrado.",
  xqOpt:"opcional", xqTip:"Opcional · até 30 segundos.", x2Title:"Mais uma pergunta? Uns 20 segundos.", x2Yes:"Responder", x2No:"Pronto",
  modeTitle:"Como prefere gravar?",
@@ -817,13 +832,13 @@ pt:{
  q3:"Antes de marcar, você assistiria vídeos de clientes reais?", q3o:{sempre:"Sim, sempre",asvezes:"Às vezes",indiferente:"Não faria diferença"},
  errQ:"Responda as 3 perguntas.",
  permTitle:"Quem pode ver o vídeo?",
- perm:{privado:["Não publicar, guardar para mim","Outros usuários da plataforma não vão ver o vídeo."],semrosto:["Pode publicar, sem meu rosto","Cortamos ou desfocamos o rosto antes de publicar."],comrosto:["Pode publicar como está","O vídeo aparece com rosto e voz."]},
+ perm:{comrosto:["Pode publicar como está","O vídeo aparece com rosto e voz."],semrosto:["Pode publicar, sem meu rosto","Cortamos ou desfocamos o rosto antes de publicar."],privado:["Não publicar, guardar para mim","Outros usuários da plataforma não vão ver o vídeo."]},
  consent:"Autorizo a Proba a receber e guardar este vídeo e a usar minha imagem e voz apenas na forma que escolhi acima. O original fica só com a equipe da Proba. Posso pedir a remoção a qualquer momento pelo WhatsApp.",
  errPerm:"Escolha uma opção e confirme a autorização.",
  sendTitle:"Tudo pronto", sendLead:"Estamos enviando sua avaliação. Não feche esta página até aparecer “Avaliação enviada”.",
  share:"Enviar vídeo pelo WhatsApp", shareParts:"Enviar vídeos pelo WhatsApp", summary:"Enviar resumo no WhatsApp", copy:"Copiar resumo", copied:"Copiado", save:"Salvar vídeo no celular",
  shareFallback:"Seu celular não abriu o compartilhamento. Salve o vídeo e anexe no WhatsApp.",
- sumHead:"O resumo que vai junto", thanks:"Recebemos! Vamos falar com você no WhatsApp para enviar seus R$ 20 por Pix.",
+ sumHead:"O resumo que vai junto", oneMore:"Gravar outra avaliação", fbTitle:"Como foi gravar?", fbLead:"O que foi cômodo, o que atrapalhou, o que faltou. Lemos tudo.", fbPh:"Ex.: não achei onde cortar o vídeo", fbSend:"Enviar sugestão", fbThanks:"Obrigado! Recebemos sua sugestão.", thanks:"Recebemos! Vamos falar com você no WhatsApp para enviar seus R$ 20 por Pix.",
  demo:"Versão de demonstração: câmera e envio só funcionam na versão publicada no site.",
  foot:"Avaliações em vídeo · Florianópolis",
  subsToggle:"Legendas automáticas", subsNote:"Só o áudio é enviado para transcrição automática. Não guardamos o áudio depois.",
@@ -831,11 +846,11 @@ pt:{
  reviewTitle:"Seu vídeo", reviewLead:"Assista, refaça qualquer parte e deixe com a sua cara.", partsTitle:"Partes", partRe:"Regravar", partRec:"Gravar", partPlay:"Assistir", partSkipped:"Pulada · dá para gravar agora", playAll:"Assistir tudo",
  stickTitle:"Figurinhas", stickLead:"Toque para colocar. Arraste no vídeo para mudar de lugar.", stickMax:"Máximo de 6. Toque numa delas no vídeo para ajustar.", stickSize:"Tamanho", stickDel:"Remover",
  musicTitle:"Música de fundo", musicLead:"Fica baixinha enquanto você fala.", music:{none:"Sem música",suave:"Suave",bossa:"Bossa",animada:"Animada"},
- againAll:"Apagar e gravar tudo de novo", againConfirm:"Toque de novo para apagar tudo", pPrep:"Preparando o vídeo…", th:{title:"O principal do seu vídeo",lead:"Destacamos os pontos que você falou. Confira, corrija se precisar e confirme.",loading:"Destacando os pontos principais…",fail:"Não deu para destacar os pontos agora.",none:"Os pontos aparecem quando as legendas ficam prontas.",retry:"Tentar de novo",pros:"Pontos positivos",cons:"Pontos negativos",empty:"Nenhum.",add:"Adicionar",remove:"Remover",restore:"Voltar",aspTitle:"Sua nota para cada item",asp:{resultado:"Resultado",atendimento:"Atendimento",pontualidade:"Pontualidade",limpeza:"Limpeza",preco:"Preço combinado"},rate:{pos:"Bom",mix:"Mais ou menos",neg:"Ruim",na:"Não sei"},voltTitle:"Voltaria?",volt:{sim:"Sim",talvez:"Talvez",nao:"Não",na:"—"},ok:"Está tudo certo",confirmed:"Confirmado",errConfirm:"Confira os pontos principais e toque em “Está tudo certo”."}, rulesTitle:"Regras da avaliação", rulesCheck:"Li e concordo com as regras.", errRules:"Marque que leu as regras para continuar.",
+ againAll:"Apagar e gravar tudo de novo", againConfirm:"Toque de novo para apagar tudo", pPrep:"Preparando o vídeo…", th:{title:"O principal do seu vídeo",lead:"Destacamos os pontos que você falou. Confira, corrija se precisar e confirme.",loading:"Destacando os pontos principais…",fail:"Não deu para destacar os pontos agora.",none:"Os pontos aparecem quando as legendas ficam prontas.",retry:"Tentar de novo",pros:"Pontos positivos",cons:"Pontos negativos",empty:"Nenhum.",add:"Adicionar",remove:"Remover",restore:"Voltar",aspTitle:"Sua nota para cada item",asp:{resultado:"Resultado",atendimento:"Atendimento",pontualidade:"Pontualidade",limpeza:"Limpeza",preco:"Preço como combinado",valor:"Vale o preço"},rate:{pos:"Bom",mix:"Mais ou menos",neg:"Ruim",na:"Não sei"},voltTitle:"Voltaria?",volt:{sim:"Sim",talvez:"Talvez",nao:"Não",na:"—"},ok:"Está tudo certo",confirmed:"Confirmado",errConfirm:"Confira os pontos principais e toque em “Está tudo certo”."}, rulesTitle:"Regras da avaliação", rulesCheck:"Li e concordo com as regras.", errRules:"Marque que leu as regras para continuar.",
  rules:["Fale só da sua própria visita, que aconteceu de verdade.","Seja sincera: conte o que gostou e o que poderia ser melhor.","Os R$ 20 que pagamos a você são pela participação e não dependem da sua opinião.","Não mostre documentos, telas com dados pessoais nem outras pessoas. Antes de publicar, desfocamos o rosto de outras pessoas.","Sem ofensas, preconceito ou acusações: fale da sua experiência.","Sem propaganda, links ou contatos."], piece:"Trecho {n}", recMore:"Gravar próximo trecho", freeMore:"Pausa. Pense com calma e grave o próximo trecho, ou toque em Concluir.", addPiece:"Adicionar trecho", delPiece:"Apagar",
  prvTitle:"Privacidade", prvLead:"O original fica só com a equipe da Proba. Publicamos só a versão que você escolher.", fxTitle:"Rosto", fxLead:"Vale para as partes gravadas com a câmera da frente.", voiceTitle:"Voz", voice:{orig:"Original",alt:"Alterada"}, voiceLoading:"Preparando a voz…", face:{show:"Mostrar",blur:"Desfocar",silhouette:"Silhueta"}, fxLoading:"Preparando o efeito…",
  send:"Enviar", sending:"Enviando…", retry:"Tentar de novo", sentTitle:"Avaliação enviada", upRun:"Seu vídeo está subindo · {p}%", upDone:"Vídeo carregado", upFail:"A conexão falhou. Toque em Tentar de novo.", sendFail:"Não deu para enviar agora. Verifique a internet e tente de novo, ou envie pelo WhatsApp.", sendNoServer:"O envio direto não está disponível agora. Envie pelo WhatsApp.", viaWa:"Enviar vídeo pelo WhatsApp", saveCopy:"Salvar uma cópia no celular", saveReady:"Baixar o vídeo pronto", talkWa:"Falar com a gente no WhatsApp",
- panel:{eyebrow:"Equipe",title:"Avaliações recebidas",lead:"Só para a equipe da Proba. A chave fica salva neste navegador.",key:"Chave de acesso",enter:"Entrar",loading:"Carregando…",empty:"Ainda não chegou nenhuma avaliação.",fail:"Não deu para carregar. Tente de novo.",bad:"Chave incorreta.",refresh:"Atualizar",logout:"Sair",sum:"Resumo",make:"Montar vídeo final",making:"Montando · {p}% · não troque de aba nem minimize a janela",paused:"Montagem pausada: a aba ficou escondida. Recomeça sozinha quando você voltar.",remake:"Montar de novo",download:"Baixar vídeo",del:"Apagar",delConfirm:"Toque de novo para apagar de vez",loadingFiles:"Baixando as partes…",nav:{overview:"Visão geral",queue:"Avaliações",board:"Quadro",links:"Gerar links"},st:{novo:"Novas",analise:"Em análise",aprovado:"Aprovadas",pago:"Pagas",recusado:"Recusadas"},st1:{novo:"Nova",analise:"Em análise",aprovado:"Aprovada",pago:"Paga",recusado:"Recusada"},all:"Todas",search:"Buscar por código",kTotal:"Recebidas",kToday:"Hoje",kWait:"Aguardando análise",kAppr:"Aprovação",kPix:"Pix a pagar",funnel:"Funil por link",funnelLead:"Quantas pessoas chegaram a cada etapa. Contamos só o código do link e a etapa, sem dados pessoais.",arm:{a:"Link A",b:"Link B"},fs:{open:"Abriram o link",start:"Começaram",visit:"Visita preenchida",cam:"Abriram a câmera",rec:"Gravaram",consent:"Autorizaram",sent:"Enviaram"},perDay:"Avaliações por dia",perDayLead:"Últimos 14 dias. Toque num dia para ver as avaliações.",privacy:"Privacidade escolhida",fmt:"Formato",survey:"Respostas às 3 perguntas",none:"Sem dados ainda",avgDur:"Duração média",avgRe:"Regravações por avaliação",editedSubs:"Legendas corrigidas",editedShort:"corrigidas",faceL:{show:"Rosto visível",blur:"Rosto desfocado",silhouette:"Silhueta",none:"Sem rosto (câmera de trás)"},voiceL:{orig:"Voz original",alt:"Voz alterada"},modeL:{guiado:"Com perguntas",livre:"Do seu jeito"},prompterL:"teleprompter",tabs:{final:"Vídeo final",faces:"Rostos",parts:"Partes",proof:"Comprovante",info:"Dados"},act:{analise:"Em análise",aprovar:"Aprovar",recusar:"Recusar",pago:"Pix pago",unpaid:"Desmarcar Pix"},reasonL:"Motivo",reasons:{semcomp:"Sem comprovante",naoreal:"Não parece visita real",ofensa:"Conteúdo impróprio",vazio:"Vídeo sem conteúdo",dup:"Duplicada",outro:"Outro"},checkT:"Checklist",checks:{comp:"Comprovante confere",real:"Parece visita real",rosto:"Rosto conforme a permissão",dados:"Sem dados pessoais nem ofensas"},note:"Notas internas",notePh:"Visível só para a equipe",saved:"Salvo",pickOne:"Escolha uma avaliação na lista",finalNone:"O vídeo final ainda não foi montado.",finalSaving:"Salvando o vídeo final no servidor…",finalSaved:"Salvo no servidor",fields:{service:"Serviço",procs:"Procedimentos",xq:"Perguntas extras",salon:"Salão",pro:"Profissional",date:"Visita",mode:"Modo",dur:"Duração",parts:"Partes",reshoots:"Regravações",face:"Rosto",voice:"Voz",subs:"Legendas",stickers:"Figurinhas",music:"Música",perm:"Permissão",proofs:"Comprovante",q1:"P1 · onde encontrou",q2:"P2 · já avaliou",q3:"P3 · assistiria vídeos",device:"Aparelho",lang:"Idioma",rules:"Regras"},yes:"sim",no:"não",drop:"Arraste para cá",thTitle:"Pontos principais",thOk:"Confirmado pela cliente, sem mudanças.",thEdited:"Confirmado pela cliente, com correções.",thNotOk:"A cliente não confirmou.",thNeu:"Observações",thOwn:"adicionado pela cliente",thAi:"IA",useful:"Utilidade do vídeo (nota da equipe)",usefulL:{alta:"Alta",media:"Média",baixa:"Baixa"},usefulLead:"Quanto o vídeo ajuda quem vai escolher. Serve para recompensar autores e ordenar vídeos, não muda a nota da profissional.",aspT:"Notas por item (confirmadas pelas clientes)",aspLead:"Parte de avaliações positivas em cada item. É o dado de entrada da fórmula de ranking.",logs:"Problemas técnicos",logsLead:"Erros e travamentos enviados pelos celulares das clientes, para a equipe técnica.",boardLead:"Arraste os cartões entre as colunas. Toque num cartão para abrir.",oldItem:"Avaliação enviada antes do novo formato: veja o resumo abaixo.",fNone:"Os rostos de outras pessoas ainda não foram verificados. A busca roda neste computador e leva cerca de meio minuto.",fScan:"Procurar rostos",fScanning:"Procurando rostos · {p}%",fPart:"Parte {n}",fAdd:"Marcar um rosto",fAddHint:"Arraste um retângulo sobre o rosto.",fHint:"Toque numa moldura para ligar ou desligar o desfoque.",fOn:"Desfocado",fOff:"Sem desfoque",fGo:"Ver",fFace:"Rosto {n}",fAuthor:"Autora",fManual:"Marcado à mão",fStart:"Começa aqui",fEnd:"Termina aqui",fDel:"Remover",fSave:"Salvar e confirmar",fRescan:"Procurar de novo",fRescanSure:"As alterações serão perdidas. Toque de novo para procurar.",fUnsaved:"Alterações não salvas",fSaved:"Verificado",fNotSaved:"Ainda não confirmado",fSavedToast:"Salvo. Monte o vídeo final de novo.",fWarn:"Os rostos de outras pessoas ainda não foram verificados (aba «Rostos»).",fEmpty:"Nenhum rosto encontrado nesta parte. Se houver algum, marque à mão.",fFail:"Não deu para rodar a busca de rostos.",fNoParts:"Sem partes para verificar.",fStTitle:"Figurinhas sobre rostos",fStLead:"O rosto embaixo continua desfocado. Remova só se a figurinha zomba de alguém.",fStRemove:"Remover",fStBack:"Devolver",fStRemoved:"removida"}, reShoot:"Regravando a parte {n}",edBack:"Voltar",edPrivacy:"Privacidade",edSubs:"Legendas",edMusic:"Música",edStickers:"Figurinhas",edMore:"Mais",edTrim:"Cortar",edTrimmed:"cortada",edSec:"{n} s",edTrimTitle:"Cortar a parte {n}",edCancel:"Cancelar",edDone:"Pronto",edReset:"Desfazer",edTrimLead:"Arraste as bordas amarelas. O vídeo original fica guardado.",edThTitle:"O principal do seu vídeo",edThLead:"Confira o que a gente entendeu e corrija se precisar.",edBackVideo:"Ao vídeo",prPh:"Por exemplo: o que fiz, o que gostei, o que poderia ser melhor…",prPlan:"Inserir um roteiro",prNote:"Só você vê este texto: ele não entra no vídeo. Falar com suas palavras soa mais confiável que ler.",prErr:"Escreva o texto ou pelo menos um ponto.",prSpeed:"vel. {n}×",qPrevTitle:"Vamos perguntar sobre isto",qPrevNote:"Dá para pensar antes. Se não tiver o que dizer, é só pular a pergunta. Se responder a última, oferecemos mais uma, também opcional.",qMins:"cerca de {m} min",thYes:"Sim, está tudo certo",
+ panel:{eyebrow:"Equipe",title:"Avaliações recebidas",lead:"Só para a equipe da Proba. A chave fica salva neste navegador.",key:"Chave de acesso",enter:"Entrar",loading:"Carregando…",empty:"Ainda não chegou nenhuma avaliação.",fail:"Não deu para carregar. Tente de novo.",bad:"Chave incorreta.",refresh:"Atualizar",logout:"Sair",sum:"Resumo",make:"Montar vídeo final",making:"Montando · {p}% · não troque de aba nem minimize a janela",paused:"Montagem pausada: a aba ficou escondida. Recomeça sozinha quando você voltar.",remake:"Montar de novo",download:"Baixar vídeo",del:"Apagar",delConfirm:"Toque de novo para apagar de vez",loadingFiles:"Baixando as partes…",nav:{overview:"Visão geral",queue:"Avaliações",board:"Quadro",links:"Gerar links"},st:{novo:"Novas",analise:"Em análise",aprovado:"Aprovadas",pago:"Pagas",recusado:"Recusadas"},st1:{novo:"Nova",analise:"Em análise",aprovado:"Aprovada",pago:"Paga",recusado:"Recusada"},all:"Todas",search:"Buscar por código",kTotal:"Recebidas",kToday:"Hoje",kWait:"Aguardando análise",kAppr:"Aprovação",kPix:"Pix a pagar",funnel:"Funil por link",funnelLead:"Quantas pessoas chegaram a cada etapa. Contamos só o código do link e a etapa, sem dados pessoais.",arm:{a:"Link A",b:"Link B"},fs:{open:"Abriram o link",start:"Começaram",visit:"Visita preenchida",cam:"Abriram a câmera",rec:"Gravaram",consent:"Autorizaram",sent:"Enviaram"},perDay:"Avaliações por dia",perDayLead:"Últimos 14 dias. Toque num dia para ver as avaliações.",privacy:"Privacidade escolhida",fmt:"Formato",survey:"Respostas às 3 perguntas",none:"Sem dados ainda",avgDur:"Duração média",avgRe:"Regravações por avaliação",editedSubs:"Legendas corrigidas",editedShort:"corrigidas",faceL:{show:"Rosto visível",blur:"Rosto desfocado",silhouette:"Silhueta",none:"Sem rosto (câmera de trás)"},voiceL:{orig:"Voz original",alt:"Voz alterada"},modeL:{guiado:"Com perguntas",livre:"Do seu jeito"},prompterL:"teleprompter",tabs:{final:"Vídeo final",faces:"Rostos",parts:"Partes",proof:"Comprovante",info:"Dados"},act:{analise:"Em análise",aprovar:"Aprovar",recusar:"Recusar",pago:"Pix pago",unpaid:"Desmarcar Pix"},reasonL:"Motivo",reasons:{semcomp:"Sem comprovante",naoreal:"Não parece visita real",ofensa:"Conteúdo impróprio",vazio:"Vídeo sem conteúdo",dup:"Duplicada",outro:"Outro"},checkT:"Checklist",checks:{comp:"Comprovante confere",real:"Parece visita real",rosto:"Rosto conforme a permissão",dados:"Sem dados pessoais nem ofensas"},note:"Notas internas",notePh:"Visível só para a equipe",saved:"Salvo",pickOne:"Escolha uma avaliação na lista",finalNone:"O vídeo final ainda não foi montado.",finalSaving:"Salvando o vídeo final no servidor…",finalSaved:"Salvo no servidor",fields:{service:"Área",procs:"Serviços",feedback:"Sugestão",xq:"Perguntas extras",salon:"Salão",pro:"Profissional",date:"Visita",mode:"Modo",dur:"Duração",parts:"Partes",reshoots:"Regravações",face:"Rosto",voice:"Voz",subs:"Legendas",stickers:"Figurinhas",music:"Música",perm:"Permissão",proofs:"Comprovante",q1:"P1 · onde encontrou",q2:"P2 · já avaliou",q3:"P3 · assistiria vídeos",device:"Aparelho",lang:"Idioma",rules:"Regras"},yes:"sim",no:"não",drop:"Arraste para cá",thTitle:"Pontos principais",thOk:"Confirmado pela cliente, sem mudanças.",thEdited:"Confirmado pela cliente, com correções.",thNotOk:"A cliente não confirmou.",thNeu:"Observações",thOwn:"adicionado pela cliente",thAi:"IA",useful:"Utilidade do vídeo (nota da equipe)",usefulL:{alta:"Alta",media:"Média",baixa:"Baixa"},usefulLead:"Quanto o vídeo ajuda quem vai escolher. Serve para recompensar autores e ordenar vídeos, não muda a nota da profissional.",aspT:"Notas por item (confirmadas pelas clientes)",aspLead:"Parte de avaliações positivas em cada item. É o dado de entrada da fórmula de ranking.",logs:"Problemas técnicos",logsLead:"Erros e travamentos enviados pelos celulares das clientes, para a equipe técnica.",boardLead:"Arraste os cartões entre as colunas. Toque num cartão para abrir.",oldItem:"Avaliação enviada antes do novo formato: veja o resumo abaixo.",fNone:"Os rostos de outras pessoas ainda não foram verificados. A busca roda neste computador e leva cerca de meio minuto.",fScan:"Procurar rostos",fScanning:"Procurando rostos · {p}%",fPart:"Parte {n}",fAdd:"Marcar um rosto",fAddHint:"Arraste um retângulo sobre o rosto.",fHint:"Toque numa moldura para ligar ou desligar o desfoque.",fOn:"Desfocado",fOff:"Sem desfoque",fGo:"Ver",fFace:"Rosto {n}",fAuthor:"Autora",fManual:"Marcado à mão",fStart:"Começa aqui",fEnd:"Termina aqui",fDel:"Remover",fSave:"Salvar e confirmar",fRescan:"Procurar de novo",fRescanSure:"As alterações serão perdidas. Toque de novo para procurar.",fUnsaved:"Alterações não salvas",fSaved:"Verificado",fNotSaved:"Ainda não confirmado",fSavedToast:"Salvo. Monte o vídeo final de novo.",fWarn:"Os rostos de outras pessoas ainda não foram verificados (aba «Rostos»).",fEmpty:"Nenhum rosto encontrado nesta parte. Se houver algum, marque à mão.",fFail:"Não deu para rodar a busca de rostos.",fNoParts:"Sem partes para verificar.",fStTitle:"Figurinhas sobre rostos",fStLead:"O rosto embaixo continua desfocado. Remova só se a figurinha zomba de alguém.",fStRemove:"Remover",fStBack:"Devolver",fStRemoved:"removida"}, reShoot:"Regravando a parte {n}",edBack:"Voltar",edPrivacy:"Privacidade",edSubs:"Legendas",edMusic:"Música",edStickers:"Figurinhas",edMore:"Mais",edTrim:"Cortar",edTrimmed:"cortada",edSec:"{n} s",edTrimTitle:"Cortar a parte {n}",edCancel:"Cancelar",edDone:"Pronto",edReset:"Desfazer",edTrimLead:"Arraste as bordas amarelas. O vídeo original fica guardado.",edThTitle:"O principal do seu vídeo",edThLead:"Confira o que a gente entendeu e corrija se precisar.",edBackVideo:"Ao vídeo",prPh:"Por exemplo: o que fiz, o que gostei, o que poderia ser melhor…",prPlan:"Inserir um roteiro",prNote:"Só você vê este texto: ele não entra no vídeo. Falar com suas palavras soa mais confiável que ler.",prErr:"Escreva o texto ou pelo menos um ponto.",prSpeed:"vel. {n}×",qPrevTitle:"Vamos perguntar sobre isto",qPrevNote:"Dá para pensar antes. Se não tiver o que dizer, é só pular a pergunta. Se responder a última, oferecemos mais uma, também opcional.",qMins:"cerca de {m} min",thYes:"Sim, está tudo certo",
  maskNone:"Sem", maskBtn:"Máscara", maskLoading:"Preparando máscaras…", faceOut:"Mantenha o rosto na tela para a máscara funcionar", maskLocked:"A máscara fica até o fim da gravação",
  permMask:["Pode publicar, com o rosto escondido","Do jeito que você escolheu no vídeo. Antes de publicar, desfocamos também o rosto de outras pessoas."],
  labTitle:"Provador de máscaras", labLead:"Escolha uma foto com rosto: todas as máscaras aparecem nela. A foto não sai do aparelho.", labPick:"Escolher foto", labLoading:"Carregando…", labReady:"Pronto. Escolha uma foto.", labFail:"Não deu para carregar o reconhecimento de rosto.", labNoFace:"Nenhum rosto encontrado nessa foto.", labFound:"Rostos encontrados: {n}", labImgFail:"Não deu para abrir a imagem.",
@@ -860,9 +875,10 @@ ru:{
  pts:["Ничего не публикуется без вашего разрешения. Выбираете в конце.","Лицо показывать не обязательно. Можно снять только результат.","Мы заплатим вам R$ 20 за участие, через Pix.","Займёт около 3 минут."],
  start:"Начать", next:"Дальше", back:"Назад",
  visitTitle:"О визите", service:"Какая услуга?", placeQ:"Где вас обслуживали?", place:{pro:"У частного мастера",salon:"В салоне или студии"}, pro:"Имя или @ мастера", proPh:"@ana.unhas", salon:"Название или @ салона", salonPh:"@studio.unhas", proIn:"Имя мастера, если помните", proInPh:"Ана", optional:"необязательно", date:"Дата визита",
- services:{manicure:"Маникюр",pedicure:"Педикюр",sobrancelha:"Брови",cilios:"Ресницы",cabelo:"Волосы",barba:"Барбер",depilacao:"Депиляция",maquiagem:"Макияж",estetica:"Эстетика и массаж",outro:"Другое"},
- errService:"Выберите услугу.",
- procQ:"Что именно делали?", procHint:"Можно отметить несколько. Необязательно.", procOtherL:"Что за услуга?", procOtherPh:"Например: массаж спины",
+ services:{unhas:"Ногти",olhar:"Брови и ресницы",cabelo:"Волосы и борода",depilacao:"Депиляция",maquiagem:"Макияж",estetica:"Лицо и тело",outro:"Другое"},
+ servicesOld:{manicure:"Маникюр",pedicure:"Педикюр",sobrancelha:"Брови",cilios:"Ресницы",barba:"Барбер"},
+ errService:"Выберите направление и услугу.", areaQ:"С чем был визит?",
+ procQ:"Какая услуга?", procHint:"Можно несколько.", procOtherL:"Что за услуга?", procOtherPh:"Например: массаж спины",
  svTitle:"Что делали", svLead:"Отметили по вашему рассказу. Поправьте, если не так.", svSub:"Техника", svFind:"Найти другую услугу", svOther:"Другое, своими словами", svEdit:"Изменить", svNone:"Ничего не нашлось.",
  xqOpt:"по желанию", xqTip:"По желанию · до 30 секунд.", x2Title:"Ещё один вопрос? Секунд 20.", x2Yes:"Ответить", x2No:"Готово",
  modeTitle:"Как удобнее снимать?",
@@ -889,13 +905,13 @@ ru:{
  q3:"Перед записью вы бы смотрели видео реальных клиенток?", q3o:{sempre:"Да, всегда",asvezes:"Иногда",indiferente:"Без разницы"},
  errQ:"Ответьте на 3 вопроса.",
  permTitle:"Кто может увидеть видео?",
- perm:{privado:["Не публиковать, оставить для себя","Видео не увидят другие пользователи платформы."],semrosto:["Можно публиковать, без лица","Перед публикацией обрежем или размоем лицо."],comrosto:["Можно публиковать как есть","Видео с лицом и голосом."]},
+ perm:{comrosto:["Можно публиковать как есть","Видео с лицом и голосом."],semrosto:["Можно публиковать, без лица","Перед публикацией обрежем или размоем лицо."],privado:["Не публиковать, оставить для себя","Видео не увидят другие пользователи платформы."]},
  consent:"Разрешаю Пробе получить и хранить это видео и использовать моё изображение и голос только в выбранном выше виде. Оригинал хранится только у команды Пробы. Могу попросить удалить в любой момент через WhatsApp.",
  errPerm:"Выберите вариант и подтвердите согласие.",
  sendTitle:"Всё готово", sendLead:"Отправляем ваш отзыв. Не закрывайте страницу, пока не появится «Отзыв отправлен».",
  share:"Отправить видео в WhatsApp", shareParts:"Отправить видео в WhatsApp", summary:"Отправить сводку в WhatsApp", copy:"Скопировать сводку", copied:"Скопировано", save:"Сохранить видео в телефон",
  shareFallback:"Телефон не открыл меню «Поделиться». Сохраните видео и приложите в WhatsApp.",
- sumHead:"Сводка, которая уйдёт вместе с видео", thanks:"Получили! Напишем вам в WhatsApp, чтобы перевести R$ 20 на ваш Pix.",
+ sumHead:"Сводка, которая уйдёт вместе с видео", oneMore:"Снять ещё один отзыв", fbTitle:"Как вам было снимать?", fbLead:"Что было удобно, что мешало, чего не хватило. Мы читаем всё.", fbPh:"Например: не нашла, где обрезать видео", fbSend:"Отправить пожелание", fbThanks:"Спасибо! Пожелание получили.", thanks:"Получили! Напишем вам в WhatsApp, чтобы перевести R$ 20 на ваш Pix.",
  demo:"Демо-версия: камера и отправка работают только в версии на сайте.",
  foot:"Видео-отзывы · Флорианополис",
  subsToggle:"Автосубтитры", subsNote:"На расшифровку отправляется только звук. После этого мы его не храним.",
@@ -903,11 +919,11 @@ ru:{
  reviewTitle:"Ваше видео", reviewLead:"Посмотрите, переснимите любую часть и оформите по-своему.", partsTitle:"Части", partRe:"Переснять", partRec:"Снять", partPlay:"Смотреть", partSkipped:"Пропущена · можно снять сейчас", playAll:"Смотреть всё",
  stickTitle:"Стикеры", stickLead:"Нажмите, чтобы добавить. Двигайте пальцем прямо на видео.", stickMax:"Максимум 6. Нажмите на стикер в видео, чтобы настроить.", stickSize:"Размер", stickDel:"Убрать",
  musicTitle:"Фоновая музыка", musicLead:"Становится тише, когда вы говорите.", music:{none:"Без музыки",suave:"Спокойная",bossa:"Босса",animada:"Бодрая"},
- againAll:"Удалить и снять всё заново", againConfirm:"Нажмите ещё раз — всё удалится", pPrep:"Готовим видео…", th:{title:"Главное из вашего видео",lead:"Мы выделили, что вы сказали. Проверьте, поправьте при необходимости и подтвердите.",loading:"Выделяем главное…",fail:"Сейчас выделить главное не получилось.",none:"Главное появится, когда будут готовы субтитры.",retry:"Попробовать ещё раз",pros:"Плюсы",cons:"Минусы",empty:"Нет.",add:"Добавить",remove:"Убрать",restore:"Вернуть",aspTitle:"Ваша оценка по пунктам",asp:{resultado:"Результат",atendimento:"Обслуживание",pontualidade:"Пунктуальность",limpeza:"Чистота",preco:"Цена как договаривались"},rate:{pos:"Хорошо",mix:"Так себе",neg:"Плохо",na:"Не знаю"},voltTitle:"Вернётесь?",volt:{sim:"Да",talvez:"Может быть",nao:"Нет",na:"—"},ok:"Всё верно",confirmed:"Подтверждено",errConfirm:"Проверьте главное и нажмите «Всё верно»."}, rulesTitle:"Правила отзыва", rulesCheck:"Я ознакомлен(а) с правилами и согласен(на).", errRules:"Отметьте, что ознакомились с правилами.",
+ againAll:"Удалить и снять всё заново", againConfirm:"Нажмите ещё раз — всё удалится", pPrep:"Готовим видео…", th:{title:"Главное из вашего видео",lead:"Мы выделили, что вы сказали. Проверьте, поправьте при необходимости и подтвердите.",loading:"Выделяем главное…",fail:"Сейчас выделить главное не получилось.",none:"Главное появится, когда будут готовы субтитры.",retry:"Попробовать ещё раз",pros:"Плюсы",cons:"Минусы",empty:"Нет.",add:"Добавить",remove:"Убрать",restore:"Вернуть",aspTitle:"Ваша оценка по пунктам",asp:{resultado:"Результат",atendimento:"Обслуживание",pontualidade:"Пунктуальность",limpeza:"Чистота",preco:"Цена как договаривались",valor:"Стоит своих денег"},rate:{pos:"Хорошо",mix:"Так себе",neg:"Плохо",na:"Не знаю"},voltTitle:"Вернётесь?",volt:{sim:"Да",talvez:"Может быть",nao:"Нет",na:"—"},ok:"Всё верно",confirmed:"Подтверждено",errConfirm:"Проверьте главное и нажмите «Всё верно»."}, rulesTitle:"Правила отзыва", rulesCheck:"Я ознакомлен(а) с правилами и согласен(на).", errRules:"Отметьте, что ознакомились с правилами.",
  rules:["Рассказывайте только о своём визите, который действительно был.","Будьте честны: что понравилось и что можно улучшить.","R$ 20, которые мы вам платим, — за участие. Они не зависят от вашего мнения.","Не показывайте документы, экраны с личными данными и других людей. Перед публикацией мы размываем лица других людей.","Без оскорблений, дискриминации и обвинений — говорите о своём опыте.","Без рекламы, ссылок и контактов."], piece:"Фрагмент {n}", recMore:"Записать следующий фрагмент", freeMore:"Пауза. Подумайте спокойно и запишите следующий фрагмент или нажмите «Завершить».", addPiece:"Добавить фрагмент", delPiece:"Удалить",
  prvTitle:"Приватность", prvLead:"Оригинал хранится только у команды Пробы. Публикуется только выбранный вами вариант.", fxTitle:"Лицо", fxLead:"Действует на части, снятые фронтальной камерой.", voiceTitle:"Голос", voice:{orig:"Обычный",alt:"Изменённый"}, voiceLoading:"Готовим голос…", face:{show:"Показать",blur:"Размыть",silhouette:"Силуэт"}, fxLoading:"Готовим эффект…",
  send:"Отправить", sending:"Отправляем…", retry:"Попробовать ещё раз", sentTitle:"Отзыв отправлен", upRun:"Видео загружается · {p}%", upDone:"Видео загружено", upFail:"Связь прервалась. Нажмите «Попробовать ещё раз».", sendFail:"Сейчас отправить не получилось. Проверьте интернет и попробуйте ещё раз или отправьте через WhatsApp.", sendNoServer:"Прямая отправка сейчас недоступна. Отправьте через WhatsApp.", viaWa:"Отправить видео через WhatsApp", saveCopy:"Сохранить копию в телефон", saveReady:"Скачать готовое видео", talkWa:"Написать нам в WhatsApp",
- panel:{eyebrow:"Команда",title:"Пришедшие отзывы",lead:"Только для команды Пробы. Ключ сохраняется в этом браузере.",key:"Ключ доступа",enter:"Войти",loading:"Загрузка…",empty:"Отзывов пока нет.",fail:"Не удалось загрузить. Попробуйте ещё раз.",bad:"Неверный ключ.",refresh:"Обновить",logout:"Выйти",sum:"Сводка",make:"Собрать ролик",making:"Собираем · {p}% · не переключайте вкладку и не сворачивайте окно",paused:"Сборка на паузе: вкладка была скрыта. Начнётся заново, когда вернётесь.",remake:"Собрать заново",download:"Скачать ролик",del:"Удалить",delConfirm:"Нажмите ещё раз — удалится насовсем",loadingFiles:"Загружаем части…",nav:{overview:"Обзор",queue:"Отзывы",board:"Доска",links:"Ссылки"},st:{novo:"Новые",analise:"На проверке",aprovado:"Одобрены",pago:"Оплачены",recusado:"Отклонены"},st1:{novo:"Новый",analise:"На проверке",aprovado:"Одобрен",pago:"Оплачен",recusado:"Отклонён"},all:"Все",search:"Поиск по коду",kTotal:"Получено",kToday:"Сегодня",kWait:"Ждут проверки",kAppr:"Одобряемость",kPix:"Pix к оплате",funnel:"Воронка по ссылкам",funnelLead:"Сколько людей дошло до каждого шага. Учитываем только код ссылки и шаг, без личных данных.",arm:{a:"Ссылка A",b:"Ссылка B"},fs:{open:"Открыли ссылку",start:"Начали",visit:"Заполнили визит",cam:"Открыли камеру",rec:"Сняли",consent:"Дали согласие",sent:"Отправили"},perDay:"Отзывы по дням",perDayLead:"Последние 14 дней. Нажмите на день, чтобы увидеть отзывы.",privacy:"Выбор приватности",fmt:"Формат",survey:"Ответы на 3 вопроса",none:"Пока нет данных",avgDur:"Средняя длина",avgRe:"Пересъёмок на отзыв",editedSubs:"Субтитры поправлены",editedShort:"поправлены",faceL:{show:"Лицо видно",blur:"Лицо размыто",silhouette:"Силуэт",none:"Без лица (задняя камера)"},voiceL:{orig:"Обычный голос",alt:"Изменённый голос"},modeL:{guiado:"С подсказками",livre:"Экспромт"},prompterL:"суфлёр",tabs:{final:"Итоговый ролик",faces:"Лица",parts:"Части",proof:"Подтверждение",info:"Данные"},act:{analise:"На проверку",aprovar:"Одобрить",recusar:"Отклонить",pago:"Pix оплачен",unpaid:"Снять оплату"},reasonL:"Причина",reasons:{semcomp:"Нет подтверждения",naoreal:"Не похоже на реальный визит",ofensa:"Недопустимое содержание",vazio:"Видео без содержания",dup:"Дубликат",outro:"Другое"},checkT:"Чек-лист",checks:{comp:"Подтверждение сходится",real:"Похоже на реальный визит",rosto:"Лицо соответствует разрешению",dados:"Нет личных данных и оскорблений"},note:"Заметки команды",notePh:"Видно только команде",saved:"Сохранено",pickOne:"Выберите отзыв в списке",finalNone:"Итоговый ролик ещё не собран.",finalSaving:"Сохраняем итоговый ролик на сервере…",finalSaved:"Сохранён на сервере",fields:{service:"Услуга",procs:"Что делали",xq:"Доп. вопросы",salon:"Салон",pro:"Мастер",date:"Визит",mode:"Режим",dur:"Длина",parts:"Части",reshoots:"Пересъёмки",face:"Лицо",voice:"Голос",subs:"Субтитры",stickers:"Стикеры",music:"Музыка",perm:"Разрешение",proofs:"Подтверждение",q1:"В1 · где нашла",q2:"В2 · оставляла отзывы",q3:"В3 · смотрела бы видео",device:"Устройство",lang:"Язык",rules:"Правила"},yes:"да",no:"нет",drop:"Перетащите сюда",thTitle:"Главное",thOk:"Подтверждено клиенткой без правок.",thEdited:"Подтверждено клиенткой с правками.",thNotOk:"Клиентка не подтвердила.",thNeu:"Замечания",thOwn:"добавлено клиенткой",thAi:"ИИ",useful:"Полезность видео (оценка команды)",usefulL:{alta:"Высокая",media:"Средняя",baixa:"Низкая"},usefulLead:"Насколько видео помогает выбирать. Нужна для вознаграждения авторов и порядка видео, на оценку мастера не влияет.",aspT:"Оценки по пунктам (подтверждены клиентками)",aspLead:"Доля положительных оценок по каждому пункту. Это входные данные формулы ранжирования.",logs:"Технические проблемы",logsLead:"Ошибки и зависания, которые прислали телефоны клиенток. Для технической команды.",boardLead:"Перетаскивайте карточки между колонками. Нажмите на карточку, чтобы открыть.",oldItem:"Отзыв прислан до нового формата: см. сводку ниже.",fNone:"Лица посторонних ещё не проверены. Поиск идёт на этом компьютере, около полуминуты.",fScan:"Найти лица",fScanning:"Ищем лица · {p}%",fPart:"Часть {n}",fAdd:"Обвести лицо",fAddHint:"Обведите лицо рамкой.",fHint:"Нажмите на рамку, чтобы включить или выключить размытие.",fOn:"Размывается",fOff:"Не размывается",fGo:"Показать",fFace:"Лицо {n}",fAuthor:"Автор",fManual:"Обведено вручную",fStart:"Начало здесь",fEnd:"Конец здесь",fDel:"Удалить",fSave:"Сохранить и подтвердить",fRescan:"Искать заново",fRescanSure:"Правки пропадут. Нажмите ещё раз, чтобы искать заново.",fUnsaved:"Есть несохранённые правки",fSaved:"Проверено",fNotSaved:"Ещё не подтверждено",fSavedToast:"Сохранено. Соберите итоговый ролик заново.",fWarn:"Лица посторонних ещё не проверены (вкладка «Лица»).",fEmpty:"В этой части лиц не найдено. Если есть — обведите вручную.",fFail:"Не удалось запустить поиск лиц.",fNoParts:"Нет частей для проверки.",fStTitle:"Стикеры на лицах",fStLead:"Лицо под стикером всё равно размывается. Убирайте, только если стикер издевается над человеком.",fStRemove:"Убрать",fStBack:"Вернуть",fStRemoved:"убран"}, reShoot:"Пересъёмка части {n}",edBack:"Назад",edPrivacy:"Приватность",edSubs:"Субтитры",edMusic:"Музыка",edStickers:"Стикеры",edMore:"Ещё",edTrim:"Обрезать",edTrimmed:"обрезана",edSec:"{n} с",edTrimTitle:"Обрезать часть {n}",edCancel:"Отмена",edDone:"Готово",edReset:"Сбросить",edTrimLead:"Двигайте жёлтые края. Исходное видео сохраняется.",edThTitle:"Главное из вашего видео",edThLead:"Проверьте, что мы поняли, и поправьте при необходимости.",edBackVideo:"К видео",prPh:"Например: что делали, что понравилось, что могло быть лучше…",prPlan:"Вставить план",prNote:"Текст видите только вы, в видео он не попадает. Пересказ своими словами звучит убедительнее, чем чтение.",prErr:"Напишите текст или хотя бы один тезис.",prSpeed:"скор. {n}×",qPrevTitle:"Вот о чём спросим",qPrevNote:"Можно заранее подумать. Если сказать нечего — вопрос можно пропустить. Ответите на последний — предложим ещё один, тоже по желанию.",qMins:"около {m} мин",thYes:"Да, всё верно",
+ panel:{eyebrow:"Команда",title:"Пришедшие отзывы",lead:"Только для команды Пробы. Ключ сохраняется в этом браузере.",key:"Ключ доступа",enter:"Войти",loading:"Загрузка…",empty:"Отзывов пока нет.",fail:"Не удалось загрузить. Попробуйте ещё раз.",bad:"Неверный ключ.",refresh:"Обновить",logout:"Выйти",sum:"Сводка",make:"Собрать ролик",making:"Собираем · {p}% · не переключайте вкладку и не сворачивайте окно",paused:"Сборка на паузе: вкладка была скрыта. Начнётся заново, когда вернётесь.",remake:"Собрать заново",download:"Скачать ролик",del:"Удалить",delConfirm:"Нажмите ещё раз — удалится насовсем",loadingFiles:"Загружаем части…",nav:{overview:"Обзор",queue:"Отзывы",board:"Доска",links:"Ссылки"},st:{novo:"Новые",analise:"На проверке",aprovado:"Одобрены",pago:"Оплачены",recusado:"Отклонены"},st1:{novo:"Новый",analise:"На проверке",aprovado:"Одобрен",pago:"Оплачен",recusado:"Отклонён"},all:"Все",search:"Поиск по коду",kTotal:"Получено",kToday:"Сегодня",kWait:"Ждут проверки",kAppr:"Одобряемость",kPix:"Pix к оплате",funnel:"Воронка по ссылкам",funnelLead:"Сколько людей дошло до каждого шага. Учитываем только код ссылки и шаг, без личных данных.",arm:{a:"Ссылка A",b:"Ссылка B"},fs:{open:"Открыли ссылку",start:"Начали",visit:"Заполнили визит",cam:"Открыли камеру",rec:"Сняли",consent:"Дали согласие",sent:"Отправили"},perDay:"Отзывы по дням",perDayLead:"Последние 14 дней. Нажмите на день, чтобы увидеть отзывы.",privacy:"Выбор приватности",fmt:"Формат",survey:"Ответы на 3 вопроса",none:"Пока нет данных",avgDur:"Средняя длина",avgRe:"Пересъёмок на отзыв",editedSubs:"Субтитры поправлены",editedShort:"поправлены",faceL:{show:"Лицо видно",blur:"Лицо размыто",silhouette:"Силуэт",none:"Без лица (задняя камера)"},voiceL:{orig:"Обычный голос",alt:"Изменённый голос"},modeL:{guiado:"С подсказками",livre:"Экспромт"},prompterL:"суфлёр",tabs:{final:"Итоговый ролик",faces:"Лица",parts:"Части",proof:"Подтверждение",info:"Данные"},act:{analise:"На проверку",aprovar:"Одобрить",recusar:"Отклонить",pago:"Pix оплачен",unpaid:"Снять оплату"},reasonL:"Причина",reasons:{semcomp:"Нет подтверждения",naoreal:"Не похоже на реальный визит",ofensa:"Недопустимое содержание",vazio:"Видео без содержания",dup:"Дубликат",outro:"Другое"},checkT:"Чек-лист",checks:{comp:"Подтверждение сходится",real:"Похоже на реальный визит",rosto:"Лицо соответствует разрешению",dados:"Нет личных данных и оскорблений"},note:"Заметки команды",notePh:"Видно только команде",saved:"Сохранено",pickOne:"Выберите отзыв в списке",finalNone:"Итоговый ролик ещё не собран.",finalSaving:"Сохраняем итоговый ролик на сервере…",finalSaved:"Сохранён на сервере",fields:{service:"Направление",procs:"Услуги",feedback:"Пожелание",xq:"Доп. вопросы",salon:"Салон",pro:"Мастер",date:"Визит",mode:"Режим",dur:"Длина",parts:"Части",reshoots:"Пересъёмки",face:"Лицо",voice:"Голос",subs:"Субтитры",stickers:"Стикеры",music:"Музыка",perm:"Разрешение",proofs:"Подтверждение",q1:"В1 · где нашла",q2:"В2 · оставляла отзывы",q3:"В3 · смотрела бы видео",device:"Устройство",lang:"Язык",rules:"Правила"},yes:"да",no:"нет",drop:"Перетащите сюда",thTitle:"Главное",thOk:"Подтверждено клиенткой без правок.",thEdited:"Подтверждено клиенткой с правками.",thNotOk:"Клиентка не подтвердила.",thNeu:"Замечания",thOwn:"добавлено клиенткой",thAi:"ИИ",useful:"Полезность видео (оценка команды)",usefulL:{alta:"Высокая",media:"Средняя",baixa:"Низкая"},usefulLead:"Насколько видео помогает выбирать. Нужна для вознаграждения авторов и порядка видео, на оценку мастера не влияет.",aspT:"Оценки по пунктам (подтверждены клиентками)",aspLead:"Доля положительных оценок по каждому пункту. Это входные данные формулы ранжирования.",logs:"Технические проблемы",logsLead:"Ошибки и зависания, которые прислали телефоны клиенток. Для технической команды.",boardLead:"Перетаскивайте карточки между колонками. Нажмите на карточку, чтобы открыть.",oldItem:"Отзыв прислан до нового формата: см. сводку ниже.",fNone:"Лица посторонних ещё не проверены. Поиск идёт на этом компьютере, около полуминуты.",fScan:"Найти лица",fScanning:"Ищем лица · {p}%",fPart:"Часть {n}",fAdd:"Обвести лицо",fAddHint:"Обведите лицо рамкой.",fHint:"Нажмите на рамку, чтобы включить или выключить размытие.",fOn:"Размывается",fOff:"Не размывается",fGo:"Показать",fFace:"Лицо {n}",fAuthor:"Автор",fManual:"Обведено вручную",fStart:"Начало здесь",fEnd:"Конец здесь",fDel:"Удалить",fSave:"Сохранить и подтвердить",fRescan:"Искать заново",fRescanSure:"Правки пропадут. Нажмите ещё раз, чтобы искать заново.",fUnsaved:"Есть несохранённые правки",fSaved:"Проверено",fNotSaved:"Ещё не подтверждено",fSavedToast:"Сохранено. Соберите итоговый ролик заново.",fWarn:"Лица посторонних ещё не проверены (вкладка «Лица»).",fEmpty:"В этой части лиц не найдено. Если есть — обведите вручную.",fFail:"Не удалось запустить поиск лиц.",fNoParts:"Нет частей для проверки.",fStTitle:"Стикеры на лицах",fStLead:"Лицо под стикером всё равно размывается. Убирайте, только если стикер издевается над человеком.",fStRemove:"Убрать",fStBack:"Вернуть",fStRemoved:"убран"}, reShoot:"Пересъёмка части {n}",edBack:"Назад",edPrivacy:"Приватность",edSubs:"Субтитры",edMusic:"Музыка",edStickers:"Стикеры",edMore:"Ещё",edTrim:"Обрезать",edTrimmed:"обрезана",edSec:"{n} с",edTrimTitle:"Обрезать часть {n}",edCancel:"Отмена",edDone:"Готово",edReset:"Сбросить",edTrimLead:"Двигайте жёлтые края. Исходное видео сохраняется.",edThTitle:"Главное из вашего видео",edThLead:"Проверьте, что мы поняли, и поправьте при необходимости.",edBackVideo:"К видео",prPh:"Например: что делали, что понравилось, что могло быть лучше…",prPlan:"Вставить план",prNote:"Текст видите только вы, в видео он не попадает. Пересказ своими словами звучит убедительнее, чем чтение.",prErr:"Напишите текст или хотя бы один тезис.",prSpeed:"скор. {n}×",qPrevTitle:"Вот о чём спросим",qPrevNote:"Можно заранее подумать. Если сказать нечего — вопрос можно пропустить. Ответите на последний — предложим ещё один, тоже по желанию.",qMins:"около {m} мин",thYes:"Да, всё верно",
  maskNone:"Без", maskBtn:"Маска", maskLoading:"Готовим маски…", faceOut:"Держите лицо в кадре, чтобы маска работала", maskLocked:"Маска остаётся до конца записи",
  permMask:["Можно публиковать со скрытым лицом","Так, как вы выбрали в видео. Перед публикацией размываем и лица других людей."],
  labTitle:"Примерочная масок", labLead:"Выберите фото с лицом — на нём появятся все маски. Фото не покидает устройство.", labPick:"Выбрать фото", labLoading:"Загрузка…", labReady:"Готово. Выберите фото.", labFail:"Не удалось загрузить распознавание лица.", labNoFace:"На фото не найдено лицо.", labFound:"Найдено лиц: {n}", labImgFail:"Не удалось открыть изображение.",
@@ -939,38 +955,37 @@ function qdefs(){ return S.mode==="guiado" ? qdefsL(L) : [t("freeQ")]; }
 /* ---------- what exactly was done: category -> procedure -> technique. Codes like "cabelo.color.balayage" stay stable for ranking.
    [key, PT, RU, word stems for the fallback match in the transcript, sub-techniques] ---------- */
 var SVC_TREE={
- manicure:[["trad","Esmaltação tradicional","Обычное покрытие",["обычн лак","обычное покрыт","esmaltacao tradicional","esmalte comum","esmalte normal"]],
-  ["gel","Esmaltação em gel","Гель-лак",["гель лак","гельлак","гель-лак","шеллак","esmaltacao em gel","esmalte em gel","shellac"]],
-  ["along","Alongamento","Наращивание",["нарастил","нарощ","наращив","alongament","unha postica","postica"],[["gel","Gel","Гель",["гелев","em gel"]],["fibra","Fibra de vidro","Стекловолокно",["стекловолок","fibra"]],["acrigel","Acrigel / polygel","Акригель, полигель",["акригел","полигел","acrigel","polygel"]],["porcelana","Porcelana / acrílico","Акрил",["акрил","porcelana","acrilic"]]]],
-  ["manut","Manutenção","Коррекция",["коррекц","manutenc"]],
-  ["remocao","Remoção","Снятие",["снятие","сняли","remocao","remover","tirar o gel"]],
-  ["design","Nail art / decoração","Дизайн",["дизайн","рисун","френч","nail art","decorac","desenho","francesinha"]],
-  ["spa","Spa / cuidado das mãos","Уход, spa",["парафин","spa ","spa das maos"]]],
- pedicure:[["trad","Esmaltação tradicional","Обычное покрытие",["обычн лак","обычное покрыт","esmaltacao tradicional","esmalte comum"]],
-  ["gel","Esmaltação em gel","Гель-лак",["гель лак","гельлак","шеллак","esmalte em gel","em gel"]],
-  ["calos","Calos e rachaduras","Пятки, мозоли",["пятк","мозол","натоптыш","calo","rachadur","calcanhar"]],
-  ["spa","Spa dos pés","Spa для стоп",["spa ","парафин","spa dos pes"]],
-  ["podo","Podologia","Подология",["подолог","вросш","podolog","encravad"]]],
- sobrancelha:[["design","Design / correção","Коррекция формы",["коррекц","форму бров","нитк","design","pinca","na linha"]],
-  ["henna","Henna / coloração","Хна, окрашивание",["хна","хной","окраш","покрас","henna","coloracao","tintur"]],
-  ["lamin","Brow lamination","Ламинирование",["ламинир","brow lamination","laminacao"]],
-  ["micro","Micropigmentação","Перманент, микроблейдинг",["перманент","микроблейд","пудров","татуаж","micropigment","microblading"]]],
- cilios:[["ext","Extensão","Наращивание",["нарастил","нарощ","наращив","extensao","alongamento de cilio"],[["classico","Fio a fio","Классика",["классик","fio a fio","classico"]],["volume","Volume russo","Объём",["объём","объем","2d","3d","volume"]],["hibrido","Híbrido","Гибрид",["гибрид","hibrido"]]]],
-  ["lifting","Lash lifting","Ламинирование, лифтинг",["ламинир","лифтинг","lash lifting","lifting","laminacao de cilio"]],
-  ["manut","Manutenção","Коррекция",["коррекц","manutenc"]],
-  ["tint","Coloração","Окрашивание",["окраш","покрас","tintura","coloracao"]],
-  ["remocao","Remoção","Снятие",["снятие","сняли","remocao"]]],
- cabelo:[["corte","Corte","Стрижка",["стрижк","подстриг","постриг","стригл","кончики","чёлк","челк","corte","cortar","cortei","cortou","franja","as pontas"]],
+ unhas:[["manicure","Manicure","Маникюр",["маникюр","manicure"],
+   [["trad","Esmaltação tradicional","Обычное покрытие",["обычн лак","обычное покрыт","esmaltacao tradicional","esmalte comum","esmalte normal"]],
+    ["gel","Esmaltação em gel","Гель-лак",["гель лак","гельлак","гель-лак","шеллак","esmalte em gel","em gel","shellac"]],
+    ["along","Alongamento","Наращивание",["нарастил","нарощ","наращив","полигел","акригел","alongament","postica","fibra","acrigel","polygel","porcelana"]],
+    ["manut","Manutenção","Коррекция",["коррекц","manutenc"]],
+    ["design","Nail art / decoração","Дизайн",["дизайн","рисун","френч","nail art","decorac","desenho","francesinha"]],
+    ["spa","Spa das mãos","Уход, spa",["парафин","spa das maos"]]]],
+  ["pedicure","Pedicure","Педикюр",["педикюр","pedicure","pedicuro"],
+   [["trad","Esmaltação tradicional","Обычное покрытие",["обычн лак","обычное покрыт","esmaltacao tradicional","esmalte comum"]],
+    ["gel","Esmaltação em gel","Гель-лак",["гель лак","гельлак","гель-лак","шеллак","esmalte em gel","em gel"]],
+    ["calos","Calos e rachaduras","Пятки, мозоли",["пятк","мозол","натоптыш","calo","rachadur","calcanhar"]],
+    ["podo","Podologia","Подология",["подолог","вросш","podolog","encravad"]]]]],
+ olhar:[["sobrancelha","Sobrancelhas","Брови",["бров","sobrancelh"],
+   [["design","Design / correção","Коррекция формы",["коррекц","форму","нитк","design","pinca","na linha"]],
+    ["henna","Henna / coloração","Хна, окрашивание",["хна","хной","окраш","покрас","henna","coloracao","tintur"]],
+    ["lamin","Brow lamination","Ламинирование",["ламинир","brow lamination","laminacao"]],
+    ["micro","Micropigmentação","Перманент, микроблейдинг",["перманент","микроблейд","пудров","татуаж","micropigment","microblading"]]]],
+  ["cilios","Cílios","Ресницы",["ресниц","cilio"],
+   [["ext","Extensão","Наращивание",["нарастил","нарощ","наращив","объем","2d","3d","классик","extensao","alongamento","fio a fio","volume russo","hibrido"]],
+    ["lifting","Lash lifting","Ламинирование, лифтинг",["ламинир","лифтинг","lash lifting","lifting","laminacao"]],
+    ["manut","Manutenção","Коррекция",["коррекц","manutenc"]],
+    ["tint","Coloração","Окрашивание",["окраш","покрас","tintura","coloracao"]]]]],
+ cabelo:[["corte","Corte","Стрижка",["стрижк","подстриг","постриг","стригл","кончики","челк","фейд","corte","cortar","cortei","cortou","franja","as pontas","degrade"]],
   ["color","Coloração","Окрашивание",["окраш","покрас","корни","мелир","балаяж","омбре","эйртач","тонир","осветл","coloracao","pintei","pintar","tinta","raiz","luzes","mechas","balayage","balaiagem","ombre","morena iluminada","tonaliz","descolor"],
    [["global","Cor única / raiz","В один тон, корни",["в один тон","корни","retoque","raiz","cor unica"]],["luzes","Luzes / mechas","Мелирование",["мелир","luzes","mechas"]],["balayage","Balayage / ombré / airtouch","Балаяж, омбре, эйртач",["балаяж","омбре","эйртач","airtouch","balayage","balaiagem","ombre","morena iluminada"]],["tonal","Tonalização","Тонирование",["тонир","тонер","tonaliz","matiz"]],["descolor","Descoloração","Осветление",["осветл","обесцвеч","descolor","platinad"]]]],
   ["escova","Escova / finalização","Укладка",["уклад","брашинг","локон","escova","finalizac","babyliss","chapinha"]],
   ["alisa","Progressiva / alisamento","Выпрямление, кератин",["кератин","выпрям","ботокс для волос","нанопласт","progressiva","alisament","selagem","botox capilar"]],
   ["trat","Hidratação / tratamento","Уход, восстановление",["увлажн","восстановлен","маску для волос","hidratac","nutricao","reconstruc","cronograma"]],
   ["mega","Mega hair","Наращивание",["нарастил","нарощ","наращив","mega hair","megahair","aplique"]],
-  ["penteado","Penteado","Причёска",["причёск","прическ","penteado","coque","tranca"]]],
- barba:[["corte","Corte masculino","Мужская стрижка",["стрижк","подстриг","фейд","fade","corte","degrade","maquina"]],
-  ["barba","Barba","Борода",["бород","усы","barba","bigode"]],
-  ["pigment","Pigmentação","Камуфляж седины",["камуфляж","пигмент","pigmentac"]]],
+  ["penteado","Penteado","Причёска",["причес","penteado","coque","tranca"]],
+  ["barba","Barba e bigode","Борода и усы",["бород","усы","усов","barba","bigode"]]],
  depilacao:[["cera","Cera","Воск, шугаринг",["воск","шугаринг","cera"]],
   ["laser","Laser","Лазер",["лазер","laser"]],
   ["linha","Linha","Нить",["нитью","нить","na linha"]]],
@@ -1002,9 +1017,13 @@ function svToggle(code){
 }
 /* fallback when the AI gives nothing: word stems from the transcript, only inside the chosen category */
 function svDetect(text,cat){
-  var tx=" "+svNorm(text)+" ", got=[];
-  svList(cat).forEach(function(it){ if(it.kw.some(function(k){ var n=svNorm(k); return n && tx.indexOf(" "+n)>-1; })) got.push(it.c); });
-  return got.filter(function(c){ var it=svFind(c); return it.lvl===3 || !got.some(function(g){ return g.indexOf(c+".")===0; }); });
+  var tx=" "+svNorm(text)+" ", hit=function(it){ return it.kw.some(function(k){ var n=svNorm(k); return n && tx.indexOf(" "+n)>-1; }); };
+  var all=svList(cat), par=all.filter(function(it){ return it.lvl===2 && (hit(it)||svOn(it.c)); }).map(function(it){ return it.c; });
+  var tech=all.filter(function(it){ return it.lvl===3 && hit(it); });
+  var lone=tech.filter(function(it){ return par.indexOf(it.parent)<0; }), lonePar=lone.map(function(it){ return it.parent; }).filter(function(p,i,a){ return a.indexOf(p)===i; });
+  var got=tech.filter(function(it){ return par.indexOf(it.parent)>-1 || lonePar.length===1; }).map(function(it){ return it.c; });
+  all.forEach(function(it){ if(it.lvl===2 && hit(it) && !got.some(function(g){ return g.indexOf(it.c+".")===0; })) got.push(it.c); });
+  return got;
 }
 function svMerge(codes){
   (codes||[]).forEach(function(c){ var it=svFind(c); if(!it||svOn(c)) return; if(it.lvl===3) S.procs=S.procs.filter(function(x){ return x!==it.parent; }); S.procs.push(c); });
@@ -1013,24 +1032,24 @@ function svMerge(codes){
 /* ---------- one extra question about the specific service (guided mode), a second one offered only after the first is answered.
    Assigned before recording, never from what she said (keeps the answers comparable). [key, procedure prefix or "", camera, PT [label,q], RU [label,q]] ---------- */
 var XQ={
- manicure:[["prep","","user",["Preparo","Como cuidaram da cutícula e do formato?"],["Подготовка","Как обработали кутикулу и форму ногтя?"]],
-  ["tools","","user",["Instrumentos","Como foi com os instrumentos: esterilizados, lixa nova?"],["Инструменты","Как было с инструментами: стерильные, новая пилка?"]],
-  ["close","","environment",["Esmalte de perto","Mostre perto da cutícula: o esmalte ficou rente e liso?"],["Покрытие вблизи","Покажите у кутикулы: покрытие легло ровно?"]],
-  ["ask","","user",["Como pediu","Ficou como você pediu?"],["Совпало с ожиданием","Получилось так, как вы хотели?"]],
-  ["remove","manicure.gel","user",["Remoção","Como tiraram o esmalte antigo: com cuidado com a unha?"],["Снятие","Как сняли старое покрытие: бережно к ногтю?"]],
-  ["shape","manicure.along","environment",["Formato","Mostre o comprimento e o formato: ficaram iguais?"],["Форма","Покажите длину и форму: всё одинаково?"]],
-  ["art","manicure.design","environment",["Desenho","Mostre o desenho de perto: ficou como a referência?"],["Дизайн","Покажите дизайн крупно: как на референсе?"]]],
- pedicure:[["tools","","user",["Instrumentos","Como foi com os instrumentos e a bacia: tudo limpo?"],["Инструменты","Как было с инструментами и ванночкой: всё чисто?"]],
-  ["comfort","","user",["Conforto","Teve dor ou incômodo em algum momento?"],["Комфорт","Было где-то больно или неприятно?"]],
-  ["close","","environment",["Resultado de perto","Mostre os pés de perto: cutícula, calcanhar, esmalte."],["Результат вблизи","Покажите стопы крупно: кутикула, пятки, покрытие."]]],
- sobrancelha:[["shape","","user",["Escolha do formato","Escolheram o formato junto com você?"],["Подбор формы","Форму подбирали вместе с вами?"]],
-  ["sym","","environment",["Simetria","Mostre as sobrancelhas na luz do dia: ficaram simétricas?"],["Симметрия","Покажите брови при дневном свете: симметрично?"]],
-  ["tone","sobrancelha.henna","user",["Cor","A cor ficou natural ou escura demais?"],["Цвет","Цвет получился естественный или слишком тёмный?"]],
-  ["care","sobrancelha.micro","user",["Cuidados","O que a profissional explicou sobre os cuidados depois?"],["Уход","Что мастер объяснил про уход после?"]]],
- cilios:[["comfort","","user",["Conforto","Os olhos ficaram confortáveis durante o procedimento?"],["Комфорт","Глазам было комфортно во время процедуры?"]],
-  ["close","","environment",["Cílios de perto","Mostre os cílios de perto: alinhados, sem grudar?"],["Ресницы вблизи","Покажите ресницы крупно: ровно, без склеек?"]],
-  ["care","","user",["Cuidados","O que explicaram sobre cuidados e manutenção?"],["Уход","Что сказали про уход и коррекцию?"]],
-  ["effect","cilios.ext","user",["Efeito","O efeito ficou como você esperava?"],["Эффект","Эффект получился таким, как вы ждали?"]]],
+ unhas:[["prep","unhas.manicure","user",["Preparo","Como cuidaram da cutícula e do formato?"],["Подготовка","Как обработали кутикулу и форму ногтя?"]],
+  ["tools","unhas.manicure","user",["Instrumentos","Como foi com os instrumentos: esterilizados, lixa nova?"],["Инструменты","Как было с инструментами: стерильные, новая пилка?"]],
+  ["close","unhas.manicure","environment",["Esmalte de perto","Mostre perto da cutícula: o esmalte ficou rente e liso?"],["Покрытие вблизи","Покажите у кутикулы: покрытие легло ровно?"]],
+  ["ask","unhas.manicure","user",["Como pediu","Ficou como você pediu?"],["Совпало с ожиданием","Получилось так, как вы хотели?"]],
+  ["remove","unhas.manicure.gel","user",["Remoção","Como tiraram o esmalte antigo: com cuidado com a unha?"],["Снятие","Как сняли старое покрытие: бережно к ногтю?"]],
+  ["shape","unhas.manicure.along","environment",["Formato","Mostre o comprimento e o formato: ficaram iguais?"],["Форма","Покажите длину и форму: всё одинаково?"]],
+  ["art","unhas.manicure.design","environment",["Desenho","Mostre o desenho de perto: ficou como a referência?"],["Дизайн","Покажите дизайн крупно: как на референсе?"]],
+  ["ptools","unhas.pedicure","user",["Instrumentos","Como foi com os instrumentos e a bacia: tudo limpo?"],["Инструменты","Как было с инструментами и ванночкой: всё чисто?"]],
+  ["pcomfort","unhas.pedicure","user",["Conforto","Teve dor ou incômodo em algum momento?"],["Комфорт","Было где-то больно или неприятно?"]],
+  ["pclose","unhas.pedicure","environment",["Resultado de perto","Mostre os pés de perto: cutícula, calcanhar, esmalte."],["Результат вблизи","Покажите стопы крупно: кутикула, пятки, покрытие."]]],
+ olhar:[["shape","olhar.sobrancelha","user",["Escolha do formato","Escolheram o formato junto com você?"],["Подбор формы","Форму подбирали вместе с вами?"]],
+  ["sym","olhar.sobrancelha","environment",["Simetria","Mostre as sobrancelhas na luz do dia: ficaram simétricas?"],["Симметрия","Покажите брови при дневном свете: симметрично?"]],
+  ["btone","olhar.sobrancelha.henna","user",["Cor","A cor ficou natural ou escura demais?"],["Цвет","Цвет получился естественный или слишком тёмный?"]],
+  ["bcare","olhar.sobrancelha.micro","user",["Cuidados","O que a profissional explicou sobre os cuidados depois?"],["Уход","Что мастер объяснил про уход после?"]],
+  ["lcomfort","olhar.cilios","user",["Conforto","Os olhos ficaram confortáveis durante o procedimento?"],["Комфорт","Глазам было комфортно во время процедуры?"]],
+  ["lclose","olhar.cilios","environment",["Cílios de perto","Mostre os cílios de perto: alinhados, sem grudar?"],["Ресницы вблизи","Покажите ресницы крупно: ровно, без склеек?"]],
+  ["lcare","olhar.cilios","user",["Cuidados","O que explicaram sobre cuidados e manutenção?"],["Уход","Что сказали про уход и коррекцию?"]],
+  ["effect","olhar.cilios.ext","user",["Efeito","O efeito ficou como você esperava?"],["Эффект","Эффект получился таким, как вы ждали?"]]],
  cabelo:[["consult","","user",["Conversa","Perguntaram o que você queria antes de começar?"],["Консультация","Перед началом расспросили, чего вы хотите?"]],
   ["sides","","environment",["Cabelo na luz do dia","Mostre o cabelo de todos os lados, na luz do dia."],["Волосы при дневном свете","Покажите волосы со всех сторон при дневном свете."]],
   ["home","","user",["Cuidados em casa","Deram dicas de como manter em casa?"],["Уход дома","Подсказали, как ухаживать дома?"]],
@@ -1038,9 +1057,9 @@ var XQ={
   ["feel","cabelo.color","user",["Saúde dos fios","Como o cabelo ficou ao toque depois da química?"],["Состояние волос","Какие волосы на ощупь после окрашивания?"]],
   ["back","cabelo.corte","environment",["Acabamento do corte","Mostre o corte de trás e de lado: ficou certinho?"],["Ровность стрижки","Покажите стрижку сзади и сбоку: всё ровно?"]],
   ["smell","cabelo.alisa","user",["O procedimento","Teve cheiro forte ou ardência durante o procedimento?"],["Процедура","Был сильный запах или жжение во время процедуры?"]],
-  ["join","cabelo.mega","environment",["Fixação","Mostre onde foi preso: dá para perceber?"],["Крепления","Покажите места креплений: заметно?"]]],
- barba:[["line","","environment",["Acabamento","Mostre o acabamento e a degradê de perto."],["Окантовка","Покажите окантовку и переходы вблизи."]],
-  ["ask","","user",["Como pediu","Perguntaram o comprimento e o estilo que você queria?"],["Длина и стиль","Уточнили длину и стиль, которые вы хотели?"]]],
+  ["join","cabelo.mega","environment",["Fixação","Mostre onde foi preso: dá para perceber?"],["Крепления","Покажите места креплений: заметно?"]],
+  ["line","cabelo.barba","environment",["Acabamento","Mostre o acabamento e a degradê de perto."],["Окантовка","Покажите окантовку и переходы вблизи."]],
+  ["bask","cabelo.barba","user",["Como pediu","Perguntaram o comprimento e o estilo que você queria?"],["Длина и стиль","Уточнили длину и стиль, которые вы хотели?"]]],
  depilacao:[["pain","","user",["Dor","Como foi a dor e o que fizeram para aliviar?"],["Боль","Насколько было больно и как это смягчали?"]],
   ["clean","","user",["Higiene","Como foi a higiene: materiais descartáveis, sala limpa?"],["Гигиена","Как с гигиеной: одноразовые материалы, чистый кабинет?"]]],
  maquiagem:[["light","","user",["Maquiagem na luz do dia","Mostre a maquiagem de perto, na luz do dia."],["Макияж при дневном свете","Покажите макияж вблизи при дневном свете."]],
@@ -1054,7 +1073,7 @@ function xqItem(k){ var p=String(k).split(":"), arr=XQ[p[0]]||[]; for(var i=0;i<
 /* weighted draw: a question for her procedure first, then the category, then the general ones; the draw is logged with its key */
 function xqPick(){
   var cat=S.service, pool=[];
-  (XQ[cat]||[]).forEach(function(x){ var w=x[1]?(svOn(x[1])?3:0):1.5; if(w) pool.push({k:cat+":"+x[0],w:w}); });
+  (XQ[cat]||[]).forEach(function(x){ var w=x[1]?(svOn(x[1])?x[1].split(".").length:0):1.5; if(w) pool.push({k:cat+":"+x[0],w:w}); });
   (XQ["*"]).forEach(function(x){ pool.push({k:"*:"+x[0],w:cat==="outro"||!XQ[cat]?2:0.5}); });
   var out=[];
   for(var n=0;n<2&&pool.length;n++){ var tot=pool.reduce(function(a,p){ return a+p.w; },0), r=Math.random()*tot, i=0; while(i<pool.length-1&&(r-=pool[i].w)>0) i++; out.push(pool[i].k); pool.splice(i,1); }
@@ -1137,11 +1156,12 @@ document.getElementById("themeBtn").onclick=function(){ THEME=THEME==="dark"?"li
 document.getElementById("backBtn").onclick=function(){ if(S.step>0) go(S.step-1); };
 window.addEventListener("hashchange",function(){ location.reload(); });
 function stepsBar(){
-  var pg=document.getElementById("progress"), show=!CFG.gen&&!CFG.lab&&!CFG.panel&&S.step>0;
+  var pg=document.getElementById("progress"), show=!CFG.gen&&!CFG.lab&&!CFG.panel&&S.step>0&&S.step<6;
   pg.hidden=!show;
   document.getElementById("backBtn").hidden=!(show);
   [].forEach.call(document.querySelectorAll("#steps i"),function(el,i){ el.className=(i<S.step)?"on":""; });
-  document.getElementById("stepcount").textContent=S.step+" / 6";
+  document.getElementById("stepcount").textContent=Math.min(S.step,5)+" / 5";
+  document.getElementById("backBtn").hidden=!show||(S.step===6&&S.sent);
 }
 function setBar(buttons){
   barIn.innerHTML="";
@@ -1188,7 +1208,7 @@ function render(){
   }
   if(st===1){
     h='<div class="stack lg">'+head(1,t("visitTitle"),t("visitLead"))+
-      '<div class="section"><p class="label">'+esc(t("service"))+'</p>'+chipGroup("svc",t("services"),S.service,false)+'</div>'+svVisitHtml()+
+      '<div class="section"><p class="label">'+esc(t("areaQ"))+'</p>'+chipGroup("svc",t("services"),S.service,false)+'</div>'+svVisitHtml()+
       '<div class="section"><p class="label">'+esc(t("placeQ"))+'</p>'+chipGroup("place",t("place"),S.place||"pro",false)+'</div>'+
       (S.place==="salon"
         ? '<div class="field"><label class="label" for="salon">'+esc(t("salon"))+'</label><input type="text" id="salon" autocomplete="off" placeholder="'+esc(t("salonPh"))+'" value="'+esc(S.salon||"")+'"></div>'+
@@ -1203,7 +1223,7 @@ function render(){
     var sal=document.getElementById("salon"); if(sal) sal.oninput=function(e){ S.salon=e.target.value.trim(); };
     app.querySelectorAll('input[name=place]').forEach(function(r){ r.onchange=function(){ S.place=r.value; var y=window.scrollY; render(); window.scrollTo(0,y); }; });
     document.getElementById("vdate").onchange=function(e){ S.date=e.target.value||iso; };
-    setBar([backBtn(0),{label:t("next"),on:function(){ if(!S.service){S.err=t("errService");render();return;} go(2); }}]); return;
+    setBar([backBtn(0),{label:t("next"),on:function(){ if(!S.service||(S.service==="outro"?!(S.procOther||"").trim():!(S.procs||[]).some(function(c){ return c.split(".")[0]===S.service; }))){S.err=t("errService");render();return;} go(2); }}]); return;
   }
   if(st===2){ renderVideoStep(); return; }
   if(st===4){
@@ -1232,7 +1252,7 @@ function render(){
   }
   if(st===3){
     var P=JSON.parse(JSON.stringify(t("perm"))), icons={privado:"lock",semrosto:"mask",comrosto:"eye"};
-    if(recorded() && maskSafe()){ P={privado:P.privado, semrosto:t("permMask")}; if(S.perm==="comrosto") S.perm=""; }
+    if(recorded() && maskSafe()){ P={semrosto:t("permMask"), privado:P.privado}; if(S.perm==="comrosto") S.perm=""; }
     h='<div class="stack lg">'+head(3,t("permTitle"),t("permLead"))+'<div class="stack">'+Object.keys(P).map(function(k){
       return radioCard("perm",k,S.perm===k,icons[k],P[k][0],P[k][1]);
     }).join("")+'</div><label class="check" for="consent"><input type="checkbox" id="consent"'+(S.consent?' checked':'')+'><span class="box">'+ic("check")+'</span><span>'+esc(t("consent"))+(S.subs&&recorded()?' '+esc(t("consentAudio")):'')+'</span></label>'+errHtml()+'</div>';
@@ -1276,7 +1296,7 @@ function renderVideoStep(){
     h='<div class="stack lg">'+head(2,t("modeTitle"))+'<p class="note">'+ic("eye")+'<span>'+esc(t("camFail"))+'</span></p>'+nativeCards();
   } else {
     var M=t("modes"), MI=t("modeInfo");
-    h='<div class="stack lg">'+head(2,t("modeTitle"),t("modeLead"))+'<div class="stack">'+
+    h='<div class="stack lg mode-page">'+head(2,t("modeTitle"),t("modeLead"))+'<div class="stack">'+
       ["livre","guiado","prompt"].map(function(k){
         var inf=MI[k];
         /* guided mode: the questions themselves are shown before the camera opens (no extra step), however many there are */
@@ -2242,7 +2262,8 @@ function renderSend(){
   if(recorded() && (PROC.state==="render"||PROC.final)) h+='<div class="stage" id="stage">'+(PROC.state==="render"?'':'<video src="'+PROC.finalUrl+'" playsinline controls></video>')+'</div>';
   h+=procHtml();
   h+='<div class="actions" id="actions"></div>';
-  h+='<details><summary>'+ic("chev")+esc(t("sumHead"))+'</summary><pre class="sum" id="sumtxt">'+esc(summary())+'</pre></details>';
+  if(S.sent) h+='<div class="fb" id="fbBox">'+(S.fbSent?'<p class="fb-ok">'+ic("check")+esc(t("fbThanks"))+'</p>':
+    '<p class="fb-h">'+esc(t("fbTitle"))+'</p><p class="small">'+esc(t("fbLead"))+'</p><textarea id="fbTxt" rows="3" maxlength="2000" placeholder="'+esc(t("fbPh"))+'">'+esc(S.fbText||"")+'</textarea><button type="button" class="btn outline small" id="fbSend">'+esc(t("fbSend"))+'</button>')+'</div>';
   h+='</div>';
   paint(h);
   if(PROC.state==="render" && PROC.stageEls){ var stg=document.getElementById("stage"); PROC.stageEls.forEach(function(el){ stg.appendChild(el); }); }
@@ -2260,6 +2281,11 @@ function renderSend(){
     addBtn(ready?t("saveReady"):t("saveCopy"),"ghost",saveCopy,busy,"image");
   }
   if(S.sent && CFG.wa) waLink(t("talkWa"));
+  if(S.sent) addBtn(t("oneMore"),"outline",function(){ location.reload(); },false,"video");
+  var fbt=document.getElementById("fbTxt"); if(fbt) fbt.oninput=function(){ S.fbText=fbt.value; };
+  var fbs=document.getElementById("fbSend"); if(fbs) fbs.onclick=function(){ var tx=(S.fbText||"").trim(); if(!tx) { fbt.focus(); return; } fbs.disabled=true;
+    fetch(API+"/feedback",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({code:upCode(),sid:SID,lang:L,text:tx.slice(0,2000)})})
+      .then(function(r){ if(!r.ok) throw httpErr(r); S.fbSent=true; render(); }).catch(function(e){ fbs.disabled=false; diag("feedback: "+(e&&e.message||e)); }); };
   /* no "Send" tap: reaching this screen sends the review on its own; a button appears only if sending failed */
   setBar((!S.sent&&S.sendErr&&!S.sending)?[{label:t("retry"),icon:"send",on:submitAll}]:[]);
   if(!S.sent && !S.sending && !S.sendErr && !S.autoSent){ S.autoSent=true; setTimeout(submitAll,0); }
@@ -2534,12 +2560,14 @@ function panelDetail(it){
   var F=P.fields, yes=P.yes, no=P.no, rows=[];
   function add(k,v){ if(v!=null&&v!=="") rows.push([F[k],v]); }
   if(it.meta){
-    add("service",t("services")[m.service]||m.service); add("procs",(m.procs||[]).map(function(c){ return svName(c); }).concat(m.procOther?["«"+m.procOther+"»"]:[]).join(", "));
+    add("service",t("services")[m.service]||(t("servicesOld")||{})[m.service]||m.service); add("procs",(m.procs||[]).map(function(c){ return svName(c); }).concat(m.procOther?["«"+m.procOther+"»"]:[]).join(", "));
     if(m.xq&&m.xq.ks) add("xq",m.xq.ks.slice(0,m.xq.x2?2:1).map(function(k){ var d=xqDef(k); return d?d.label:k; }).join(" · ")+(m.xq.offered&&!m.xq.x2?" · (+1 ✕)":"")); if(m.place==="salon") add("salon",m.salon||"—"); add("pro",m.pro||"—"); add("date",m.date); add("mode",(P.modeL[m.mode]||m.mode||"")+(m.prompter?" · "+P.prompterL:"")+(m.format?" · Link "+m.format.toUpperCase():""));
     add("dur",mmss(m.dur||0)); add("parts",m.parts); add("reshoots",m.reshoots); add("face",P.faceL[m.face]||m.face); add("voice",P.voiceL[m.voice]||m.voice);
     add("subs",m.subs?(yes+(m.edited?" · "+P.editedShort:"")):no); add("stickers",m.stickers); add("music",(t("music")||{})[m.music]||m.music);
     add("perm",m.perm?((t("perm")[m.perm]||t("permMask"))[0]):"—"); add("proofs",(m.proofs||[]).map(function(k){ return t("proofs")[k]||k; }).join(", ")+(m.photo?" · 📎":""));
     add("q1",t("q1o")[m.q1]); add("q2",t("q2o")[m.q2]); add("q3",t("q3o")[m.q3]); add("device",m.device); add("lang",(m.lang||"").toUpperCase()); add("rules",m.rules?yes:no);
+  }
+  if(it.feedback&&it.feedback.length){ add("feedback",it.feedback.join(" / "));
   }
   h+='<div class="dt-right"><div class="card"><h3>'+esc(P.tabs.info)+'</h3>'+(rows.length?'<dl class="kv">'+rows.map(function(x){ return '<dt>'+esc(x[0])+'</dt><dd>'+esc(x[1])+'</dd>'; }).join("")+'</dl>':'<p class="small">'+esc(P.oldItem)+'</p>')+
     '<details><summary>'+ic("chev")+esc(P.sum)+'</summary><pre class="sum">'+esc(it.summary)+'</pre></details></div>';
@@ -3182,7 +3210,7 @@ function makeMusic(key){
 /* ---------- key points: the AI proposes, the client confirms or corrects ----------
    Theses (pros / cons) + one rating per aspect + "would come back". The client's confirmed answers are what
    ranking uses later; the AI never sets a rating on its own. Quotes are highlighted in the subtitles. */
-var TH_ASPECTS=["resultado","atendimento","pontualidade","limpeza","preco"];
+var TH_ASPECTS=["resultado","atendimento","pontualidade","limpeza","preco","valor"];
 function thKey(){ var txt=clipList().map(function(c){ return clipCues(c).map(function(q){ return q.text; }).join(" "); }).join("|"), hsh=0; for(var i=0;i<txt.length;i++){ hsh=(hsh*31+txt.charCodeAt(i))|0; }
   return clipList().map(function(c){ return c.url+"@"+clipIn(c).toFixed(1)+"-"+clipOut(c).toFixed(1); }).join(",")+"#"+hsh; }
 /* a word fixed in the subtitles ("частота" -> "чистота") is fixed in the key points too:
@@ -3230,7 +3258,7 @@ function recomputeHL(){
 function svVisitHtml(){
   if(!S.service) return "";
   if(S.service==="outro"||!(SVC_TREE[S.service]||[]).length)
-    return '<div class="field"><label class="label" for="procOther">'+esc(t("procOtherL"))+' <span class="small">· '+esc(t("optional"))+'</span></label><input type="text" id="procOther" autocomplete="off" placeholder="'+esc(t("procOtherPh"))+'" value="'+esc(S.procOther||"")+'"></div>';
+    return '<div class="field"><label class="label" for="procOther">'+esc(t("procOtherL"))+'</label><input type="text" id="procOther" autocomplete="off" placeholder="'+esc(t("procOtherPh"))+'" value="'+esc(S.procOther||"")+'"></div>';
   var opts={}, sel=[]; svList(S.service).filter(function(x){ return x.lvl===2; }).forEach(function(x){ opts[x.c]=x[L]; if(svOn(x.c)) sel.push(x.c); });
   return '<div class="section sv-sec"><p class="label">'+esc(t("procQ"))+' <span class="small">· '+esc(t("procHint"))+'</span></p>'+chipGroup("proc",opts,sel,true)+'</div>';
 }
