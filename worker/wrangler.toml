@@ -5,6 +5,7 @@ main = "src/index.js"
 compatibility_date = "2025-09-01"
 account_id = "80d8ca0fc74d7988e4500024eb93aa54"
 workers_dev = true
+keep_vars = true   # never wipe variables set in the dashboard
 
 [[r2_buckets]]
 binding = "BUCKET"
