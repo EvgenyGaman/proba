@@ -1,4 +1,4 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#FFFFFF"><title>Proba · Avaliação em vídeo</title><meta property="og:title" content="Proba · Avaliação em vídeo"><meta name="description" content="Grave uma avaliação em vídeo da sua visita. Sem baixar aplicativo."><meta property="og:description" content="Grave uma avaliação em vídeo da sua visita. Sem baixar aplicativo."><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>Avaliação Proba</title>
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#FFFFFF"><title>Proba · Avaliação em vídeo</title><meta property="og:title" content="Proba · Avaliação em vídeo"><meta name="description" content="Grave uma avaliação em vídeo da sua visita. Sem baixar aplicativo."><meta property="og:description" content="Grave uma avaliação em vídeo da sua visita. Sem baixar aplicativo."><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>Avaliação Proba</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&display=swap">
@@ -33,6 +33,9 @@
   --sel:#ECEAE4; --focus:rgba(236,234,228,.35); --shadow:0 0 0 1px rgba(255,255,255,.02); color-scheme:dark}
 *{box-sizing:border-box}
 html,body{min-height:100%}
+html,body{max-width:100%;overflow-x:hidden;overflow-x:clip;overscroll-behavior-x:none}
+html.lock{touch-action:pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html.lock .ed-strip,html.lock .stk-tray{touch-action:pan-x pan-y}
 body{background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--f);-webkit-font-smoothing:antialiased;font-feature-settings:"tnum" 1;transition:background-color .25s var(--ease),color .25s var(--ease)}
 button{font:inherit;color:inherit}
 .wrap{max-width:480px;margin:0 auto;padding-inline:20px;padding-block:0 132px}
@@ -532,7 +535,7 @@ html.panel-mode header.top,html.panel-mode #foot{display:none}
 .cues{display:flex;flex-direction:column;gap:8px}
 .cue{display:grid;grid-template-columns:42px 1fr;gap:8px;align-items:start}
 .cue span{font:600 12px/2.6 var(--f);color:var(--ink3)}
-.cue textarea{min-height:0;font-size:15px;line-height:1.45;padding:8px 10px;resize:none;overflow:hidden;background:var(--sub);border-color:transparent}
+.cue textarea{min-height:0;font-size:16px;line-height:1.45;padding:8px 10px;resize:none;overflow:hidden;background:var(--sub);border-color:transparent}
 .cue textarea:focus{background:var(--bg);border-color:var(--ink)}
 .cuehint{display:flex;gap:6px;align-items:center;margin:2px 0 0}.cuehint svg{width:15px;height:15px;flex:none}
 .cuetext{margin:0;font-size:15px;line-height:1.5;color:var(--ink);background:var(--sub);border-radius:var(--r-sm);padding:12px 14px}
@@ -1182,7 +1185,11 @@ function bindReview(){
   PV.playing=false; pvLoad(0);
   document.getElementById("pvPlay").onclick=function(){ if(STK_SEL>=0){ STK_SEL=-1; layoutStickers(); refreshStickerPanel(); } if(PV.playing) pvPause(); else pvPlay(); };
   v.onended=pvPartEnd;
-  var bk=document.getElementById("edBack"); if(bk) bk.onclick=function(){ pvStop(); S.edSheet=null; S.trim=null; go(1); };
+  /* back closes what is open first (trim = cancel, a tool sheet = close); only from the bare editor it goes to the visit step, recordings kept */
+  var bk=document.getElementById("edBack"); if(bk) bk.onclick=function(){
+    if(S.edSheet){ var wasTrim=S.edSheet==="trim"; S.edSheet=null; S.trim=null; STK_SEL=-1; if(wasTrim){ pvPause(); pvLoad(S.edSel); } edLowSwap(); layoutStickers(); return; }
+    pvStop(); go(1);
+  };
   document.querySelectorAll("#edRail [data-sheet]").forEach(function(b){ b.onclick=function(){ edOpen(b.dataset.sheet); }; });
   edBindLow();
   v.ontimeupdate=function(){ pvBarUI(); pvCueUI(); };
@@ -1616,7 +1623,7 @@ function setZoom(z){
   }
   view.addEventListener("pointerup",end); view.addEventListener("pointercancel",end);
   /* keep the page itself from zooming while the camera is open (iOS) */
-  document.addEventListener("gesturestart",function(e){ if(CAM&&CAM.open) e.preventDefault(); });
+  document.addEventListener("gesturestart",function(e){ if((CAM&&CAM.open)||!CFG.panel) e.preventDefault(); });
   view.addEventListener("touchmove",function(e){ if(e.touches&&e.touches.length>1) e.preventDefault(); },{passive:false});
 })();
 document.getElementById("camQPrev").onclick=function(){ goQ(CAM.q-1); };
@@ -3431,6 +3438,14 @@ render=function(){
 };
 setLang(L);
 if(!CFG.gen&&!CFG.panel) ev("open");
+/* fixed layout on the phone: no pinch zoom, no double-tap zoom, no sideways drift */
+if(!CFG.panel){
+  document.documentElement.classList.add("lock");
+  ["gesturestart","gesturechange","gestureend"].forEach(function(n){ document.addEventListener(n,function(e){ e.preventDefault(); },{passive:false}); });
+  document.addEventListener("touchmove",function(e){ if(e.touches&&e.touches.length>1&&!(e.target.closest&&e.target.closest(".cam-view"))) e.preventDefault(); },{passive:false});
+  document.addEventListener("dblclick",function(e){ e.preventDefault(); },{passive:false});
+  window.addEventListener("scroll",function(){ if(window.scrollX) window.scrollTo(0,window.scrollY); },{passive:true});
+}
 if(qs.debug) window.PROBA={S:S,summary:summary,totalDur:totalDur,upload:upload,proc:function(){ return PROC; }};
 })();
 </script>
