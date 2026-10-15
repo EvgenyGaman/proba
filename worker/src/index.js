@@ -263,7 +263,7 @@ async function theses(request, env, json) {
   if (!env.GROQ_API_KEY) return json({ error: "server not configured" }, 500);
   const b = await request.json().catch(() => null);
   if (!b || typeof b.text !== "string" || !b.text.trim()) return json({ error: "bad request" }, 400);
-  const text = b.text.slice(0, 12000), lang = b.lang === "ru" ? "ru" : "pt";
+  const text = b.text.slice(0, 12000), lang = b.lang === "ru" ? "ru" : b.lang === "en" ? "en" : "pt";
   const procs = (Array.isArray(b.procs) ? b.procs : []).slice(0, 60).map((p) => ({ c: String((p && p.c) || "").slice(0, 60), l: String((p && p.l) || "").slice(0, 80) })).filter((p) => /^[a-z]+(\.[a-z0-9]+){1,2}$/.test(p.c));
   const sys = "You analyse a customer's spoken video review of a service visit (beauty: nails, hair, brows, lashes, etc.). " +
     "Extract only what the customer actually said, never invent. Return strict JSON: " +
