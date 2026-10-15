@@ -1725,7 +1725,7 @@ function upHtml(){
 var procTimer=0;
 function procUI(){
   if(CFG.gen||CFG.lab||CFG.panel) return;
-  if(S.step===2){ thRefresh(); var sb=document.getElementById("subsbox"); if(sb && !PROC.editing){ var tmp=document.createElement("div"); tmp.innerHTML=subsCard(); if(tmp.firstChild){ sb.replaceWith(tmp.firstChild); bindSubs(); } } return; }
+  if(S.step===2){ thRefresh(); if(!PROC.editing) subsRedraw(); return; }
   if(S.step!==6) return;
   if(PROC.justDone){ PROC.justDone=false; render(); return; }
   [["upbox",upHtml()],["procbox",procHtml()]].forEach(function(p){ var el=document.getElementById(p[0]); if(!el||!p[1]) return; var tmp=document.createElement("div"); tmp.innerHTML=p[1]; if(tmp.firstChild) el.replaceWith(tmp.firstChild); });
@@ -2241,10 +2241,12 @@ function subsCard(){
   }
   return h+'</div>';
 }
+/* redraw the subtitles card; background refreshes skip it while she is typing, the edit buttons redraw it on purpose */
+function subsRedraw(){ var sb=document.getElementById("subsbox"); if(!sb) return; var tmp=document.createElement("div"); tmp.innerHTML=subsCard(); if(tmp.firstChild){ sb.replaceWith(tmp.firstChild); bindSubs(); } }
 function bindSubs(){
   var sb=document.getElementById("subs"); if(sb) sb.onchange=function(){ S.subs=sb.checked; if(S.subs&&recorded()) startTranscription(); procUI(); };
-  var ed=document.getElementById("cuesEdit"); if(ed) ed.onclick=function(){ PROC.editing=true; procUI(); };
-  var dn=document.getElementById("cuesDone"); if(dn) dn.onclick=function(){ PROC.editing=false; recomputeHL(); procUI(); };
+  var ed=document.getElementById("cuesEdit"); if(ed) ed.onclick=function(){ PROC.editing=true; subsRedraw(); var ta=document.querySelector("#subsbox textarea"); if(ta){ try{ ta.focus({preventScroll:true}); }catch(e){} } };
+  var dn=document.getElementById("cuesDone"); if(dn) dn.onclick=function(){ PROC.editing=false; recomputeHL(); subsRedraw(); procUI(); };
   app.querySelectorAll("[data-cue]").forEach(function(ta){ ta.oninput=function(){ var p=ta.dataset.cue.split(":"), c=S.clips[+p[0]]; if(c&&c.cues&&c.cues[+p[1]]){ c.cues[+p[1]].text=ta.value; S.cuesEdited=true; } }; });
 }
 
