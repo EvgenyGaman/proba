@@ -256,6 +256,9 @@ async function stt(request, env, json) {
 }
 
 const ASPECTS = ["resultado", "atendimento", "pontualidade", "limpeza", "preco", "valor", "ambiente", "durabilidade", "outro"];
+// the model sees self-explaining names, so "expensive" is not read as "price as agreed"
+const AI_ASP = { result: "resultado", service: "atendimento", punctuality: "pontualidade", cleanliness: "limpeza", price_as_agreed: "preco", worth_the_money: "valor", ambience: "ambiente", durability: "durabilidade", other: "outro" };
+const aspIn = (k) => AI_ASP[k] || (ASPECTS.includes(k) ? k : null);
 async function theses(request, env, json) {
   if (!env.GROQ_API_KEY) return json({ error: "server not configured" }, 500);
   const b = await request.json().catch(() => null);
@@ -264,13 +267,13 @@ async function theses(request, env, json) {
   const procs = (Array.isArray(b.procs) ? b.procs : []).slice(0, 60).map((p) => ({ c: String((p && p.c) || "").slice(0, 60), l: String((p && p.l) || "").slice(0, 80) })).filter((p) => /^[a-z]+(\.[a-z0-9]+){1,2}$/.test(p.c));
   const sys = "You analyse a customer's spoken video review of a service visit (beauty: nails, hair, brows, lashes, etc.). " +
     "Extract only what the customer actually said, never invent. Return strict JSON: " +
-    '{"theses":[{"text":string,"polarity":"pos"|"neg"|"neu","aspect":' + JSON.stringify(ASPECTS.join("|")) + ',"quote":string}],' +
+    '{"theses":[{"text":string,"polarity":"pos"|"neg"|"neu","aspect":' + JSON.stringify(Object.keys(AI_ASP).join("|")) + ',"quote":string}],' +
     '"aspects":{"<aspect>":"pos"|"neg"|"mix"},"voltaria":"sim"|"nao"|"talvez"|"na","summary":string}. ' +
     "Rules: at most 6 theses, the most important first; text = a short claim (max 90 characters) in the same language as the review, written as the customer's own statement; " +
     "quote = 2 to 10 consecutive words copied EXACTLY from the transcript that best express the thesis; " +
     "aspects only for aspects the customer talked about; " +
-    "preco = ONLY whether the final price matched what was agreed or announced (no surprise charges); saying it was expensive or cheap is NOT preco. " +
-    "valor = whether it was worth the money: pos = worth it / fair, neg = not worth it / overpriced, mix = expensive but worth it, or she only says it was expensive without judging; " +
+    "price_as_agreed = ONLY whether the final price matched what was agreed or announced beforehand (pos = same as agreed, neg = surprise extra charges). " +
+    "Saying it was expensive, pricey, cheap or affordable is NEVER price_as_agreed: it is worth_the_money (pos = worth it / fair / affordable, neg = not worth it / overpriced, mix = expensive but she liked it, or she only says it was expensive). " +
     "voltaria = whether the customer said they would come back; summary = one neutral sentence in the review's language. " +
     "If the transcript has no real content, return empty theses." +
     (procs.length ? ' Also return "procs": the codes from the PROCEDURES list that the customer explicitly said were done in this visit (a technique code when she named the technique), [] if not said.' : "");
@@ -289,9 +292,9 @@ async function theses(request, env, json) {
   try { out = JSON.parse(data.choices[0].message.content); } catch (e) { return json({ error: "bad output" }, 502); }
   const th = (Array.isArray(out.theses) ? out.theses : []).slice(0, 6).map((t) => ({
     text: String(t.text || "").slice(0, 140), polarity: ["pos", "neg", "neu"].includes(t.polarity) ? t.polarity : "neu",
-    aspect: ASPECTS.includes(t.aspect) ? t.aspect : "outro", quote: String(t.quote || "").slice(0, 160),
+    aspect: aspIn(t.aspect) || "outro", quote: String(t.quote || "").slice(0, 160),
   })).filter((t) => t.text);
-  const asp = {}; Object.keys(out.aspects || {}).forEach((k) => { const v = out.aspects[k]; if (ASPECTS.includes(k) && ["pos", "neg", "mix"].includes(v)) asp[k] = v; });
+  const asp = {}; Object.keys(out.aspects || {}).forEach((k) => { const v = out.aspects[k]; const a = aspIn(k); if (a && ["pos", "neg", "mix"].includes(v)) asp[a] = v; });
   return json({ theses: th, aspects: asp, voltaria: ["sim", "nao", "talvez", "na"].includes(out.voltaria) ? out.voltaria : "na", summary: String(out.summary || "").slice(0, 300), lang,
     procs: (Array.isArray(out.procs) ? out.procs : []).map(String).filter((c) => procs.some((p) => p.c === c)).slice(0, 8) });
 }
