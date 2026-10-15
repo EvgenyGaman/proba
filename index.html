@@ -92,6 +92,7 @@ h3{font:600 18px/1.3 var(--f);letter-spacing:-.01em}
 .how li{list-style:none;background:var(--sub);border-radius:var(--r);padding:14px 12px;display:flex;flex-direction:column;gap:10px;min-width:0}
 .how .n{width:28px;height:28px;border-radius:999px;background:var(--paper);display:grid;place-items:center;color:var(--ink)}
 .how .n svg{width:16px;height:16px}
+.how li{position:relative}.how .hn{position:absolute;top:12px;right:14px;font:700 22px/1 var(--f);color:var(--ink3);font-variant-numeric:tabular-nums}
 .how span{font:500 13px/1.3 var(--f)}
 ul.how{margin:0;padding:0}
 .trust{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
@@ -1218,7 +1219,7 @@ function render(){
     h='<div class="stack lg"><div class="hero"><p class="eyebrow">'+esc(t("introEyebrow"))+'</p><h1>'+esc(t("introTitle"))+'</h1><p class="lead">'+esc(t("introLead"))+'</p>'+
       (ctx.length?'<div class="ctx">'+ctx.map(function(c){return '<span class="tag">'+ic(c[0])+esc(c[1])+'</span>';}).join("")+'</div>':'')+
       '<span class="meta">'+ic("clock")+esc(t("introTime"))+'</span></div>'+
-      '<ul class="how">'+[["video",how[0]],["receipt",how[1]]].map(function(x,i){ return '<li><span class="n">'+ic(x[0])+'</span><span>'+esc(x[1])+'</span></li>'; }).join("")+'</ul>'+
+      '<ul class="how">'+[["video",how[0]],["receipt",how[1]]].map(function(x,i){ return '<li><b class="hn">'+(i+1)+'</b><span class="n">'+ic(x[0])+'</span><span>'+esc(x[1])+'</span></li>'; }).join("")+'</ul>'+
       '<ul class="trust">'+[["shield",tr[0]],["mask",tr[1]],["gift",tr[2]]].map(function(x){ return '<li><span class="ic">'+ic(x[0])+'</span><span><b>'+esc(x[1][0])+'</b><span>'+esc(x[1][1])+'</span></span></li>'; }).join("")+'</ul>'+
       '</div>';
     paint(h); setBar([{label:t("start"),on:function(){go(1);}}]); return;
