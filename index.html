@@ -706,7 +706,7 @@ details[open] summary svg{transform:rotate(90deg)}
 .cam-x2 p{margin:0;font:600 14px/1.3 var(--f);color:rgba(255,255,255,.75)}.cam-x2 strong{font:600 19px/1.3 var(--f)}
 .cam-x2b{display:grid;grid-template-columns:1fr 1.4fr;gap:10px;margin-top:6px}.cam-x2b button{all:unset;cursor:pointer;text-align:center;border-radius:999px;padding:14px 10px;font:600 16px/1 var(--f);background:#fff;color:#111}.cam-x2b button.ghost{background:rgba(255,255,255,.14);color:#fff}
 .qprev li.xq{opacity:.9}.xq-b{font:500 12px/1 var(--f);font-style:normal;color:var(--ink2);border:1px solid var(--line2);border-radius:999px;padding:3px 7px;margin-left:6px;vertical-align:2px}
-.sv-g .sv-lead{margin:-4px 0 2px}.th-page .sv-g .chips .fchip{font-size:15px;padding:9px 13px}.sv-edit svg{width:15px;height:15px}.th-page .sv-g .chips .sv-edit{border-style:dashed}.sv-subs{display:flex;flex-direction:column;gap:6px;padding-left:10px;border-left:2px solid var(--line)}.sv-find{font-size:16px;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line2);background:var(--bg);color:var(--ink);width:100%;box-sizing:border-box}.sv-res:empty{display:none}.sv-res em{font-style:normal;opacity:.6;margin-left:4px}
+.th-page .sv-g{display:flex;flex-direction:column;gap:12px;padding:16px}.sv-g>.label{margin:0}.sv-g .sv-lead{margin:-6px 0 2px;line-height:1.4}.sv-g .chips{gap:8px}.sv-g .sv-find+.sv-res{margin-top:-4px}.th-page .sv-g .chips .fchip{font-size:15px;padding:9px 13px}.sv-edit svg{width:15px;height:15px}.th-page .sv-g .chips .sv-edit{border-style:dashed}.sv-subs{display:flex;flex-direction:column;gap:6px;padding-left:10px;border-left:2px solid var(--line)}.sv-find{font-size:16px;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line2);background:var(--bg);color:var(--ink);width:100%;box-sizing:border-box}.sv-res:empty{display:none}.sv-res em{font-style:normal;opacity:.6;margin-left:4px}
 .cam-tip{text-align:center;font:500 14px/1.35 var(--f);color:rgba(255,255,255,.92);padding:0 24px;min-height:20px;text-shadow:0 1px 3px rgba(0,0,0,.6)}
 .cam-ctl{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:14px 18px 0;gap:10px}
 .cam-ctl .side{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;font:600 12px/1.2 var(--f);color:#fff;padding:6px;justify-self:center;text-align:center;transition:transform .15s var(--ease)}
@@ -811,7 +811,7 @@ pt:{
  servicesOld:{manicure:"Manicure",pedicure:"Pedicure",sobrancelha:"Sobrancelha",cilios:"Cílios",barba:"Barbearia"},
  errService:"Escolha sobre o que foi a visita.", areaQ:"Sobre o que foi a visita?",
  procQ:"Qual serviço?", procHint:"Pode marcar vários. Opcional.", procOtherL:"Qual serviço?", procOtherPh:"Ex.: massagem relaxante",
- svTitle:"O que foi feito", svLead:"Marcamos pelo que você contou. Corrija se precisar.", svSub:"Técnica", svFind:"Procurar outro serviço", svOther:"Outro, com suas palavras", svEdit:"Alterar", svNone:"Nada encontrado.",
+ svTitle:"O que foi feito", svLead:"Marcamos pelo que você contou. Corrija se precisar.", svLeadNone:"Marque o que foi feito: ajuda quem está escolhendo.", svSub:"Técnica", svFind:"Procurar outro serviço", svOther:"Outro, com suas palavras", svEdit:"Alterar", svNone:"Nada encontrado.",
  xqOpt:"opcional", xqTip:"Opcional · até 30 segundos.", x2Title:"Mais uma pergunta? Uns 20 segundos.", x2Yes:"Responder", x2No:"Pronto",
  modeTitle:"Como prefere gravar?",
  modes:{guiado:["Com perguntas","As perguntas aparecem na tela e você responde uma de cada vez. São 3 principais e 1 sobre o seu serviço, de 10 a 30 segundos cada."],livre:["Do seu jeito","Você fala livremente sobre a visita, com pausas se quiser."],prompt:["Teleprompter","Escreva seu texto ou alguns pontos: ele passa na tela enquanto você grava."]},
@@ -884,7 +884,7 @@ ru:{
  servicesOld:{manicure:"Маникюр",pedicure:"Педикюр",sobrancelha:"Брови",cilios:"Ресницы",barba:"Барбер"},
  errService:"Выберите, с чем был связан визит.", areaQ:"С чем был связан визит?",
  procQ:"Какая услуга?", procHint:"Можно несколько. Необязательно.", procOtherL:"Что за услуга?", procOtherPh:"Например: массаж спины",
- svTitle:"Что делали", svLead:"Отметили по вашему рассказу. Поправьте, если не так.", svSub:"Техника", svFind:"Найти другую услугу", svOther:"Другое, своими словами", svEdit:"Изменить", svNone:"Ничего не нашлось.",
+ svTitle:"Что делали", svLead:"Отметили по вашему рассказу. Поправьте, если не так.", svLeadNone:"Отметьте, что делали: это поможет тем, кто выбирает.", svSub:"Техника", svFind:"Найти другую услугу", svOther:"Другое, своими словами", svEdit:"Изменить", svNone:"Ничего не нашлось.",
  xqOpt:"по желанию", xqTip:"По желанию · до 30 секунд.", x2Title:"Ещё один вопрос? Секунд 20.", x2Yes:"Ответить", x2No:"Готово",
  modeTitle:"Как удобнее снимать?",
  modes:{guiado:["С подсказками","Вопросы появляются на экране, вы отвечаете по одному. 3 основных и 1 про вашу услугу, по 10–30 секунд."],livre:["Экспромт","Рассказываете свободно, можно с паузами."],prompt:["Суфлёр","Напишите свой текст или пару тезисов — он будет бежать на экране, пока вы снимаете."]},
@@ -3302,7 +3302,7 @@ function svVisitHtml(){
 }
 /* «what was done» on the key-points page: pre-marked from the story, fixable with one tap */
 function svBlockHtml(){
-  var h='<div class="th-g sv-g" id="svBlock"><p class="label">'+esc(t("svTitle"))+'</p><p class="small sv-lead">'+esc(t("svLead"))+'</p>';
+  var h='<div class="th-g sv-g" id="svBlock"><p class="label">'+esc(t("svTitle"))+'</p><p class="small sv-lead">'+esc(((S.procs||[]).length||S.procOther)?t("svLead"):t("svLeadNone"))+'</p>';
   if(!S.svOpen && ((S.procs||[]).length||S.procOther)){
     return h+'<div class="chips">'+(S.procs||[]).map(function(c){ return '<span class="fchip on">'+esc(svName(c))+'</span>'; }).join("")+(S.procOther?'<span class="fchip on">'+esc(S.procOther)+'</span>':'')+
       '<button type="button" class="fchip sv-edit" id="svEdit">'+ic("wand")+esc(t("svEdit"))+'</button></div></div>';
