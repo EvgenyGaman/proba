@@ -247,6 +247,7 @@ async function theses(request, env, json) {
   const b = await request.json().catch(() => null);
   if (!b || typeof b.text !== "string" || !b.text.trim()) return json({ error: "bad request" }, 400);
   const text = b.text.slice(0, 12000), lang = b.lang === "ru" ? "ru" : "pt";
+  const procs = (Array.isArray(b.procs) ? b.procs : []).slice(0, 60).map((p) => ({ c: String((p && p.c) || "").slice(0, 60), l: String((p && p.l) || "").slice(0, 80) })).filter((p) => /^[a-z]+(\.[a-z0-9]+){1,2}$/.test(p.c));
   const sys = "You analyse a customer's spoken video review of a service visit (beauty: nails, hair, brows, lashes, etc.). " +
     "Extract only what the customer actually said, never invent. Return strict JSON: " +
     '{"theses":[{"text":string,"polarity":"pos"|"neg"|"neu","aspect":' + JSON.stringify(ASPECTS.join("|")) + ',"quote":string}],' +
@@ -254,8 +255,10 @@ async function theses(request, env, json) {
     "Rules: at most 6 theses, the most important first; text = a short claim (max 90 characters) in the same language as the review, written as the customer's own statement; " +
     "quote = 2 to 10 consecutive words copied EXACTLY from the transcript that best express the thesis; " +
     "aspects only for aspects the customer talked about; voltaria = whether the customer said they would come back; summary = one neutral sentence in the review's language. " +
-    "If the transcript has no real content, return empty theses.";
-  const user = "Service: " + String(b.service || "").slice(0, 40) + "\nTranscript:\n" + text;
+    "If the transcript has no real content, return empty theses." +
+    (procs.length ? ' Also return "procs": the codes from the PROCEDURES list that the customer explicitly said were done in this visit (a technique code when she named the technique), [] if not said.' : "");
+  const user = "Service: " + String(b.service || "").slice(0, 40) +
+    (procs.length ? "\nPROCEDURES (code = name):\n" + procs.map((p) => p.c + " = " + p.l).join("\n") : "") + "\nTranscript:\n" + text;
   const call = (model) => fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
     headers: { Authorization: "Bearer " + env.GROQ_API_KEY, "Content-Type": "application/json" },
@@ -272,5 +275,6 @@ async function theses(request, env, json) {
     aspect: ASPECTS.includes(t.aspect) ? t.aspect : "outro", quote: String(t.quote || "").slice(0, 160),
   })).filter((t) => t.text);
   const asp = {}; Object.keys(out.aspects || {}).forEach((k) => { const v = out.aspects[k]; if (ASPECTS.includes(k) && ["pos", "neg", "mix"].includes(v)) asp[k] = v; });
-  return json({ theses: th, aspects: asp, voltaria: ["sim", "nao", "talvez", "na"].includes(out.voltaria) ? out.voltaria : "na", summary: String(out.summary || "").slice(0, 300), lang });
+  return json({ theses: th, aspects: asp, voltaria: ["sim", "nao", "talvez", "na"].includes(out.voltaria) ? out.voltaria : "na", summary: String(out.summary || "").slice(0, 300), lang,
+    procs: (Array.isArray(out.procs) ? out.procs : []).map(String).filter((c) => procs.some((p) => p.c === c)).slice(0, 8) });
 }
