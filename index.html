@@ -388,6 +388,19 @@ html.panel-mode header.top,html.panel-mode #foot{display:none}
 .dt-media{display:flex;flex-direction:column;gap:10px}
 .dt-media video,.dt-media img{width:100%;max-height:72vh;border-radius:var(--r-lg);background:#0D0E10;object-fit:contain}
 .dt-media .stage{max-height:72vh}
+.fd-stage{position:relative;width:100%;max-width:380px;border-radius:var(--r-lg);overflow:hidden;background:#0D0E10;touch-action:none}
+.dt-media .fd-stage video{width:100%;height:auto;max-height:none;display:block;border-radius:0;object-fit:fill}
+.fd-stage canvas{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
+.fd-stage.add canvas{cursor:crosshair}
+.fd-ctl{display:flex;gap:10px;align-items:center;max-width:380px}.fd-ctl input{flex:1}
+.fd-list{display:flex;flex-direction:column;gap:6px;max-width:560px}
+.fd-row{display:flex;gap:10px;align-items:center;padding:6px;border:1px solid var(--line);border-radius:12px;flex-wrap:wrap}
+.fd-row img{width:52px;height:52px;border-radius:8px;object-fit:cover;background:var(--sub);flex:none}
+.fd-row .fd-txt{flex:1;min-width:120px;display:flex;flex-direction:column;gap:2px;font:500 13px/1.3 var(--f)}
+.fd-row.off img{opacity:.6}
+.fd-row .fchip svg,.fd-ctl svg{width:16px;height:16px;flex:none}
+.fd-dirty{color:var(--warn)}
+.fd-warn{margin:0}
 .dt-empty{background:var(--sub);border-radius:var(--r-lg);padding:28px 18px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;aspect-ratio:9/16;justify-content:center}
 .dt-right{display:flex;flex-direction:column;gap:12px;min-width:0}
 .kv{display:grid;grid-template-columns:minmax(120px,40%) 1fr;gap:8px 12px;margin:0;font-size:14px}
@@ -710,7 +723,7 @@ pt:{
  rules:["Fale só da sua própria visita, que aconteceu de verdade.","Seja sincera: conte o que gostou e o que poderia ser melhor.","Os R$ 20 que pagamos a você são pela participação e não dependem da sua opinião.","Não mostre documentos, telas com dados pessoais nem outras pessoas. Antes de publicar, desfocamos o rosto de outras pessoas.","Sem ofensas, preconceito ou acusações: fale da sua experiência.","Sem propaganda, links ou contatos."], piece:"Trecho {n}", recMore:"Gravar próximo trecho", freeMore:"Pausa. Pense com calma e grave o próximo trecho, ou toque em Concluir.", addPiece:"Adicionar trecho", delPiece:"Apagar",
  prvTitle:"Privacidade", prvLead:"O original fica só com a equipe da Proba. Publicamos só a versão que você escolher.", fxTitle:"Rosto", fxLead:"Vale para as partes gravadas com a câmera da frente.", voiceTitle:"Voz", voice:{orig:"Original",alt:"Alterada"}, voiceLoading:"Preparando a voz…", face:{show:"Mostrar",blur:"Desfocar",silhouette:"Silhueta"}, fxLoading:"Preparando o efeito…",
  send:"Enviar", sending:"Enviando…", retry:"Tentar de novo", sentTitle:"Avaliação enviada", upRun:"Seu vídeo está subindo · {p}%", upDone:"Vídeo carregado", upFail:"A conexão falhou. Toque em Tentar de novo.", sendFail:"Não deu para enviar agora. Verifique a internet e tente de novo, ou envie pelo WhatsApp.", sendNoServer:"O envio direto não está disponível agora. Envie pelo WhatsApp.", viaWa:"Enviar vídeo pelo WhatsApp", saveCopy:"Salvar uma cópia no celular", saveReady:"Baixar o vídeo pronto", talkWa:"Falar com a gente no WhatsApp",
- panel:{eyebrow:"Equipe",title:"Avaliações recebidas",lead:"Só para a equipe da Proba. A chave fica salva neste navegador.",key:"Chave de acesso",enter:"Entrar",loading:"Carregando…",empty:"Ainda não chegou nenhuma avaliação.",fail:"Não deu para carregar. Tente de novo.",bad:"Chave incorreta.",refresh:"Atualizar",logout:"Sair",sum:"Resumo",make:"Montar vídeo final",making:"Montando · {p}% · não troque de aba nem minimize a janela",paused:"Montagem pausada: a aba ficou escondida. Recomeça sozinha quando você voltar.",remake:"Montar de novo",download:"Baixar vídeo",del:"Apagar",delConfirm:"Toque de novo para apagar de vez",loadingFiles:"Baixando as partes…",nav:{overview:"Visão geral",queue:"Avaliações",board:"Quadro",links:"Gerar links"},st:{novo:"Novas",analise:"Em análise",aprovado:"Aprovadas",pago:"Pagas",recusado:"Recusadas"},st1:{novo:"Nova",analise:"Em análise",aprovado:"Aprovada",pago:"Paga",recusado:"Recusada"},all:"Todas",search:"Buscar por código",kTotal:"Recebidas",kToday:"Hoje",kWait:"Aguardando análise",kAppr:"Aprovação",kPix:"Pix a pagar",funnel:"Funil por link",funnelLead:"Quantas pessoas chegaram a cada etapa. Contamos só o código do link e a etapa, sem dados pessoais.",arm:{a:"Link A · começa com perguntas",b:"Link B · começa do seu jeito"},fs:{open:"Abriram o link",start:"Começaram",visit:"Visita preenchida",cam:"Abriram a câmera",rec:"Gravaram",consent:"Autorizaram",sent:"Enviaram"},perDay:"Avaliações por dia",perDayLead:"Últimos 14 dias. Toque num dia para ver as avaliações.",privacy:"Privacidade escolhida",fmt:"Formato",survey:"Respostas às 3 perguntas",none:"Sem dados ainda",avgDur:"Duração média",avgRe:"Regravações por avaliação",editedSubs:"Legendas corrigidas",editedShort:"corrigidas",faceL:{show:"Rosto visível",blur:"Rosto desfocado",silhouette:"Silhueta",none:"Sem rosto (câmera de trás)"},voiceL:{orig:"Voz original",alt:"Voz alterada"},modeL:{guiado:"Com perguntas",livre:"Do seu jeito"},tabs:{final:"Vídeo final",parts:"Partes",proof:"Comprovante",info:"Dados"},act:{analise:"Em análise",aprovar:"Aprovar",recusar:"Recusar",pago:"Pix pago",unpaid:"Desmarcar Pix"},reasonL:"Motivo",reasons:{semcomp:"Sem comprovante",naoreal:"Não parece visita real",ofensa:"Conteúdo impróprio",vazio:"Vídeo sem conteúdo",dup:"Duplicada",outro:"Outro"},checkT:"Checklist",checks:{comp:"Comprovante confere",real:"Parece visita real",rosto:"Rosto conforme a permissão",dados:"Sem dados pessoais nem ofensas"},note:"Notas internas",notePh:"Visível só para a equipe",saved:"Salvo",pickOne:"Escolha uma avaliação na lista",finalNone:"O vídeo final ainda não foi montado.",finalSaving:"Salvando o vídeo final no servidor…",finalSaved:"Salvo no servidor",fields:{service:"Serviço",salon:"Salão",pro:"Profissional",date:"Visita",mode:"Modo",dur:"Duração",parts:"Partes",reshoots:"Regravações",face:"Rosto",voice:"Voz",subs:"Legendas",stickers:"Figurinhas",music:"Música",perm:"Permissão",proofs:"Comprovante",q1:"P1 · onde encontrou",q2:"P2 · já avaliou",q3:"P3 · assistiria vídeos",device:"Aparelho",lang:"Idioma",rules:"Regras"},yes:"sim",no:"não",drop:"Arraste para cá",thTitle:"Pontos principais",thOk:"Confirmado pela cliente, sem mudanças.",thEdited:"Confirmado pela cliente, com correções.",thNotOk:"A cliente não confirmou.",thNeu:"Observações",thOwn:"adicionado pela cliente",thAi:"IA",useful:"Utilidade do vídeo (nota da equipe)",usefulL:{alta:"Alta",media:"Média",baixa:"Baixa"},usefulLead:"Quanto o vídeo ajuda quem vai escolher. Serve para recompensar autores e ordenar vídeos, não muda a nota da profissional.",aspT:"Notas por item (confirmadas pelas clientes)",aspLead:"Parte de avaliações positivas em cada item. É o dado de entrada da fórmula de ranking.",logs:"Problemas técnicos",logsLead:"Erros e travamentos enviados pelos celulares das clientes, para a equipe técnica.",boardLead:"Arraste os cartões entre as colunas. Toque num cartão para abrir.",oldItem:"Avaliação enviada antes do novo formato: veja o resumo abaixo."}, reShoot:"Regravando a parte {n}",
+ panel:{eyebrow:"Equipe",title:"Avaliações recebidas",lead:"Só para a equipe da Proba. A chave fica salva neste navegador.",key:"Chave de acesso",enter:"Entrar",loading:"Carregando…",empty:"Ainda não chegou nenhuma avaliação.",fail:"Não deu para carregar. Tente de novo.",bad:"Chave incorreta.",refresh:"Atualizar",logout:"Sair",sum:"Resumo",make:"Montar vídeo final",making:"Montando · {p}% · não troque de aba nem minimize a janela",paused:"Montagem pausada: a aba ficou escondida. Recomeça sozinha quando você voltar.",remake:"Montar de novo",download:"Baixar vídeo",del:"Apagar",delConfirm:"Toque de novo para apagar de vez",loadingFiles:"Baixando as partes…",nav:{overview:"Visão geral",queue:"Avaliações",board:"Quadro",links:"Gerar links"},st:{novo:"Novas",analise:"Em análise",aprovado:"Aprovadas",pago:"Pagas",recusado:"Recusadas"},st1:{novo:"Nova",analise:"Em análise",aprovado:"Aprovada",pago:"Paga",recusado:"Recusada"},all:"Todas",search:"Buscar por código",kTotal:"Recebidas",kToday:"Hoje",kWait:"Aguardando análise",kAppr:"Aprovação",kPix:"Pix a pagar",funnel:"Funil por link",funnelLead:"Quantas pessoas chegaram a cada etapa. Contamos só o código do link e a etapa, sem dados pessoais.",arm:{a:"Link A · começa com perguntas",b:"Link B · começa do seu jeito"},fs:{open:"Abriram o link",start:"Começaram",visit:"Visita preenchida",cam:"Abriram a câmera",rec:"Gravaram",consent:"Autorizaram",sent:"Enviaram"},perDay:"Avaliações por dia",perDayLead:"Últimos 14 dias. Toque num dia para ver as avaliações.",privacy:"Privacidade escolhida",fmt:"Formato",survey:"Respostas às 3 perguntas",none:"Sem dados ainda",avgDur:"Duração média",avgRe:"Regravações por avaliação",editedSubs:"Legendas corrigidas",editedShort:"corrigidas",faceL:{show:"Rosto visível",blur:"Rosto desfocado",silhouette:"Silhueta",none:"Sem rosto (câmera de trás)"},voiceL:{orig:"Voz original",alt:"Voz alterada"},modeL:{guiado:"Com perguntas",livre:"Do seu jeito"},tabs:{final:"Vídeo final",faces:"Rostos",parts:"Partes",proof:"Comprovante",info:"Dados"},act:{analise:"Em análise",aprovar:"Aprovar",recusar:"Recusar",pago:"Pix pago",unpaid:"Desmarcar Pix"},reasonL:"Motivo",reasons:{semcomp:"Sem comprovante",naoreal:"Não parece visita real",ofensa:"Conteúdo impróprio",vazio:"Vídeo sem conteúdo",dup:"Duplicada",outro:"Outro"},checkT:"Checklist",checks:{comp:"Comprovante confere",real:"Parece visita real",rosto:"Rosto conforme a permissão",dados:"Sem dados pessoais nem ofensas"},note:"Notas internas",notePh:"Visível só para a equipe",saved:"Salvo",pickOne:"Escolha uma avaliação na lista",finalNone:"O vídeo final ainda não foi montado.",finalSaving:"Salvando o vídeo final no servidor…",finalSaved:"Salvo no servidor",fields:{service:"Serviço",salon:"Salão",pro:"Profissional",date:"Visita",mode:"Modo",dur:"Duração",parts:"Partes",reshoots:"Regravações",face:"Rosto",voice:"Voz",subs:"Legendas",stickers:"Figurinhas",music:"Música",perm:"Permissão",proofs:"Comprovante",q1:"P1 · onde encontrou",q2:"P2 · já avaliou",q3:"P3 · assistiria vídeos",device:"Aparelho",lang:"Idioma",rules:"Regras"},yes:"sim",no:"não",drop:"Arraste para cá",thTitle:"Pontos principais",thOk:"Confirmado pela cliente, sem mudanças.",thEdited:"Confirmado pela cliente, com correções.",thNotOk:"A cliente não confirmou.",thNeu:"Observações",thOwn:"adicionado pela cliente",thAi:"IA",useful:"Utilidade do vídeo (nota da equipe)",usefulL:{alta:"Alta",media:"Média",baixa:"Baixa"},usefulLead:"Quanto o vídeo ajuda quem vai escolher. Serve para recompensar autores e ordenar vídeos, não muda a nota da profissional.",aspT:"Notas por item (confirmadas pelas clientes)",aspLead:"Parte de avaliações positivas em cada item. É o dado de entrada da fórmula de ranking.",logs:"Problemas técnicos",logsLead:"Erros e travamentos enviados pelos celulares das clientes, para a equipe técnica.",boardLead:"Arraste os cartões entre as colunas. Toque num cartão para abrir.",oldItem:"Avaliação enviada antes do novo formato: veja o resumo abaixo.",fNone:"Os rostos de outras pessoas ainda não foram verificados. A busca roda neste computador e leva cerca de meio minuto.",fScan:"Procurar rostos",fScanning:"Procurando rostos · {p}%",fPart:"Parte {n}",fAdd:"Marcar um rosto",fAddHint:"Arraste um retângulo sobre o rosto.",fHint:"Toque numa moldura para ligar ou desligar o desfoque.",fOn:"Desfocado",fOff:"Sem desfoque",fGo:"Ver",fFace:"Rosto {n}",fAuthor:"Autora",fManual:"Marcado à mão",fStart:"Começa aqui",fEnd:"Termina aqui",fDel:"Remover",fSave:"Salvar e confirmar",fRescan:"Procurar de novo",fRescanSure:"As alterações serão perdidas. Toque de novo para procurar.",fUnsaved:"Alterações não salvas",fSaved:"Verificado",fNotSaved:"Ainda não confirmado",fSavedToast:"Salvo. Monte o vídeo final de novo.",fWarn:"Os rostos de outras pessoas ainda não foram verificados (aba «Rostos»).",fEmpty:"Nenhum rosto encontrado nesta parte. Se houver algum, marque à mão.",fFail:"Não deu para rodar a busca de rostos.",fNoParts:"Sem partes para verificar."}, reShoot:"Regravando a parte {n}",
  maskNone:"Sem", maskBtn:"Máscara", maskLoading:"Preparando máscaras…", faceOut:"Mantenha o rosto na tela para a máscara funcionar", maskLocked:"A máscara fica até o fim da gravação",
  permMask:["Pode publicar, com o rosto escondido","Do jeito que você escolheu no vídeo. Antes de publicar, desfocamos também o rosto de outras pessoas."],
  labTitle:"Provador de máscaras", labLead:"Escolha uma foto com rosto: todas as máscaras aparecem nela. A foto não sai do aparelho.", labPick:"Escolher foto", labLoading:"Carregando…", labReady:"Pronto. Escolha uma foto.", labFail:"Não deu para carregar o reconhecimento de rosto.", labNoFace:"Nenhum rosto encontrado nessa foto.", labFound:"Rostos encontrados: {n}", labImgFail:"Não deu para abrir a imagem.",
@@ -779,7 +792,7 @@ ru:{
  rules:["Рассказывайте только о своём визите, который действительно был.","Будьте честны: что понравилось и что можно улучшить.","R$ 20, которые мы вам платим, — за участие. Они не зависят от вашего мнения.","Не показывайте документы, экраны с личными данными и других людей. Перед публикацией мы размываем лица других людей.","Без оскорблений, дискриминации и обвинений — говорите о своём опыте.","Без рекламы, ссылок и контактов."], piece:"Фрагмент {n}", recMore:"Записать следующий фрагмент", freeMore:"Пауза. Подумайте спокойно и запишите следующий фрагмент или нажмите «Завершить».", addPiece:"Добавить фрагмент", delPiece:"Удалить",
  prvTitle:"Приватность", prvLead:"Оригинал хранится только у команды Пробы. Публикуется только выбранный вами вариант.", fxTitle:"Лицо", fxLead:"Действует на части, снятые фронтальной камерой.", voiceTitle:"Голос", voice:{orig:"Обычный",alt:"Изменённый"}, voiceLoading:"Готовим голос…", face:{show:"Показать",blur:"Размыть",silhouette:"Силуэт"}, fxLoading:"Готовим эффект…",
  send:"Отправить", sending:"Отправляем…", retry:"Попробовать ещё раз", sentTitle:"Отзыв отправлен", upRun:"Видео загружается · {p}%", upDone:"Видео загружено", upFail:"Связь прервалась. Нажмите «Попробовать ещё раз».", sendFail:"Сейчас отправить не получилось. Проверьте интернет и попробуйте ещё раз или отправьте через WhatsApp.", sendNoServer:"Прямая отправка сейчас недоступна. Отправьте через WhatsApp.", viaWa:"Отправить видео через WhatsApp", saveCopy:"Сохранить копию в телефон", saveReady:"Скачать готовое видео", talkWa:"Написать нам в WhatsApp",
- panel:{eyebrow:"Команда",title:"Пришедшие отзывы",lead:"Только для команды Пробы. Ключ сохраняется в этом браузере.",key:"Ключ доступа",enter:"Войти",loading:"Загрузка…",empty:"Отзывов пока нет.",fail:"Не удалось загрузить. Попробуйте ещё раз.",bad:"Неверный ключ.",refresh:"Обновить",logout:"Выйти",sum:"Сводка",make:"Собрать ролик",making:"Собираем · {p}% · не переключайте вкладку и не сворачивайте окно",paused:"Сборка на паузе: вкладка была скрыта. Начнётся заново, когда вернётесь.",remake:"Собрать заново",download:"Скачать ролик",del:"Удалить",delConfirm:"Нажмите ещё раз — удалится насовсем",loadingFiles:"Загружаем части…",nav:{overview:"Обзор",queue:"Отзывы",board:"Доска",links:"Ссылки"},st:{novo:"Новые",analise:"На проверке",aprovado:"Одобрены",pago:"Оплачены",recusado:"Отклонены"},st1:{novo:"Новый",analise:"На проверке",aprovado:"Одобрен",pago:"Оплачен",recusado:"Отклонён"},all:"Все",search:"Поиск по коду",kTotal:"Получено",kToday:"Сегодня",kWait:"Ждут проверки",kAppr:"Одобряемость",kPix:"Pix к оплате",funnel:"Воронка по ссылкам",funnelLead:"Сколько людей дошло до каждого шага. Учитываем только код ссылки и шаг, без личных данных.",arm:{a:"Ссылка A · сначала с подсказками",b:"Ссылка B · сначала экспромт"},fs:{open:"Открыли ссылку",start:"Начали",visit:"Заполнили визит",cam:"Открыли камеру",rec:"Сняли",consent:"Дали согласие",sent:"Отправили"},perDay:"Отзывы по дням",perDayLead:"Последние 14 дней. Нажмите на день, чтобы увидеть отзывы.",privacy:"Выбор приватности",fmt:"Формат",survey:"Ответы на 3 вопроса",none:"Пока нет данных",avgDur:"Средняя длина",avgRe:"Пересъёмок на отзыв",editedSubs:"Субтитры поправлены",editedShort:"поправлены",faceL:{show:"Лицо видно",blur:"Лицо размыто",silhouette:"Силуэт",none:"Без лица (задняя камера)"},voiceL:{orig:"Обычный голос",alt:"Изменённый голос"},modeL:{guiado:"С подсказками",livre:"Экспромт"},tabs:{final:"Итоговый ролик",parts:"Части",proof:"Подтверждение",info:"Данные"},act:{analise:"На проверку",aprovar:"Одобрить",recusar:"Отклонить",pago:"Pix оплачен",unpaid:"Снять оплату"},reasonL:"Причина",reasons:{semcomp:"Нет подтверждения",naoreal:"Не похоже на реальный визит",ofensa:"Недопустимое содержание",vazio:"Видео без содержания",dup:"Дубликат",outro:"Другое"},checkT:"Чек-лист",checks:{comp:"Подтверждение сходится",real:"Похоже на реальный визит",rosto:"Лицо соответствует разрешению",dados:"Нет личных данных и оскорблений"},note:"Заметки команды",notePh:"Видно только команде",saved:"Сохранено",pickOne:"Выберите отзыв в списке",finalNone:"Итоговый ролик ещё не собран.",finalSaving:"Сохраняем итоговый ролик на сервере…",finalSaved:"Сохранён на сервере",fields:{service:"Услуга",salon:"Салон",pro:"Мастер",date:"Визит",mode:"Режим",dur:"Длина",parts:"Части",reshoots:"Пересъёмки",face:"Лицо",voice:"Голос",subs:"Субтитры",stickers:"Стикеры",music:"Музыка",perm:"Разрешение",proofs:"Подтверждение",q1:"В1 · где нашла",q2:"В2 · оставляла отзывы",q3:"В3 · смотрела бы видео",device:"Устройство",lang:"Язык",rules:"Правила"},yes:"да",no:"нет",drop:"Перетащите сюда",thTitle:"Главное",thOk:"Подтверждено клиенткой без правок.",thEdited:"Подтверждено клиенткой с правками.",thNotOk:"Клиентка не подтвердила.",thNeu:"Замечания",thOwn:"добавлено клиенткой",thAi:"ИИ",useful:"Полезность видео (оценка команды)",usefulL:{alta:"Высокая",media:"Средняя",baixa:"Низкая"},usefulLead:"Насколько видео помогает выбирать. Нужна для вознаграждения авторов и порядка видео, на оценку мастера не влияет.",aspT:"Оценки по пунктам (подтверждены клиентками)",aspLead:"Доля положительных оценок по каждому пункту. Это входные данные формулы ранжирования.",logs:"Технические проблемы",logsLead:"Ошибки и зависания, которые прислали телефоны клиенток. Для технической команды.",boardLead:"Перетаскивайте карточки между колонками. Нажмите на карточку, чтобы открыть.",oldItem:"Отзыв прислан до нового формата: см. сводку ниже."}, reShoot:"Пересъёмка части {n}",
+ panel:{eyebrow:"Команда",title:"Пришедшие отзывы",lead:"Только для команды Пробы. Ключ сохраняется в этом браузере.",key:"Ключ доступа",enter:"Войти",loading:"Загрузка…",empty:"Отзывов пока нет.",fail:"Не удалось загрузить. Попробуйте ещё раз.",bad:"Неверный ключ.",refresh:"Обновить",logout:"Выйти",sum:"Сводка",make:"Собрать ролик",making:"Собираем · {p}% · не переключайте вкладку и не сворачивайте окно",paused:"Сборка на паузе: вкладка была скрыта. Начнётся заново, когда вернётесь.",remake:"Собрать заново",download:"Скачать ролик",del:"Удалить",delConfirm:"Нажмите ещё раз — удалится насовсем",loadingFiles:"Загружаем части…",nav:{overview:"Обзор",queue:"Отзывы",board:"Доска",links:"Ссылки"},st:{novo:"Новые",analise:"На проверке",aprovado:"Одобрены",pago:"Оплачены",recusado:"Отклонены"},st1:{novo:"Новый",analise:"На проверке",aprovado:"Одобрен",pago:"Оплачен",recusado:"Отклонён"},all:"Все",search:"Поиск по коду",kTotal:"Получено",kToday:"Сегодня",kWait:"Ждут проверки",kAppr:"Одобряемость",kPix:"Pix к оплате",funnel:"Воронка по ссылкам",funnelLead:"Сколько людей дошло до каждого шага. Учитываем только код ссылки и шаг, без личных данных.",arm:{a:"Ссылка A · сначала с подсказками",b:"Ссылка B · сначала экспромт"},fs:{open:"Открыли ссылку",start:"Начали",visit:"Заполнили визит",cam:"Открыли камеру",rec:"Сняли",consent:"Дали согласие",sent:"Отправили"},perDay:"Отзывы по дням",perDayLead:"Последние 14 дней. Нажмите на день, чтобы увидеть отзывы.",privacy:"Выбор приватности",fmt:"Формат",survey:"Ответы на 3 вопроса",none:"Пока нет данных",avgDur:"Средняя длина",avgRe:"Пересъёмок на отзыв",editedSubs:"Субтитры поправлены",editedShort:"поправлены",faceL:{show:"Лицо видно",blur:"Лицо размыто",silhouette:"Силуэт",none:"Без лица (задняя камера)"},voiceL:{orig:"Обычный голос",alt:"Изменённый голос"},modeL:{guiado:"С подсказками",livre:"Экспромт"},tabs:{final:"Итоговый ролик",faces:"Лица",parts:"Части",proof:"Подтверждение",info:"Данные"},act:{analise:"На проверку",aprovar:"Одобрить",recusar:"Отклонить",pago:"Pix оплачен",unpaid:"Снять оплату"},reasonL:"Причина",reasons:{semcomp:"Нет подтверждения",naoreal:"Не похоже на реальный визит",ofensa:"Недопустимое содержание",vazio:"Видео без содержания",dup:"Дубликат",outro:"Другое"},checkT:"Чек-лист",checks:{comp:"Подтверждение сходится",real:"Похоже на реальный визит",rosto:"Лицо соответствует разрешению",dados:"Нет личных данных и оскорблений"},note:"Заметки команды",notePh:"Видно только команде",saved:"Сохранено",pickOne:"Выберите отзыв в списке",finalNone:"Итоговый ролик ещё не собран.",finalSaving:"Сохраняем итоговый ролик на сервере…",finalSaved:"Сохранён на сервере",fields:{service:"Услуга",salon:"Салон",pro:"Мастер",date:"Визит",mode:"Режим",dur:"Длина",parts:"Части",reshoots:"Пересъёмки",face:"Лицо",voice:"Голос",subs:"Субтитры",stickers:"Стикеры",music:"Музыка",perm:"Разрешение",proofs:"Подтверждение",q1:"В1 · где нашла",q2:"В2 · оставляла отзывы",q3:"В3 · смотрела бы видео",device:"Устройство",lang:"Язык",rules:"Правила"},yes:"да",no:"нет",drop:"Перетащите сюда",thTitle:"Главное",thOk:"Подтверждено клиенткой без правок.",thEdited:"Подтверждено клиенткой с правками.",thNotOk:"Клиентка не подтвердила.",thNeu:"Замечания",thOwn:"добавлено клиенткой",thAi:"ИИ",useful:"Полезность видео (оценка команды)",usefulL:{alta:"Высокая",media:"Средняя",baixa:"Низкая"},usefulLead:"Насколько видео помогает выбирать. Нужна для вознаграждения авторов и порядка видео, на оценку мастера не влияет.",aspT:"Оценки по пунктам (подтверждены клиентками)",aspLead:"Доля положительных оценок по каждому пункту. Это входные данные формулы ранжирования.",logs:"Технические проблемы",logsLead:"Ошибки и зависания, которые прислали телефоны клиенток. Для технической команды.",boardLead:"Перетаскивайте карточки между колонками. Нажмите на карточку, чтобы открыть.",oldItem:"Отзыв прислан до нового формата: см. сводку ниже.",fNone:"Лица посторонних ещё не проверены. Поиск идёт на этом компьютере, около полуминуты.",fScan:"Найти лица",fScanning:"Ищем лица · {p}%",fPart:"Часть {n}",fAdd:"Обвести лицо",fAddHint:"Обведите лицо рамкой.",fHint:"Нажмите на рамку, чтобы включить или выключить размытие.",fOn:"Размывается",fOff:"Не размывается",fGo:"Показать",fFace:"Лицо {n}",fAuthor:"Автор",fManual:"Обведено вручную",fStart:"Начало здесь",fEnd:"Конец здесь",fDel:"Удалить",fSave:"Сохранить и подтвердить",fRescan:"Искать заново",fRescanSure:"Правки пропадут. Нажмите ещё раз, чтобы искать заново.",fUnsaved:"Есть несохранённые правки",fSaved:"Проверено",fNotSaved:"Ещё не подтверждено",fSavedToast:"Сохранено. Соберите итоговый ролик заново.",fWarn:"Лица посторонних ещё не проверены (вкладка «Лица»).",fEmpty:"В этой части лиц не найдено. Если есть — обведите вручную.",fFail:"Не удалось запустить поиск лиц.",fNoParts:"Нет частей для проверки."}, reShoot:"Пересъёмка части {n}",
  maskNone:"Без", maskBtn:"Маска", maskLoading:"Готовим маски…", faceOut:"Держите лицо в кадре, чтобы маска работала", maskLocked:"Маска остаётся до конца записи",
  permMask:["Можно публиковать со скрытым лицом","Так, как вы выбрали в видео. Перед публикацией размываем и лица других людей."],
  labTitle:"Примерочная масок", labLead:"Выберите фото с лицом — на нём появятся все маски. Фото не покидает устройство.", labPick:"Выбрать фото", labLoading:"Загрузка…", labReady:"Готово. Выберите фото.", labFail:"Не удалось загрузить распознавание лица.", labNoFace:"На фото не найдено лицо.", labFound:"Найдено лиц: {n}", labImgFail:"Не удалось открыть изображение.",
@@ -2024,7 +2037,7 @@ function panelHead(it){
 }
 function panelDetail(it){
   var P=t("panel"), m=itMeta(it), a=it.admin||{}, r=it.recipe||{}, files=it.files||[], hasPhoto=files.some(function(k){ return /comprovante/.test(k); });
-  var tabs=[["final",P.tabs.final],["parts",P.tabs.parts]]; if(hasPhoto) tabs.push(["proof",P.tabs.proof]);
+  var tabs=[["final",P.tabs.final],["faces",P.tabs.faces],["parts",P.tabs.parts]]; if(hasPhoto) tabs.push(["proof",P.tabs.proof]);
   if(PANEL.tab==="proof"&&!hasPhoto) PANEL.tab="final";
   var h='<div id="dtHead">'+panelHead(it)+'</div>';
   h+='<div class="dt-grid"><div class="dt-left"><div class="tabs">'+tabs.map(function(x){ return '<button type="button" class="tab'+(PANEL.tab===x[0]?' on':'')+'" data-tab="'+x[0]+'">'+esc(x[1])+'</button>'; }).join("")+'</div><div class="dt-media" id="dtMedia"></div></div>';
@@ -2068,10 +2081,12 @@ function panelTab(it){
   var a=it.admin||{}, r=it.recipe||{}, files=it.files||[], tab=PANEL.tab, myId=it.id;
   function loading(){ box.innerHTML='<p class="status"><span class="spin"></span><span>'+esc(P.loading)+'</span></p>'; }
   function stale(){ return PANEL.sel!==myId||PANEL.tab!==tab||!document.getElementById("dtMedia"); }
+  if(tab==="faces"){ panelFaces(it,box); return; }
   if(tab==="final"){
+    var fw=(a.faces&&a.faces.reviewed)?"":'<p class="status warn fd-warn">'+ic("eye")+'<span>'+esc(P.fWarn)+'</span></p>';
     if(PANEL.mk===myId && (PROC.state==="wait"||PROC.state==="render")){ panelMakeView(it); return; }
-    if(a.final){ loading(); panelBlob(a.final).then(function(x){ if(stale()) return; box.innerHTML='<video src="'+x.u+'" controls playsinline></video><div class="row-i"><a class="btn ghost small" download="proba_'+esc(it.code)+'_final'+extOf(x.b)+'" href="'+x.u+'">'+ic("check")+'<span>'+esc(P.download)+'</span></a><button type="button" class="btn ghost small" id="pnRemake">'+ic("video")+'<span>'+esc(P.remake)+'</span></button><span class="small">'+esc(P.finalSaved)+'</span></div>'; var rm=document.getElementById("pnRemake"); if(rm) rm.onclick=function(){ panelMake(it,true); }; }).catch(function(){ if(!stale()) box.innerHTML='<p class="err">'+esc(P.fail)+'</p>'; }); return; }
-    box.innerHTML='<div class="dt-empty"><p class="small">'+esc(P.finalNone)+'</p>'+(r.clips&&r.clips.length?'<button type="button" class="btn primary small" id="pnMake">'+ic("video")+'<span>'+esc(P.make)+'</span></button>':'')+'</div>';
+    if(a.final){ loading(); panelBlob(a.final).then(function(x){ if(stale()) return; box.innerHTML=fw+'<video src="'+x.u+'" controls playsinline></video><div class="row-i"><a class="btn ghost small" download="proba_'+esc(it.code)+'_final'+extOf(x.b)+'" href="'+x.u+'">'+ic("check")+'<span>'+esc(P.download)+'</span></a><button type="button" class="btn ghost small" id="pnRemake">'+ic("video")+'<span>'+esc(P.remake)+'</span></button><span class="small">'+esc(P.finalSaved)+'</span></div>'; var rm=document.getElementById("pnRemake"); if(rm) rm.onclick=function(){ panelMake(it,true); }; }).catch(function(){ if(!stale()) box.innerHTML='<p class="err">'+esc(P.fail)+'</p>'; }); return; }
+    box.innerHTML=fw+'<div class="dt-empty"><p class="small">'+esc(P.finalNone)+'</p>'+(r.clips&&r.clips.length?'<button type="button" class="btn primary small" id="pnMake">'+ic("video")+'<span>'+esc(P.make)+'</span></button>':'')+'</div>';
     var mk=document.getElementById("pnMake"); if(mk) mk.onclick=function(){ panelMake(it); };
     return;
   }
@@ -2097,6 +2112,7 @@ function panelMake(it,force){
     clearClips();
     list.forEach(function(c,k){ var b=xs[k].b, f; try{ f=new File([b],c.key.split("/").pop(),{type:b.type}); }catch(e){ f=b; }
       S.clips[c.q]={q:c.q,file:f,url:URL.createObjectURL(f),dur:c.dur||1,mask:c.mask,facing:c.facing,cues:c.cues||[],txState:"done",tx:Promise.resolve(c.cues||[])}; });
+    S.faceTracks=(it.admin&&it.admin.faces&&it.admin.faces.parts)||null;
     S.stickers=r.stickers||[]; S.music=r.music||"none"; S.subs=!!r.subs; S.mode=r.mode||S.mode; S.face=r.face||"show"; S.voice=r.voice||"orig";
     if(force){ PROC.key=null; PROC.final=null; }
     prepareFinal();
@@ -2115,6 +2131,102 @@ function panelMake(it,force){
       else if(PROC.state==="fail"){ clearInterval(iv); PANEL.mk=null; var bx=document.getElementById("dtMedia"); if(bx) bx.innerHTML='<p class="err">'+esc(t("procFail"))+'</p>'; }
     },300);
   }).catch(function(){ PANEL.mk=null; var bx=document.getElementById("dtMedia"); if(bx) bx.innerHTML='<p class="err">'+esc(P.fail)+'</p>'; });
+}
+
+/* ---- Pult: faces tab ---- */
+function fdClips(it){ return ((it.recipe||{}).clips||[]).filter(function(c){ return c.key; }); }
+function panelFaces(it,box){
+  var P=t("panel"), a=it.admin||{}, clips=fdClips(it);
+  if(!clips.length){ box.innerHTML='<p class="small">'+esc(P.fNoParts)+'</p>'; return; }
+  if(!PANEL.fd||PANEL.fd.id!==it.id){ PANEL.fd={id:it.id,parts:(a.faces&&a.faces.parts)?JSON.parse(JSON.stringify(a.faces.parts)):null,reviewed:!!(a.faces&&a.faces.reviewed),dirty:false,q:clips[0].q}; }
+  var F=PANEL.fd;
+  if(F.scanning){ box.innerHTML='<p class="status" id="fdProg"><span class="spin"></span><span>'+esc(fmt(P.fScanning,{p:Math.round((F.pct||0)*100)}))+'</span></p>'; return; }
+  if(!F.parts){ box.innerHTML='<div class="dt-empty"><p class="small">'+esc(P.fNone)+'</p><button type="button" class="btn primary small" id="fdScan">'+ic("eye")+'<span>'+esc(P.fScan)+'</span></button></div>';
+    document.getElementById("fdScan").onclick=function(){ fdRun(it); }; return; }
+  if(!clips.some(function(c){ return c.q===F.q; })) F.q=clips[0].q;
+  var h='<div class="row-i">'+clips.map(function(c){ var n=(F.parts[c.q]||[]).filter(function(x){ return x.on; }).length; return '<button type="button" class="fchip'+(c.q===F.q?' on':'')+'" data-fq="'+c.q+'">'+esc(fmt(P.fPart,{n:c.q+1}))+(n?' · '+n:'')+'</button>'; }).join("")+'</div>';
+  h+='<div class="fd-stage" id="fdStage"><video id="fdVid" playsinline muted preload="auto"></video><canvas id="fdOv"></canvas></div>';
+  h+='<div class="fd-ctl"><button type="button" class="btn ghost small" id="fdPlay" aria-label="Play">'+ic("play")+'</button><input type="range" id="fdSeek" min="0" max="1000" value="0" aria-label="time"><span class="small" id="fdTime">0:00</span></div>';
+  h+='<div class="row-i"><button type="button" class="btn ghost small" id="fdAdd">'+ic("wand")+'<span>'+esc(P.fAdd)+'</span></button><span class="small" id="fdHint">'+esc(P.fHint)+'</span></div>';
+  h+='<div class="fd-list" id="fdList"></div>';
+  h+='<div class="row-i"><button type="button" class="btn primary small" id="fdSave">'+ic("check")+'<span>'+esc(P.fSave)+'</span></button><button type="button" class="btn ghost small" id="fdRescan">'+esc(P.fRescan)+'</button><span class="small" id="fdState"></span></div>';
+  box.innerHTML=h; fdState();
+  box.querySelectorAll("[data-fq]").forEach(function(b){ b.onclick=function(){ F.q=+b.dataset.fq; panelFaces(it,box); }; });
+  document.getElementById("fdRescan").onclick=function(){ if(F.dirty&&!F.confirmRescan){ F.confirmRescan=true; document.getElementById("fdState").textContent=P.fRescanSure; return; } F.confirmRescan=false; fdRun(it); };
+  document.getElementById("fdSave").onclick=function(){ F.dirty=false; F.reviewed=true; panelSet(it,{faces:{v:1,reviewed:true,at:new Date().toISOString(),parts:F.parts},final:""}); panelToast(P.fSavedToast); fdState(); };
+  var c=clips.filter(function(x){ return x.q===F.q; })[0], v=document.getElementById("fdVid"), ov=document.getElementById("fdOv"), stage=document.getElementById("fdStage");
+  var list=function(){ return F.parts[F.q]||(F.parts[F.q]=[]); }, add=null, raf=0;
+  panelBlob(c.key).then(function(x){ if(!document.getElementById("fdVid")) return; v.src=x.u; fdThumbs(x.u,list()); });
+  function size(){ var r=ov.getBoundingClientRect(), d=window.devicePixelRatio||1; if(ov.width!==Math.round(r.width*d)){ ov.width=Math.round(r.width*d); ov.height=Math.round(r.height*d); } }
+  function draw(){
+    size(); var g=ov.getContext("2d"), w=ov.width, hh=ov.height, tt=v.currentTime||0, d=window.devicePixelRatio||1; g.clearRect(0,0,w,hh);
+    list().forEach(function(tr,i){ var b=fdBoxAt(tr,tt); if(!b) return; var col=tr.on?"#FF3B5C":(tr.kind==="author"?"#F2C94C":"rgba(255,255,255,.85)");
+      g.save(); g.lineWidth=2.5*d; g.strokeStyle=col; if(!tr.on) g.setLineDash([6*d,5*d]); g.strokeRect(b[1]*w,b[2]*hh,b[3]*w,b[4]*hh); g.setLineDash([]);
+      var lab=fdLabel(tr,i); g.font="600 "+(12*d)+"px system-ui,sans-serif"; var lw=g.measureText(lab).width+10*d; g.fillStyle=col; g.fillRect(b[1]*w,Math.max(0,b[2]*hh-18*d),lw,18*d); g.fillStyle=tr.on?"#fff":"#17181C"; g.fillText(lab,b[1]*w+5*d,Math.max(13*d,b[2]*hh-5*d)); g.restore(); });
+    if(add&&add.cur){ var r=add.cur; g.save(); g.lineWidth=2.5*d; g.strokeStyle="#FF3B5C"; g.setLineDash([6*d,4*d]); g.strokeRect(r[0]*w,r[1]*hh,r[2]*w,r[3]*hh); g.restore(); }
+    var sk=document.getElementById("fdSeek"); if(sk&&v.duration) sk.value=String(Math.round(tt/v.duration*1000)); var tm=document.getElementById("fdTime"); if(tm) tm.textContent=mmss(tt);
+  }
+  function loop(){ draw(); if(!v.paused&&document.getElementById("fdVid")===v) raf=requestAnimationFrame(loop); }
+  v.onplay=function(){ document.getElementById("fdPlay").innerHTML=ic("pause"); cancelAnimationFrame(raf); loop(); };
+  v.onpause=v.onseeked=v.onloadeddata=function(){ var pb=document.getElementById("fdPlay"); if(pb) pb.innerHTML=ic("play"); draw(); };
+  document.getElementById("fdPlay").onclick=function(){ if(v.paused){ var p=v.play(); if(p&&p.catch) p.catch(function(){}); } else v.pause(); };
+  document.getElementById("fdSeek").oninput=function(e){ if(v.duration){ v.pause(); v.currentTime=(+e.target.value/1000)*v.duration; } };
+  function pt(e){ var r=ov.getBoundingClientRect(); return [Math.min(1,Math.max(0,(e.clientX-r.left)/r.width)),Math.min(1,Math.max(0,(e.clientY-r.top)/r.height))]; }
+  document.getElementById("fdAdd").onclick=function(){ v.pause(); add={}; stage.classList.add("add"); document.getElementById("fdHint").textContent=P.fAddHint; };
+  ov.onpointerdown=function(e){
+    var p=pt(e);
+    if(add){ add.p0=p; add.cur=[p[0],p[1],0,0]; try{ ov.setPointerCapture(e.pointerId); }catch(x){} return; }
+    var tt=v.currentTime||0, hit=null; list().forEach(function(tr){ var b=fdBoxAt(tr,tt); if(b&&p[0]>=b[1]&&p[0]<=b[1]+b[3]&&p[1]>=b[2]&&p[1]<=b[2]+b[4]) hit=tr; });
+    if(hit){ hit.on=!hit.on; F.dirty=true; fdRows(); draw(); fdState(); }
+  };
+  ov.onpointermove=function(e){ if(!add||!add.p0) return; var p=pt(e), a0=add.p0; add.cur=[Math.min(a0[0],p[0]),Math.min(a0[1],p[1]),Math.abs(p[0]-a0[0]),Math.abs(p[1]-a0[1])]; draw(); };
+  ov.onpointerup=function(){ if(!add||!add.cur) return; var r=add.cur; add=null; stage.classList.remove("add"); document.getElementById("fdHint").textContent=P.fHint;
+    if(r[2]<0.02||r[3]<0.02){ draw(); return; }
+    var t0=Math.max(0,(v.currentTime||0)-0.5), t1=Math.min(v.duration||t0+2,t0+2.5), bx=[r[0],r[1],r[2],r[3]].map(function(z){ return Math.round(z*10000)/10000; });
+    var tr={id:F.q+"-m"+Date.now().toString(36),kind:"manual",on:true,s:1,tb:Math.round((v.currentTime||0)*100)/100,b:[[Math.round(t0*100)/100].concat(bx),[Math.round(t1*100)/100].concat(bx)]};
+    list().push(tr); F.dirty=true; fdRows(); draw(); fdState(); fdThumbs(v.src,[tr]); };
+  function fdRows(){
+    var el=document.getElementById("fdList"); if(!el) return; var L=list();
+    if(!L.length){ el.innerHTML='<p class="small">'+esc(P.fEmpty)+'</p>'; return; }
+    el.innerHTML=L.map(function(tr,i){ var b=tr.b, a1=mmss(b[0][0]), a2=mmss(b[b.length-1][0]);
+      return '<div class="fd-row'+(tr.on?'':' off')+'"><img alt="" data-th="'+esc(tr.id)+'"'+(FD.thumbs[tr.id]?' src="'+FD.thumbs[tr.id]+'"':'')+'><div class="fd-txt"><b>'+esc(fdLabel(tr,i))+'</b><span class="small">'+a1+'–'+a2+(tr.kind==="manual"?'':' · '+Math.round(tr.s*100)+'%')+'</span></div>'+
+        '<button type="button" class="fchip'+(tr.on?' on':'')+'" data-ft="'+esc(tr.id)+'">'+esc(tr.on?P.fOn:P.fOff)+'</button><button type="button" class="fchip" data-fgo="'+esc(tr.id)+'" aria-label="'+esc(P.fGo)+'">'+ic("play")+'</button>'+
+        (tr.kind==="manual"?'<button type="button" class="fchip" data-fs="'+esc(tr.id)+'">'+esc(P.fStart)+'</button><button type="button" class="fchip" data-fe="'+esc(tr.id)+'">'+esc(P.fEnd)+'</button><button type="button" class="fchip" data-fdel="'+esc(tr.id)+'" aria-label="'+esc(P.fDel)+'">'+ic("trash")+'</button>':'')+'</div>'; }).join("");
+    var byId=function(id){ return L.filter(function(x){ return x.id===id; })[0]; };
+    el.querySelectorAll("[data-ft]").forEach(function(b){ b.onclick=function(){ var tr=byId(b.dataset.ft); tr.on=!tr.on; F.dirty=true; fdRows(); draw(); fdState(); }; });
+    el.querySelectorAll("[data-fgo]").forEach(function(b){ b.onclick=function(){ var tr=byId(b.dataset.fgo); v.pause(); v.currentTime=Math.max(0,tr.tb); }; });
+    el.querySelectorAll("[data-fs]").forEach(function(b){ b.onclick=function(){ var tr=byId(b.dataset.fs), t0=Math.round((v.currentTime||0)*100)/100; if(t0<tr.b[1][0]){ tr.b[0][0]=t0; F.dirty=true; fdRows(); draw(); fdState(); } }; });
+    el.querySelectorAll("[data-fe]").forEach(function(b){ b.onclick=function(){ var tr=byId(b.dataset.fe), t1=Math.round((v.currentTime||0)*100)/100; if(t1>tr.b[0][0]){ tr.b[1][0]=t1; F.dirty=true; fdRows(); draw(); fdState(); } }; });
+    el.querySelectorAll("[data-fdel]").forEach(function(b){ b.onclick=function(){ var k=L.indexOf(byId(b.dataset.fdel)); if(k>-1) L.splice(k,1); F.dirty=true; fdRows(); draw(); fdState(); }; });
+  }
+  fdRows(); setTimeout(draw,50);
+  if(PANEL.fdResize) window.removeEventListener("resize",PANEL.fdResize); PANEL.fdResize=draw; window.addEventListener("resize",draw);
+}
+function fdLabel(tr,i){ var P=t("panel"); return tr.kind==="author"?P.fAuthor:(tr.kind==="manual"?P.fManual:fmt(P.fFace,{n:i+1})); }
+function fdState(){ var F=PANEL.fd, P=t("panel"), el=document.getElementById("fdState"); if(!el||!F) return; el.textContent=F.dirty?P.fUnsaved:(F.reviewed?P.fSaved:P.fNotSaved); el.className="small"+(F.dirty?" fd-dirty":""); }
+/* small pictures of each face for the list, cut from the frame where it was found most confidently */
+function fdThumbs(url,tracks){
+  var need=tracks.filter(function(tr){ return !FD.thumbs[tr.id]; }); if(!need.length) return;
+  fdOpen(url).then(async function(v){
+    var c=document.createElement("canvas"); c.width=104; c.height=104; var x=c.getContext("2d"), vw=v.videoWidth||720, vh=v.videoHeight||1280;
+    for(var i=0;i<need.length;i++){ var tr=need[i], b=fdBoxAt(tr,tr.tb)||tr.b[0]; await fdSeek(v,tr.tb);
+      var bw=b[3]*vw, bh=b[4]*vh, s=Math.max(bw,bh)*1.6, cx=(b[1]+b[3]/2)*vw, cy=(b[2]+b[4]/2)*vh;
+      x.fillStyle="#222"; x.fillRect(0,0,104,104); try{ x.drawImage(v,cx-s/2,cy-s/2,s,s,0,0,104,104); FD.thumbs[tr.id]=c.toDataURL("image/jpeg",0.8); }catch(e){}
+      var im=document.querySelector('img[data-th="'+tr.id+'"]'); if(im&&FD.thumbs[tr.id]) im.src=FD.thumbs[tr.id]; }
+    v.removeAttribute("src"); try{ v.load(); }catch(e){}
+  });
+}
+async function fdRun(it){
+  var P=t("panel"), F=PANEL.fd, clips=fdClips(it); if(!F||F.scanning) return;
+  F.scanning=true; F.pct=0; if(PANEL.sel===it.id&&PANEL.tab==="faces") panelTab(it);
+  try{
+    var det=await fdLoad(), parts={}, tot=clips.reduce(function(s,c){ return s+(c.dur||1); },0), acc=0;
+    for(var i=0;i<clips.length;i++){ var c=clips[i], x=await panelBlob(c.key);
+      parts[c.q]=await fdScanPart(det,{q:c.q,url:x.u,dur:c.dur||1,facing:c.facing},function(f){ F.pct=(acc+f*(c.dur||1))/tot; var pe=document.getElementById("fdProg"); if(pe&&PANEL.fd===F) pe.lastChild.textContent=fmt(P.fScanning,{p:Math.round(F.pct*100)}); });
+      acc+=c.dur||1; }
+    F.parts=parts; F.dirty=true; F.reviewed=false;
+  }catch(e){ panelToast(P.fFail); }
+  F.scanning=false; if(PANEL.sel===it.id&&PANEL.tab==="faces") panelTab(it);
 }
 
 /* ---- board ---- */
@@ -2250,8 +2362,66 @@ function bindSubs(){
   app.querySelectorAll("[data-cue]").forEach(function(ta){ ta.oninput=function(){ var p=ta.dataset.cue.split(":"), c=S.clips[+p[0]]; if(c&&c.cues&&c.cues[+p[1]]){ c.cues[+p[1]].text=ta.value; S.cuesEdited=true; } }; });
 }
 
+/* ---------- other people's faces: found in the Pult, confirmed by a person, blurred when the final video is assembled ----------
+   The phone records clean video. Here, on a computer, a model made for far faces checks every 0.2 s.
+   It errs both ways (a printed cartoon or a shoe taken for a face; a face in profile missed), so a person confirms every box. */
+var FD_VER="1.0.1", FD_BASE="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@"+FD_VER;
+var FD_MODEL="https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_full_range/float16/latest/blaze_face_full_range.tflite";
+var FD={p:null,step:0.2,thumbs:{}};
+IC.pause='<path d="M9 5v14M15 5v14"/>';
+function fdLoad(){
+  if(FD.p) return FD.p;
+  FD.p=import(FD_BASE+"/vision_bundle.mjs").then(function(V){ return V.FilesetResolver.forVisionTasks(FD_BASE+"/wasm").then(function(fs){
+    function mk(dl){ return V.FaceDetector.createFromOptions(fs,{baseOptions:{modelAssetPath:FD_MODEL,delegate:dl},runningMode:"IMAGE",minDetectionConfidence:0.45}); }
+    return mk("GPU").catch(function(){ return mk("CPU"); });
+  }); }).catch(function(e){ FD.p=null; throw e; });
+  return FD.p;
+}
+function fdSeek(v,t){ return new Promise(function(res){ var d=false; function ok(){ if(d) return; d=true; v.removeEventListener("seeked",ok); res(); } v.addEventListener("seeked",ok); setTimeout(ok,1500); try{ v.currentTime=t; }catch(e){ ok(); } }); }
+function fdOpen(url){ return new Promise(function(res){ var v=document.createElement("video"); v.muted=true; v.playsInline=true; v.preload="auto"; var d=false; function ok(){ if(d) return; d=true; res(v); } v.onloadeddata=ok; v.onerror=ok; setTimeout(ok,8000); v.src=url; }); }
+function fdIou(a,b){ var x1=Math.max(a[1],b[1]), y1=Math.max(a[2],b[2]), x2=Math.min(a[1]+a[3],b[1]+b[3]), y2=Math.min(a[2]+a[4],b[2]+b[4]); var i=Math.max(0,x2-x1)*Math.max(0,y2-y1); return i/((a[3]*a[4]+b[3]*b[4]-i)||1); }
+/* one part: sample every 0.2 s, link boxes into tracks; on the front camera the biggest steady face is the author (her own choice applies to it) */
+async function fdScanPart(det,c,onProg){
+  var v=await fdOpen(c.url), dur=(isFinite(v.duration)&&v.duration)||c.dur||0, vw=v.videoWidth||720, vh=v.videoHeight||1280;
+  var cv=document.createElement("canvas"), sc=Math.min(1,960/Math.max(vw,vh)); cv.width=Math.round(vw*sc); cv.height=Math.round(vh*sc); var x=cv.getContext("2d");
+  var tracks=[], n=0, r4=function(z){ return Math.round(z*10000)/10000; };
+  for(var t=0.05;t<dur-0.02;t+=FD.step){
+    await fdSeek(v,t); try{ x.drawImage(v,0,0,cv.width,cv.height); }catch(e){}
+    var ds=[]; try{ ds=det.detect(cv).detections||[]; }catch(e){}
+    var tt=Math.round(t*100)/100;
+    ds.forEach(function(d){
+      var bb=d.boundingBox, s=(d.categories&&d.categories[0])?d.categories[0].score:0;
+      var b=[tt,r4(Math.max(0,bb.originX)/cv.width),r4(Math.max(0,bb.originY)/cv.height),r4(bb.width/cv.width),r4(bb.height/cv.height)];
+      var best=null, bs=0.15;
+      tracks.forEach(function(tr){ var l=tr.b[tr.b.length-1]; if(tt-l[0]>0.75||tr.at===tt) return; var o=fdIou(l,b); if(o>bs){ bs=o; best=tr; } });
+      if(best){ best.b.push(b); best.at=tt; if(s>best.s){ best.s=s; best.tb=tt; } } else tracks.push({b:[b],s:s,tb:tt,at:tt});
+    });
+    n++; if(onProg) onProg(Math.min(1,t/(dur||1)));
+  }
+  tracks=tracks.filter(function(tr){ return tr.b.length>1||tr.s>=0.7; });
+  var author=null;
+  if(c.facing==="user"){ var top=0; tracks.forEach(function(tr){ var area=tr.b.reduce(function(a,b){ return a+b[3]*b[4]; },0)/tr.b.length, cov=tr.b.length/Math.max(1,n), k=area*cov; if(cov>=0.3&&area>=0.02&&k>top){ top=k; author=tr; } }); }
+  v.removeAttribute("src"); try{ v.load(); }catch(e){}
+  return tracks.map(function(tr,i){ return {id:c.q+"-"+(i+1),kind:tr===author?"author":"auto",on:tr!==author&&tr.s>=0.7,s:Math.round(tr.s*100)/100,tb:tr.tb,b:tr.b}; });
+}
+/* box of a track at time t, interpolated between samples; null where the face is not in the picture */
+function fdBoxAt(tr,t){
+  var b=tr.b; if(!b||!b.length) return null;
+  if(t<b[0][0]-0.15||t>b[b.length-1][0]+0.15) return null;
+  for(var i=0;i<b.length;i++){ if(b[i][0]>=t){ if(i===0) return b[0]; var p=b[i-1], q=b[i], gap=q[0]-p[0];
+    if(gap>0.8&&tr.kind!=="manual") return (t-p[0]<0.15)?p:((q[0]-t<0.15)?q:null);
+    var k=(t-p[0])/(gap||1); return [t,p[1]+(q[1]-p[1])*k,p[2]+(q[2]-p[2])*k,p[3]+(q[3]-p[3])*k,p[4]+(q[4]-p[4])*k]; } }
+  return b[b.length-1];
+}
+/* strong blur over every switched-on face (oval a bit larger than the box: hair and ears too) */
+function fdApply(x,tracks,t,w,h){
+  if(!tracks) return;
+  tracks.forEach(function(tr){ if(!tr.on) return; var b=fdBoxAt(tr,t); if(!b) return; var bw=b[3]*w, bh=b[4]*h, X=b[1]*w-bw*0.3, Y=b[2]*h-bh*0.4, Wd=bw*1.6, Hd=bh*1.7; softBlur(x,X,Y,Wd,Hd,true); softBlur(x,X,Y,Wd,Hd,true); });
+}
+function fdSig(){ var p=S.faceTracks; if(!p) return "-"; return Object.keys(p).map(function(q){ return q+":"+(p[q]||[]).filter(function(t){ return t.on; }).map(function(t){ return t.id+"/"+t.b.length+"/"+t.b[0][0]+"/"+t.b[t.b.length-1][0]; }).join(","); }).join(";"); }
+
 /* ---------- final video = parts in order + stickers + subtitles + voice mixed with music ---------- */
-function finalKey(){ return clipList().map(function(c){return c.url;}).join(",")+"|"+(S.subs?cuesKey():"-")+"|"+S.music+"|"+S.face+"|"+S.voice+"|"+S.stickers.map(function(s){ return [s.e,s.x.toFixed(3),s.y.toFixed(3),s.s].join(":"); }).join(","); }
+function finalKey(){ return fdSig()+"|"+clipList().map(function(c){return c.url;}).join(",")+"|"+(S.subs?cuesKey():"-")+"|"+S.music+"|"+S.face+"|"+S.voice+"|"+S.stickers.map(function(s){ return [s.e,s.x.toFixed(3),s.y.toFixed(3),s.s].join(":"); }).join(","); }
 function prepareFinal(){
   var cs=clipList(); if(!cs.length) return;
   var key=finalKey();
@@ -2269,7 +2439,8 @@ function prepareFinal(){
   var myKey=key, musP=S.music!=="none"?makeMusic(S.music):Promise.resolve(null);
   Promise.all([S.subs?startTranscription():null, S.face!=="show"?fxLoad(S.face):null]).then(function(){
     if(PROC.key!==myKey) return;
-    var plain = cs.length===1 && !S.stickers.length && S.music==="none" && !(S.subs&&allCues().length) && (S.face==="show"||!hasFront()) && S.voice==="orig";
+    var ftr=cs.map(function(c){ return (S.faceTracks&&S.faceTracks[c.q])||null; }), anyFace=ftr.some(function(a){ return a&&a.some(function(x){ return x.on; }); });
+    var plain = !anyFace && cs.length===1 && !S.stickers.length && S.music==="none" && !(S.subs&&allCues().length) && (S.face==="show"||!hasFront()) && S.voice==="orig";
     if(plain){ PROC.state="skip"; PROC.justDone=true; procUI(); return; }
     return Promise.all(cs.map(decodeClip)).then(function(bufs){ return S.voice==="alt" ? Promise.all(bufs.map(function(b,i){ return b?voiceAlt(cs[i],b):null; })) : bufs; }).then(function(bufs){
       if(PROC.key!==myKey) return;
@@ -2280,7 +2451,7 @@ function prepareFinal(){
         PROC.state="render"; PROC.justDone=true;
         var c=document.createElement("canvas"); c.width=W; c.height=H; c.className="stage-canvas";
         PROC.stageEls=vids.concat([c]); procUI();
-        return renderPass(vids,c,mix,cues,offs,durs,cs.map(function(c){ return c.facing; })).then(function(file){
+        return renderPass(vids,c,mix,cues,offs,durs,cs.map(function(c){ return c.facing; }),ftr).then(function(file){
           if(PROC.key!==myKey) return;
           PROC.final=file; PROC.finalUrl=URL.createObjectURL(file); PROC.state="done"; PROC.stageEls=null; PROC.justDone=true; procUI();
         });
@@ -2316,7 +2487,7 @@ function mixAudio(bufs,offs,durs,mbuf){
 }
 function softLim(x){ var a=x<0?-x:x; if(a<=0.85) return x; var y=0.85+0.15*Math.tanh((a-0.85)/0.15); return x<0?-y:y; }
 
-function renderPass(vids,c,buf,cues,offs,durs,facings){
+function renderPass(vids,c,buf,cues,offs,durs,facings,ftr){
   return new Promise(function(resolve,reject){
     var x=c.getContext("2d"), base=document.createElement("canvas"); base.width=W; base.height=H;
     var bx=base.getContext("2d"); bx.fillStyle="#000"; bx.fillRect(0,0,W,H);
@@ -2358,7 +2529,7 @@ function renderPass(vids,c,buf,cues,offs,durs,facings){
     }
     function paint(tt){
       var v=vids[cur], now=performance.now();
-      if(v && v.readyState>=2 && !v.seeking && (now-lastDraw>=30||cur!==lastVC)){ lastDraw=now; lastVC=cur; try{ bx.drawImage(v,0,0,W,H); if(fxMode!=="show"&&facings&&facings[cur]==="user") applyFace(bx,fxMode); }catch(e){} }
+      if(v && v.readyState>=2 && !v.seeking && (now-lastDraw>=30||cur!==lastVC)){ lastDraw=now; lastVC=cur; try{ bx.drawImage(v,0,0,W,H); if(ftr&&ftr[cur]) fdApply(bx,ftr[cur],v.currentTime||0,W,H); if(fxMode!=="show"&&facings&&facings[cur]==="user") applyFace(bx,fxMode); }catch(e){} }
       x.drawImage(base,0,0); drawStickers(x,sprites); var cue=cueAt(tt); if(cue) drawCue(x,cue);
       if(started) frames++;
     }
@@ -2382,7 +2553,7 @@ function renderPass(vids,c,buf,cues,offs,durs,facings){
     }
     function end(){
       if(done) return;
-      if(frames<Math.max(10,dur*8)){ interrupt("only "+frames+" frames"); return; }
+      if(frames<Math.max(10,dur*3)){ interrupt("only "+frames+" frames"); return; }
       done=true; PROC.cancel=null; stopAll();
       rec.onstop=function(){
         var type=(rec.mimeType||mime||"video/webm").split(";")[0], blob=new Blob(chunks,{type:type});
